@@ -1,7 +1,13 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">我</router-link> |
+    <router-link to="/about">是</router-link>|
+    <router-link to="/about1">卢</router-link>|
+    <router-link to="/about2">豪</router-link>|
+    <router-link to="/about3">的</router-link>|
+    <router-link to="/about4">爹</router-link>|
+    <router-link to="/about5">?</router-link>|
+    <router-link to="/about6">!</router-link>
   </div>
   <router-view/>
 </template>

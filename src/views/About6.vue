@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1>我儿卢豪</h1>
+    <h1>卢豪要文文的幸福</h1>
     <div>{{ data }}</div>
   </div>
 </template>
@@ -8,7 +8,7 @@
 <script lang="ts">
 import { ElMessage } from "element-plus";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import api from "../js/backendApi/test";
+import post from "../http/axios/index";
 export default defineComponent({
   name: "",
   components: {},
@@ -22,26 +22,24 @@ export default defineComponent({
     const methods = {};
     // 页面默认请求
     onMounted(() => {
-      // console.log(api.getList());
-      api.getList();
-      ElMessage.success("11");
+      request.getList();
     });
     // 请求
-    // const request = {
-    //   getList() {
-    //     // 请求体数据
-    //     const data = {
-    //       data: {},
-    //     };
-    //     // post请求
-    //     post("/admin/user/getTest", data).then((res: any) => {
-    //       console.log(res);
-    //       let { msg, data } = res;
-    //       ElMessage.success(msg)
-    //       state.data = data;
-    //     });
-    //   },
-    // };
+    const request = {
+      getList() {
+        // 请求体数据
+        const data = {
+          data: {},
+        };
+        // post请求
+        post("/admin/user/getTest", data).then((res: any) => {
+          console.log(res);
+          let { msg, data } = res;
+          ElMessage.success(msg)
+          state.data = data;
+        });
+      },
+    };
     return { ...methods, ...toRefs(state) };
   },
 });
