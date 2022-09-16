@@ -1,23 +1,18 @@
 <template>
-  <div class="about">
-    <h1>我的好儿子卢豪</h1>
-    <div>{{ data }}</div>
+  <div class="HomeBottom">
+    <div class="content">待更新...</div>
   </div>
 </template>
-
 <script lang="ts">
-import { ElMessage } from "element-plus";
+import post from "@/http/axios";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import post from "../http/axios/index";
 export default defineComponent({
   name: "",
   components: {},
   props: {},
   setup() {
     // 页面数据
-    const state = reactive({
-      data: "",
-    });
+    const state = reactive({});
     // 方法体
     const methods = {};
     // 页面默认请求
@@ -29,14 +24,12 @@ export default defineComponent({
       getList() {
         // 请求体数据
         const data = {
-          data: {},
+          customData: {},
         };
         // post请求
-        post("/admin/user/getTest", data).then((res: any) => {
+        post("/gsg/user/getAllUser", data).then((res: any) => {
           console.log(res);
-          let { msg, data } = res;
-          ElMessage.success(msg)
-          state.data = data;
+          let { message, customData } = res;
         });
       },
     };
@@ -44,6 +37,12 @@ export default defineComponent({
   },
 });
 </script>
-<style>
+<style scoped>
+.HomeBottom {
+  height: 50vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
-

@@ -1,0 +1,150 @@
+<template>
+  <div class="home">
+    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
+    <div class="body_style">
+      <div class="body_img"></div>
+    </div>
+    <div class="cover">
+      <div class="info">
+        <div class="info_title">首页</div>
+        <div class="info_text">
+          <span class="span1">
+            <el-tooltip
+              class="box-item"
+              effect="light"
+              content="https://github.com/Monica3568/blog-frontEnd.git"
+              placement="bottom-start"
+            >
+              <el-button type="text">
+                <img class="icon_module" src="../../assets/home/github.png" />
+              </el-button>
+            </el-tooltip>
+          </span>
+          <span class="span2"
+            ><el-tooltip
+              class="box-item"
+              effect="light"
+              content="Monica"
+              placement="bottom-start"
+            >
+              <el-button type="text">
+                <img class="icon_module" src="../../assets/home/vx.png" />
+              </el-button> </el-tooltip
+          ></span>
+          <span class="span3"
+            ><el-tooltip
+              class="box-item"
+              effect="light"
+              content="305064132"
+              placement="bottom-start"
+            >
+              <el-button type="text">
+                <img class="icon_module" src="../../assets/home/QQ.png" />
+              </el-button> </el-tooltip
+          ></span>
+          <span class="span4"
+            ><el-tooltip
+              class="box-item"
+              effect="light"
+              content="博客整合资料，点击获取详情"
+              placement="bottom-start"
+            >
+              <el-button type="text" @click="open()">
+                <img class="icon_module" src="../../assets/home/ziliao.png" />
+              </el-button> </el-tooltip
+          ></span>
+          <el-dialog
+            v-model="dialogVisible"
+            title="整合资料"
+            width="30%"
+            :before-close="handleClose"
+          >
+            <span v-html="content"></span>
+            <!-- <template #footer>
+                  <span class="dialog-footer">
+                    <el-button @click="dialogVisible = false">Cancel</el-button>
+                    <el-button type="primary" @click="dialogVisible = false"
+                      >Confirm</el-button
+                    >
+                  </span>
+                </template> -->
+          </el-dialog>
+        </div>
+      </div>
+    </div>
+    <HomeBottom/>
+    <!-- <div class="bottom">79845612856284562</div> -->
+    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
+// import HelloWorld from '@/components/HelloWorld.vue';
+import HomeBottom from "@/components/HomeBottom.vue";
+
+export default defineComponent({
+  name: "Home",
+  components: {
+    // HelloWorld,
+    HomeBottom,
+  },
+  setup() {
+    // 页面数据
+    const state = reactive({
+      dialogVisible: false,
+      content:
+        "博客的代码是开源的，位置在网站首页。<br><br>此外，博主还整理了一份资料<br>https://shuaigang.top<br><br>内容包括：<br><br><b>前后端代码、数据库文件<br><br>Nginx配置文件、文本训练集<br><br>本地部署视频、以及远程部署相关教程</b><br><br>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！<br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
+    });
+    // 方法体
+    const methods = {
+      open() {
+        console.log("Hello");
+        state.dialogVisible = true;
+      },
+      handleClose() {
+        state.dialogVisible = false;
+      },
+    };
+    // 页面默认请求
+    onMounted(() => {
+      // request.getList();
+    });
+    // 请求
+    const request = {};
+    return { ...methods, ...toRefs(state) };
+  },
+});
+</script>
+
+<style scoped>
+
+.body_img {
+  background-image: url(../../assets/backgroundImg/1.jpg);
+}
+
+.info_text {
+  margin-top: 2vh;
+  font-size: 1.3rem;
+}
+.span2 {
+  margin-left: 3vw;
+}
+.span3 {
+  margin-left: 3vw;
+}
+.span4 {
+  margin-left: 3vw;
+}
+:deep(.el-dialog__header) {
+  text-align: center !important;
+}
+:deep(.el-dialog__body) {
+  background-color: #ecf7fe !important;
+}
+
+/* .bottom {
+  height: 50vh;
+  background-color: #fff;
+} */
+</style>
