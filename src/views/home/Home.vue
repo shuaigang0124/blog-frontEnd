@@ -72,7 +72,7 @@
         </div>
       </div>
     </div>
-    <HomeBottom/>
+    <HomeBottom />
     <!-- <div class="bottom">79845612856284562</div> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
   </div>
@@ -90,35 +90,26 @@ export default defineComponent({
     HomeBottom,
   },
   setup() {
-    // 页面数据
     const state = reactive({
       dialogVisible: false,
       content:
         "博客的代码是开源的，位置在网站首页。<br><br>此外，博主还整理了一份资料<br>https://shuaigang.top<br><br>内容包括：<br><br><b>前后端代码、数据库文件<br><br>Nginx配置文件、文本训练集<br><br>本地部署视频、以及远程部署相关教程</b><br><br>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！<br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
     });
-    // 方法体
     const methods = {
       open() {
-        console.log("Hello");
         state.dialogVisible = true;
       },
       handleClose() {
         state.dialogVisible = false;
       },
     };
-    // 页面默认请求
-    onMounted(() => {
-      // request.getList();
-    });
-    // 请求
-    const request = {};
+    onMounted(() => {});
     return { ...methods, ...toRefs(state) };
   },
 });
 </script>
 
 <style scoped>
-
 .body_img {
   background-image: url(../../assets/backgroundImg/1.jpg);
 }

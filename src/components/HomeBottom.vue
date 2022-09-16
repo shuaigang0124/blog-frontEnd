@@ -17,7 +17,7 @@ export default defineComponent({
     const methods = {};
     // 页面默认请求
     onMounted(() => {
-      request.getList();
+      // request.getList();
     });
     // 请求
     const request = {
