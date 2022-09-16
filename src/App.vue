@@ -3,7 +3,7 @@
     <div class="item" v-for="item in titleList" :key="item">
       <router-link class="router" :to="item.to">
         <img class="icon_img" :src="item.icon" />
-        {{ item.title }}
+        <span class="router_title">{{ item.title }}</span>
       </router-link>
     </div>
   </div>
@@ -88,8 +88,11 @@ body {
 }
 
 .icon_img {
-  height: 1rem;
-  width: 1rem;
+  height: 0.9rem;
+  width: 0.9rem;
+}
+.router_title {
+  margin-left: 0.1rem;
 }
 .icon_module {
   height: 1.6rem;
@@ -98,7 +101,7 @@ body {
 .top {
   position: fixed;
   top: 3vh;
-  right: 2vw;
+  right: 2.2vw;
   /* height: 1vh; */
   /* float: right; */
   z-index: 99;
@@ -108,7 +111,7 @@ body {
 
 .item {
   margin-left: 1.5rem;
-  font-size: 1rem;
+  font-size: 0.9rem;
   /* font-weight: bold; */
 }
 
@@ -117,11 +120,36 @@ body {
   text-decoration: none;
   display: flex;
   align-items: center;
+  /* flex: 1 1 auto; */
+  /* margin: 10px; */
+  padding-bottom: 0.5rem;
+  /* border: 2px solid #f7f7f7; */
+  /* text-align: center; */
+  /* text-transform: uppercase; */
+  position: relative;
+  /* overflow: hidden; */
+  transition: 0.3s;
 }
-
-/* .top a.router-link-exact-active {
-  color: blue;
-} */
+.router:after {
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+  content: "";
+  width: 0;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  background: #80c8f8;
+}
+.router:hover {
+  /* color: #80c8f8; */
+  /* transform: translateY(-1rem); */
+  /* filter: drop-shadow(#80c8f8 0 1rem); */
+  cursor: pointer;
+}
+.router:hover:after {
+  width: 100%;
+  left: 0;
+}
 
 #global_loading {
   background: linear-gradient(
@@ -146,6 +174,7 @@ body {
     width: 100vw;
   }
 }
+
 .body_style {
   position: fixed;
   z-index: -99;

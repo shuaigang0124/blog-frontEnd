@@ -12,7 +12,7 @@
             <el-tooltip
               class="box-item"
               effect="light"
-              content="https://github.com/Monica3568/blog-frontEnd.git"
+              content="https://github.com/Monica3568/blog-frontEnd"
               placement="bottom-start"
             >
               <el-button type="text">

@@ -29,6 +29,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/10.jpg);
+  background-image: url(../../assets/backgroundImg/yu.gif);
 }
 </style>
