@@ -11,7 +11,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import { ElNotification } from "element-plus";
+import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
   components: {},
@@ -63,9 +64,49 @@ export default defineComponent({
       ],
     });
     // 方法体
-    const methods = {};
+    const methods = {
+      // 通知提醒
+      openNotification1() {
+        ElNotification({
+          title: "消息",
+          dangerouslyUseHTMLString: true,
+          message:
+            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
+          duration: 0,
+        });
+      },
+      openNotification2() {
+        ElNotification({
+          title: "通知",
+          dangerouslyUseHTMLString: true,
+          message:
+            '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
+          position: "top-left",
+          duration: 10000,
+        });
+      },
+    };
     // 页面默认请求
-    onMounted(() => {});
+    onMounted(() => {
+      // 测试使用
+      // let time = new Date("2022-01-01 00:00:00").getTime();
+      // console.log(time);
+      // localStorage.setItem("notification", time.toString());
+      let ntf = localStorage.getItem("notification");
+      let nowTime = new Date().getTime();
+      if (ntf) {
+        let time = Number(ntf);
+        if (time < nowTime - 24 * 60 * 60 * 1000) {
+          methods.openNotification1();
+          localStorage.setItem("notification", nowTime.toString());
+        }
+      } else {
+        localStorage.setItem("notification", nowTime.toString());
+        methods.openNotification1();
+      }
+      // methods.openNotification1();
+      methods.openNotification2();
+    });
     // 请求
     const request = {};
     return { ...methods, ...toRefs(state) };
@@ -74,13 +115,6 @@ export default defineComponent({
 </script>
 
 <style>
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-} */
 body {
   margin: 0;
   height: 100vh;
@@ -151,6 +185,10 @@ body {
   left: 0;
 }
 
+/**
+* 全局样式
+*/
+
 #global_loading {
   background: linear-gradient(
     to right,
@@ -220,7 +258,7 @@ body {
 ::-webkit-scrollbar {
   /*高宽分别对应横竖滚动条的尺寸*/
   width: 8px;
-  height: 3px;
+  height: 8px;
 }
 
 /*滚动条里面小方块*/

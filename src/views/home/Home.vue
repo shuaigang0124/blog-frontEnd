@@ -75,6 +75,24 @@
     <HomeBottom />
     <!-- <div class="bottom">79845612856284562</div> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
+    <div class="my_backtop" @click="upTop()">
+      <div class="my_backtop_msg">
+        <img class="my_backtop_img" src="../../assets/icon/backTop.png" />
+      </div>
+    </div>
+    <div class="buttomRight" @click="open()">
+      <div class="buttomRight_msg">
+        <div class="msg_details">资料</div>
+      </div>
+    </div>
+    <el-dialog
+      v-model="dialogVisible"
+      title="整合资料"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <span v-html="content"></span>
+    </el-dialog>
   </div>
 </template>
 
@@ -82,6 +100,7 @@
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 // import HelloWorld from '@/components/HelloWorld.vue';
 import HomeBottom from "@/components/HomeBottom.vue";
+import { ElMessage } from "element-plus";
 
 export default defineComponent({
   name: "Home",
@@ -101,6 +120,29 @@ export default defineComponent({
       },
       handleClose() {
         state.dialogVisible = false;
+      },
+      upTop() {
+        let top = document.documentElement.scrollTop;
+        if (top > 0) {
+          // 实现滚动效果
+          const timeTop = setInterval(() => {
+            if (top < 100) {
+              document.body.scrollTop = document.documentElement.scrollTop = top -= 50;
+            } else {
+              var t = top/5;
+              document.body.scrollTop = document.documentElement.scrollTop = top -= t;
+            }
+            document.body.scrollTop =
+              document.documentElement.scrollTop =
+              top -=
+                50;
+            if (top <= 0) {
+              clearInterval(timeTop);
+            }
+          }, 1);
+        } else {
+          ElMessage.warning("已置于顶部");
+        }
       },
     };
     onMounted(() => {});
@@ -132,6 +174,63 @@ export default defineComponent({
 }
 :deep(.el-dialog__body) {
   background-color: #ecf7fe !important;
+}
+
+.my_backtop {
+  /* box-shadow: 0 0 6px rgb(34, 36, 38, 0.15) inset; */
+  position: fixed;
+  z-index: 999;
+  bottom: 15px;
+  right: 15px;
+  /* z-index: 999; */
+  cursor: pointer;
+  border-radius: 0 0 5px 5px;
+  background-color: #e0e1e2;
+}
+
+.my_backtop:hover {
+  box-shadow: 0 0 0 40px rgba(48, 55, 66, 0.15) inset;
+  border-radius: 0 0 5px 5px;
+}
+
+.my_backtop_msg {
+  width: 50px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.my_backtop_img {
+  width: 20px;
+  height: 20px;
+}
+
+.buttomRight {
+  box-shadow: 0 0 6px rgb(34, 36, 38, 0.15) inset;
+  /* box-shadow: 0 0 6px rgb(0 0 0 / 12%); */
+  position: fixed;
+  bottom: 50px;
+  right: 15px;
+  z-index: 999;
+  cursor: pointer;
+  background-color: #2185d0;
+  border-radius: 5px 5px 0 0;
+}
+.buttomRight:hover {
+  box-shadow: 0 0 0 40px rgba(48, 55, 66, 0.15) inset;
+  border-radius: 5px 5px 0 0;
+}
+.buttomRight_msg {
+  width: 50px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.msg_details {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.8rem;
 }
 
 /* .bottom {
