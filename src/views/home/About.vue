@@ -1,0 +1,34 @@
+<template>
+  <div class="about">
+    <div class="body_style">
+      <div class="body_img"></div>
+    </div>
+    <div class="cover">
+      <div class="info">
+        <div class="info_title">关于</div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
+export default defineComponent({
+  name: "",
+  components: {},
+  props: {},
+  setup() {
+    const state = reactive({
+      data: "",
+    });
+    const methods = {};
+    onMounted(() => {});
+    return { ...methods, ...toRefs(state) };
+  },
+});
+</script>
+<style scoped>
+.body_img {
+  background-image: url(../../assets/backgroundImg/yu.gif);
+}
+</style>
