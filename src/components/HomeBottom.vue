@@ -69,14 +69,11 @@
 <script lang="js">
 import post from "@/http/axios";
 import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from "vue";
-// import Particles from "@/components/particles.vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../js/particles.min.js";
-// import "stats.js";
 export default defineComponent({
   name: "",
   components: {
-    // Particles,
   },
   props: {},
   setup() {
@@ -253,6 +250,7 @@ export default defineComponent({
     };
     // 页面默认请求
     onMounted(() => {
+      request.getList();
       // var homeState = localStorage.getItem('if_home');
       // if (!homeState) {
       //   localStorage.setItem('if_home', 'true');
@@ -268,7 +266,7 @@ export default defineComponent({
         title: "入站需知！！",
         describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
         avatar:
-          "http://175.178.9.64/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
+          "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
         userName: "shuaigang",
         time: "2022-09-19 16:05",
         readNum: "99",
@@ -292,13 +290,11 @@ export default defineComponent({
     const request = {
       getList() {
         // 请求体数据
-        const data = {
-          customData: {},
-        };
+        const data = {}
         // post请求
-        post("", data).then((res, any) => {
-          console.log(res);
-          let { message, customData } = res;
+        post("/gsg/authentication/form", data).then((res, any) => {
+          console.log(res)
+          let { code, message, customData } = res;
         });
       },
     };
@@ -545,4 +541,5 @@ export default defineComponent({
     background-position: 0% 50%;
   }
 }
+
 </style>

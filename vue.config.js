@@ -12,14 +12,14 @@ module.exports = {
         // 自动判断当前环境为开发还是线上
         proxy: process.env.NODE_ENV === 'production' ?
             {
-                '/meiqi': {
+                '/gsg': {
                     //对应自己的 跨域地址 即请求的后端地址
                     // 服务器
-                    target: 'http://服务器ip地址:9527',
+                    target: 'http://175.178.9.64:5200',
                     ws: true,   //代理websokets
                     changeOrigin: true,  //是否跨域，虚拟的站点需要更管origin
                     pathRewrite: {
-                        '^/meiqi': '',
+                        '^/gsg': '',
                     },
                 },
             }
@@ -28,7 +28,7 @@ module.exports = {
                 '/api': {
                     //对应自己的 跨域地址 即请求的后端地址
                     // 本地开发
-                    target: 'http://localhost:9527',
+                    target: 'http://localhost:5200',
                     ws: true,   //代理websokets
                     changeOrigin: true,  //是否跨域，虚拟的站点需要更管origin
                     pathRewrite: {

@@ -27,6 +27,11 @@ export default defineComponent({
           title: "首页",
         },
         {
+          to: "/games",
+          icon: require("./assets/icon/game.png"),
+          title: "游戏",
+        },
+        {
           to: "/discovery",
           icon: require("./assets/icon/listen.png"),
           title: "音乐盒",
@@ -35,11 +40,6 @@ export default defineComponent({
           to: "/chat",
           icon: require("./assets/icon/chat.png"),
           title: "聊天室",
-        },
-        {
-          to: "/types",
-          icon: require("./assets/icon/home.png"),
-          title: "类别",
         },
         {
           to: "/archives",
@@ -59,7 +59,7 @@ export default defineComponent({
         {
           to: "/about",
           icon: require("./assets/icon/candy.png"),
-          title: "后花园",
+          title: "关于",
         },
       ],
     });
@@ -286,5 +286,51 @@ body {
   border-radius: 0 !important;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
   background-color: #f5deb3 !important;
+}
+
+.pull_down {
+  position: absolute;
+  /* width: 25px; */
+  /* height: 25px; */
+  color: #02f8f8;
+  font-size: 50px;
+  font-weight: bold;
+  left: 48.5%;
+  top: 90vh;
+  -webkit-animation: jumpY 1s infinite ease-in-out;
+  -o-animation: jumpY 1s infinite ease-in-out;
+  animation: jumpY 1s infinite ease-in-out;
+}
+
+@-webkit-keyframes jumpY {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@keyframes jumpY {
+  0% {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+  50% {
+    -webkit-transform: translateY(-10px);
+    -ms-transform: translateY(-10px);
+    transform: translateY(-10px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <div class="pull_down">﹀</div>
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <div class="body_style">
@@ -9,22 +10,15 @@
         <div class="info_title">首页</div>
         <div class="info_text">
           <span class="span1">
-            <el-tooltip
-              class="box-item"
-              effect="light"
-              content="https://github.com/Monica3568/blog-frontEnd"
-              placement="bottom-start"
-            >
-              <el-button type="text">
-                <img class="icon_module" src="../../assets/home/github.png" />
-              </el-button>
-            </el-tooltip>
+            <el-button type="text" @click="openGitHub()">
+              <img class="icon_module" src="../../assets/home/github.png" />
+            </el-button>
           </span>
           <span class="span2"
             ><el-tooltip
               class="box-item"
               effect="light"
-              content="Monica"
+              content="GSG1491900793"
               placement="bottom-start"
             >
               <el-button type="text">
@@ -35,7 +29,7 @@
             ><el-tooltip
               class="box-item"
               effect="light"
-              content="305064132"
+              content="1491900793"
               placement="bottom-start"
             >
               <el-button type="text">
@@ -51,30 +45,21 @@
             >
               <el-button type="text" @click="open()">
                 <img class="icon_module" src="../../assets/home/ziliao.png" />
-              </el-button> </el-tooltip
-          ></span>
-          <el-dialog
-            v-model="dialogVisible"
-            title="整合资料"
-            width="30%"
-            :before-close="handleClose"
-          >
-            <span v-html="content"></span>
-            <!-- <template #footer>
-                  <span class="dialog-footer">
-                    <el-button @click="dialogVisible = false">Cancel</el-button>
-                    <el-button type="primary" @click="dialogVisible = false"
-                      >Confirm</el-button
-                    >
-                  </span>
-                </template> -->
-          </el-dialog>
+              </el-button>
+              <el-dialog
+                v-model="dialogVisible"
+                title="整合资料"
+                width="30%"
+                :before-close="handleClose"
+              >
+                <span v-html="content"></span>
+              </el-dialog>
+            </el-tooltip>
+          </span>
         </div>
       </div>
     </div>
     <HomeBottom />
-    <!-- <div class="bottom">79845612856284562</div> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/> -->
     <div class="my_backtop" @click="upTop()">
       <div class="my_backtop_msg">
         <img class="my_backtop_img" src="../../assets/icon/backTop.png" />
@@ -112,9 +97,12 @@ export default defineComponent({
     const state = reactive({
       dialogVisible: false,
       content:
-        "博客的代码是开源的，位置在网站首页。<br><br>此外，博主还整理了一份资料<br>https://shuaigang.top<br><br>内容包括：<br><br><b>前后端代码、数据库文件<br><br>Nginx配置文件、文本训练集<br><br>本地部署视频、以及远程部署相关教程</b><br><br>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！<br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
+        "<b>博客的代码是开源的，位置在:</b><br><br>前端：https://github.com/shuaigang0124/blog-frontEnd<br>后端：https://github.com/shuaigang0124/blog-backEnd<br><br><b>此外，博主的第一版网站也在GitHub上面，有兴趣的小伙伴可以去看看：</b><br><br>web端地址：https://github.com/shuaigang0124/website-frontend<br><br>小程序地址：https://github.com/shuaigang0124/website-uniapp-vx<br><br>后台地址：https://github.com/shuaigang0124/website-backend<br><br><b>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！</b><br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
     });
     const methods = {
+      openGitHub() {
+        window.open('https://github.com/shuaigang0124/blog-frontEnd', '_blank')
+      },
       open() {
         state.dialogVisible = true;
       },
@@ -127,10 +115,16 @@ export default defineComponent({
           // 实现滚动效果
           const timeTop = setInterval(() => {
             if (top < 100) {
-              document.body.scrollTop = document.documentElement.scrollTop = top -= 50;
+              document.body.scrollTop =
+                document.documentElement.scrollTop =
+                top -=
+                  50;
             } else {
-              var t = top/5;
-              document.body.scrollTop = document.documentElement.scrollTop = top -= t;
+              var t = top / 5;
+              document.body.scrollTop =
+                document.documentElement.scrollTop =
+                top -=
+                  t;
             }
             document.body.scrollTop =
               document.documentElement.scrollTop =

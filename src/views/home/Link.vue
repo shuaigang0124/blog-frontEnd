@@ -30,6 +30,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/11.jpg);
+  background-image: url(../../assets/backgroundImg/wb06.jpg);
 }
 </style>

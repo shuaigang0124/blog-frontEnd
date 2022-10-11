@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Base64 } from "js-base64";
 
 const instance = axios.create({
     timeout: 20000,
@@ -33,25 +34,32 @@ instance.interceptors.response.use(
 let baseUrl = ""
 if (process.env.NODE_ENV === 'production') {
     // 生产环境
-    baseUrl = "/meiqi"
+    baseUrl = "/"
 } else {
     // 本地环境
-    baseUrl = "/api/meiqi"
+    baseUrl = "/api"
 }
 
 const post = async (url: string, param?: any) => {
     let token = await getToken()
     let userInfo = await getUserInfo()
+    let myData = {
+        customData: param,
+    }
+    let paramData = {
+        encryption_type: "base64",
+        data: Base64.encode(JSON.stringify(myData)),
+    }
     return new Promise((resolve, reject) => {
         instance
-            .post(`${baseUrl}${url}`, param, {
+            .post(`${baseUrl}${url}`, paramData, {
                 headers: {
                     "Authorization": token || '',
                     "userInfo": userInfo || '',
                 }
             })
             .then(res => {
-                resolve(res);
+                resolve(JSON.parse(Base64.decode(res.data)));
             })
             .catch(err =>
                 reject(err));
