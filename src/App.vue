@@ -27,6 +27,21 @@ export default defineComponent({
           title: "首页",
         },
         {
+          to: "/archives",
+          icon: require("./assets/icon/archive.png"),
+          title: "归档",
+        },
+        {
+          to: "/chat",
+          icon: require("./assets/icon/chat.png"),
+          title: "聊天室",
+        },
+        {
+          to: "/message",
+          icon: require("./assets/icon/message.png"),
+          title: "留言",
+        },
+        {
           to: "/games",
           icon: require("./assets/icon/game.png"),
           title: "游戏",
@@ -36,26 +51,11 @@ export default defineComponent({
           icon: require("./assets/icon/listen.png"),
           title: "音乐盒",
         },
-        {
-          to: "/chat",
-          icon: require("./assets/icon/chat.png"),
-          title: "聊天室",
-        },
-        {
-          to: "/archives",
-          icon: require("./assets/icon/archive.png"),
-          title: "归档",
-        },
-        {
-          to: "/link",
-          icon: require("./assets/icon/link.png"),
-          title: "友链",
-        },
-        {
-          to: "/message",
-          icon: require("./assets/icon/message.png"),
-          title: "留言",
-        },
+        // {
+        //   to: "/link",
+        //   icon: require("./assets/icon/link.png"),
+        //   title: "友链",
+        // },
         {
           to: "/about",
           icon: require("./assets/icon/candy.png"),
@@ -257,8 +257,8 @@ body {
 /*滚动条整体粗细样式*/
 ::-webkit-scrollbar {
   /*高宽分别对应横竖滚动条的尺寸*/
-  width: 8px;
-  height: 8px;
+  width: 5px;
+  height: 5px;
 }
 
 /*滚动条里面小方块*/
@@ -266,26 +266,27 @@ body {
   border-radius: 10px !important;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
   /* 颜色 */
-  /* background: rgb(232, 232, 232) !important; */
+  background: #00ff00 !important;
   /* 线性渐变背景 */
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     45deg,
-    #ffbd61 25%,
-    #ffbd61 25%,
-    #ff8800 25%,
-    #ff8800 50%,
-    #ffbd61 50%,
-    #ffbd61 75%,
-    #ff8800 75%,
-    #ff8800 100%
-  ) !important;
+    red 25%,
+    red 25%,
+    blue 25%,
+    blue 50%,
+    yellow 50%,
+    yellow 75%,
+    green 75%,
+    green 100%
+  ) !important; */
 }
 
 /*滚动条轨道*/
 ::-webkit-scrollbar-track {
   border-radius: 0 !important;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
-  background-color: #f5deb3 !important;
+  background-color: #fff !important;
+  /* background-color: #f5deb3 !important; */
 }
 
 .pull_down {

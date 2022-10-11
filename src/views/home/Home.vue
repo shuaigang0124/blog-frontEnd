@@ -120,20 +120,20 @@ export default defineComponent({
                 top -=
                   50;
             } else {
-              var t = top / 5;
+              var t = top / 10;
               document.body.scrollTop =
                 document.documentElement.scrollTop =
                 top -=
                   t;
             }
-            document.body.scrollTop =
-              document.documentElement.scrollTop =
-              top -=
-                50;
+            // document.body.scrollTop =
+            //   document.documentElement.scrollTop =
+            //   top -=
+            //     50;
             if (top <= 0) {
               clearInterval(timeTop);
             }
-          }, 1);
+          }, 10);
         } else {
           ElMessage.warning("已置于顶部");
         }
