@@ -50,7 +50,50 @@
             </div>
           </div>
           <div class="HomeBottom_body_info_right" id="HomeBottom_body_right">
-            <div class="HomeBottom_body_info_right_me">9876</div>
+            <div class="module_one">
+              <div class="module_title">标签云</div>
+              <div class="module_title_line" />
+              <el-tag
+                class="my_el_tags"
+                v-for="tag in tagList"
+                :key="tag.name"
+                :color="tag.color"
+                effect="light"
+              >
+                <span class="tag_text"> {{ tag.name }}</span>
+              </el-tag>
+            </div>
+            <div class="module_two">
+              <div class="module_title">使用指南</div>
+              <div class="module_title_line" />
+              <div class="guide_info">
+                <div>
+                  <div class="guide_info_title">项目下载安装使用指南</div>
+                  <el-button
+                    class="guide_info_button"
+                    round
+                    size="mini"
+                    @click="readGuide"
+                  >
+                    开始阅读
+                  </el-button>
+                </div>
+              </div>
+            </div>
+            <div class="module_two">
+              <div class="module_title">友链</div>
+              <div class="module_title_line" />
+              <el-link
+                style="margin-right: 1vw; margin-top: 1vh"
+                v-for="link in linkData"
+                :key="link"
+                :href="link.url"
+                target="_blank"
+                :underline="false"
+              >
+                {{ link.name }}
+              </el-link>
+            </div>
           </div>
         </div>
       </div>
@@ -71,10 +114,10 @@ import post from "@/http/axios";
 import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../js/particles.min.js";
+import { ElMessage } from "element-plus";
 export default defineComponent({
   name: "",
-  components: {
-  },
+  components: {},
   props: {},
   setup() {
     // 页面数据
@@ -97,9 +140,48 @@ export default defineComponent({
         //   tag: "公告",
         // },
       ],
+      tagList: [
+        { color: "#036564", name: "java" },
+        { color: "#EB6841", name: "vue" },
+        { color: "#3FB8AF", name: "服务器" },
+        { color: "#FE4365", name: "数据库" },
+        { color: "#FC9D9A", name: "学习笔记" },
+        { color: "#EDC951", name: "面试" },
+        { color: "#C8C8A9", name: "生活" },
+        { color: "#83AF9B", name: "数据库" },
+        { color: "#8A9B0F", name: "Spring" },
+        { color: "#EB6841", name: "Redis" },
+        { color: "#3FB8AF", name: "RabbitMQ" },
+        { color: "#FE4365", name: "MyBtis" },
+        { color: "#FC9D9A", name: "ElasticSearch" },
+        { color: "#EDC951", name: "BUG" },
+      ],
+      linkData: [
+        {
+          name: "游戏一",
+          url: "https://shuaigang.top/html/stick.html",
+        },
+        {
+          name: "游戏二",
+          url: "https://shuaigang.top/html/plane.html",
+        },
+        {
+          name: "游戏三",
+          url: "https://shuaigang.top/html/brick.html",
+        },{
+          name: "游戏四",
+          url: "https://shuaigang.top/html/spaceship.html",
+        },{
+          name: "隔江明月照莲华",
+          url: "https://shuaigang.top",
+        },
+      ],
     });
     // 方法体
     const methods = {
+      readGuide() {
+        ElMessage.warning("敬请期待");
+      },
       par() {
         particlesJS("particles-js", {
           particles: {
@@ -187,31 +269,41 @@ export default defineComponent({
       //监听容器高度变化
       listenParentHeight() {
         const erd = elementResizeDetectorMaker();
-        erd.listenTo(document.getElementById("HomeBottom_body_left").offsetHeight,
-         element => {
-          nextTick(()=>{
-            //监听到事件后执行的业务逻辑
-            var leftHeight =document.getElementById("HomeBottom_body_left").offsetHeight;
-            var rightHeight =document.getElementById("HomeBottom_body_right").offsetHeight;
-            var parent =document.getElementById("HomeBottom");
-            if (leftHeight > rightHeight) {
-              if (parent.offsetHeight < leftHeight) {
-
+        erd.listenTo(
+          document.getElementById("HomeBottom_body_left").offsetHeight,
+          (element) => {
+            nextTick(() => {
+              //监听到事件后执行的业务逻辑
+              var leftHeight = document.getElementById(
+                "HomeBottom_body_left"
+              ).offsetHeight;
+              var rightHeight = document.getElementById(
+                "HomeBottom_body_right"
+              ).offsetHeight;
+              var parent = document.getElementById("HomeBottom");
+              if (leftHeight > rightHeight) {
+                if (parent.offsetHeight < leftHeight) {
+                }
+                var height = state.PH + leftHeight;
+                document
+                  .getElementById("HomeBottom")
+                  .setAttribute(
+                    "style",
+                    "height: " + height.toString() + "px;"
+                  );
+              } else {
               }
-              var height = state.PH + leftHeight;
-              document.getElementById("HomeBottom").setAttribute("style","height: " + height.toString() + "px;");
-            } else {
-
-            }
-          });
-        });
-        erd.listenTo(document.getElementById("HomeBottom_body_right").offsetHeight,
-         element => {
-          nextTick(()=>{
-            //监听到事件后执行的业务逻辑
-
-          });
-        });
+            });
+          }
+        );
+        erd.listenTo(
+          document.getElementById("HomeBottom_body_right").offsetHeight,
+          (element) => {
+            nextTick(() => {
+              //监听到事件后执行的业务逻辑
+            });
+          }
+        );
       },
       //设置容器高度
       setParentHeight() {
@@ -219,14 +311,17 @@ export default defineComponent({
         state.PH = parent.offsetHeight;
         var childLeft = document.getElementById("HomeBottom_body_left");
         var childRight = document.getElementById("HomeBottom_body_right");
-        if (parent.offsetHeight < childLeft.offsetHeight || parent.offsetWidth < childRight.offsetWidth) {
+        if (
+          parent.offsetHeight < childLeft.offsetHeight ||
+          parent.offsetWidth < childRight.offsetWidth
+        ) {
           if (childLeft.offsetHeight > childRight.offsetHeight) {
             var height = parent.offsetHeight + childLeft.offsetHeight;
           } else {
             var height = parent.offsetHeight + childRight.offsetHeight;
           }
         }
-        parent.setAttribute("style","height: " + height.toString() + "px;");
+        parent.setAttribute("style", "height: " + height.toString() + "px;");
       },
       //监听窗口变化
       watchWin() {
@@ -276,10 +371,10 @@ export default defineComponent({
       for (var i = 0; i < 5; i++) {
         state.articleList.push(data);
       }
-      setTimeout(function() {
+      setTimeout(function () {
         methods.setParentHeight();
         methods.par();
-      }, 1)
+      }, 1);
     });
     onUnmounted(() => {
       state.winState = false;
@@ -290,10 +385,10 @@ export default defineComponent({
     const request = {
       getList() {
         // 请求体数据
-        const data = {}
+        const data = {};
         // post请求
         post("/gsg/authentication/form", data).then((res, any) => {
-          console.log(res)
+          console.log(res);
           let { code, message, customData } = res;
         });
       },
@@ -303,6 +398,78 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.module_title {
+  text-decoration: none;
+  font-size: 1.2rem;
+  position: relative;
+  transition: 0.3s;
+}
+.module_title_line {
+  margin-top: 1vh;
+  width: 6.5vw;
+  border-bottom: 3px solid #80c8f8;
+}
+.guide_info {
+  margin-top: 2vh;
+  width: 100%;
+  height: 20vh;
+  background-image: url(../assets/backgroundImg/20.jpg);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  justify-content: center;
+}
+.guide_info_title {
+  font: 1rem Microsoft YaHei, Arial, Helvetica, sans-serif;
+}
+.guide_info_button {
+  margin-top: 1.5vh;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.guide_info_button:hover {
+  color: black;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.module_one {
+  padding: 2vh 1vw 2vh 1vw;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.module_two {
+  padding: 2vh 1vw 2vh 1vw;
+  margin-top: 2vh;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.module_one:hover {
+  cursor: pointer;
+}
+.module_two:hover {
+  cursor: pointer;
+}
+.my_el_tags {
+  margin-right: 0.5vw;
+  margin-top: 1vh;
+  border-radius: 0.6rem;
+  /* font-weight: bold; */
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+.my_el_tags:hover {
+  border-radius: 0;
+}
+.my_el_tags:hover .tag_text {
+  /* color: #ffffff; */
+  text-shadow: 1px 1px 1px black;
+}
+
 /* :deep(.particles-js-canvas-el) {
   width: 100vw !important;
   min-height: 100% !important;
@@ -383,10 +550,8 @@ export default defineComponent({
 }
 .HomeBottom_body_info_right {
   margin-left: 55vw;
-  /* height: 20vh;
-  width: 21vw; */
-  border-radius: 5px;
-  background-color: #ffffff;
+  /* height: 20vh; */
+  width: 21vw;
   position: absolute;
   z-index: 99;
 }
@@ -490,14 +655,6 @@ export default defineComponent({
 /**
 * flex右  简介
 */
-.HomeBottom_body_info_right_me {
-  padding: 2vh 1vw 2vh 1vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 21vw;
-  height: 20vh;
-}
 
 /**
 * 底部
@@ -541,5 +698,4 @@ export default defineComponent({
     background-position: 0% 50%;
   }
 }
-
 </style>

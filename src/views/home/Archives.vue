@@ -48,7 +48,7 @@
                 <el-tag
                   style="margin-right: 0.5vw"
                   v-for="tag in item.tags"
-                  :key="tag.label"
+                  :key="tag.name"
                   :type="tag.type"
                   effect="light"
                 >
@@ -123,55 +123,55 @@ export default defineComponent({
           time: "2022-09-19 16:05",
           content: "nima",
           tags: [
-            { type: "", name: "Tag 1" },
-            { type: "success", name: "Tag 2" },
-            { type: "info", name: "Tag 3" },
-            { type: "danger", name: "Tag 4" },
-            { type: "warning", name: "Tag 5" },
+            { type: "", name: "java" },
+            { type: "success", name: "vue" },
+            { type: "info", name: "服务器" },
+            { type: "danger", name: "数据库" },
+            { type: "warning", name: "kiss" },
           ],
         },
         {
           time: "2022-09-19 16:06",
           content: "0000000",
           tags: [
-            { type: "", name: "Tag 1" },
-            { type: "success", name: "Tag 2" },
+            { type: "", name: "java" },
+            { type: "success", name: "vue" },
           ],
         },
         {
           time: "2022-09-19 16:07",
           content: "呃呃呃呃",
           tags: [
-            { type: "", name: "Tag 1" },
-            { type: "success", name: "Tag 2" },
-            { type: "info", name: "Tag 3" },
+            { type: "", name: "java" },
+            { type: "success", name: "vue" },
+            { type: "info", name: "服务器" },
           ],
         },
         {
           time: "2022-09-19 16:07",
           content: "呃呃呃呃",
           tags: [
-            { type: "", name: "Tag 1" },
-            { type: "success", name: "Tag 2" },
-            { type: "info", name: "Tag 3" },
+            { type: "", name: "java" },
+            { type: "success", name: "vue" },
+            { type: "info", name: "服务器" },
           ],
         },
         {
           time: "2022-09-19 16:07",
           content: "呃呃呃呃",
           tags: [
-            { type: "", name: "Tag 1" },
-            { type: "success", name: "Tag 2" },
-            { type: "info", name: "Tag 3" },
+            { type: "", name: "java" },
+            { type: "success", name: "vue" },
+            { type: "info", name: "服务器" },
           ],
         },
         {
           time: "2022-09-19 16:07",
           content: "呃呃呃呃",
           tags: [
-            { type: "", name: "Tag 1" },
-            { type: "success", name: "Tag 2" },
-            { type: "info", name: "Tag 3" },
+            { type: "", name: "java" },
+            { type: "success", name: "vue" },
+            { type: "info", name: "服务器" },
           ],
         },
       ],
@@ -191,6 +191,8 @@ export default defineComponent({
       },
       aaaa(e) {
         state.indexNum = e;
+        // 获取并更改右边数据
+        // state.rightData = 
       },
       goToDetail(e) {
         ElMessage.warning("敬请期待，标题：" + e.content);
