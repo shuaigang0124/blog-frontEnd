@@ -12,7 +12,7 @@
             </div>
             <div class="article_info">
               <div class="article_list" v-for="item in articleList" :key="item">
-                <div class="article_item">
+                <div class="article_item" @click="readArticle">
                   <div class="article_title">{{ item.title }}</div>
                   <div class="article_describe">{{ item.describe }}</div>
                   <div class="article_user_info">
@@ -59,6 +59,7 @@
                 :key="tag.name"
                 :color="tag.color"
                 effect="light"
+                @click="tagToList"
               >
                 <span class="tag_text"> {{ tag.name }}</span>
               </el-tag>
@@ -179,6 +180,12 @@ export default defineComponent({
     });
     // 方法体
     const methods = {
+      readArticle() {
+        ElMessage.warning("敬请期待");
+      },
+      tagToList() {
+        ElMessage.warning("敬请期待");
+      },
       readGuide() {
         ElMessage.warning("敬请期待");
       },

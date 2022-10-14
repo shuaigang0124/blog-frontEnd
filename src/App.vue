@@ -1,10 +1,23 @@
 <template>
   <div class="top">
     <div class="item" v-for="item in titleList" :key="item">
-      <router-link class="router" :to="item.to">
+      <!-- <router-link class="router" :to="item.to">
         <img class="icon_img" :src="item.icon" />
         <span class="router_title">{{ item.title }}</span>
-      </router-link>
+        <div v-if="item.title === '音乐盒'" @click ="goMusic" />
+        <div v-if="item.title === '首页'" @click="goHome" />
+      </router-link> -->
+      <el-button
+        class="router"
+        @click="checkPage(item)"
+        type="text"
+        :disabled="isDisabled"
+      >
+        <div class="router_item_center">
+          <div><img class="icon_img" :src="item.icon" /></div>
+          <div class="router_title">{{ item.title }}</div>
+        </div>
+      </el-button>
     </div>
   </div>
   <router-view />
@@ -13,6 +26,7 @@
 <script lang="ts">
 import { ElNotification } from "element-plus";
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
+import router from "./router";
 export default defineComponent({
   name: "",
   components: {},
@@ -47,24 +61,132 @@ export default defineComponent({
           title: "游戏",
         },
         {
-          to: "/discovery",
+          to: "/music",
           icon: require("./assets/icon/listen.png"),
           title: "音乐盒",
         },
-        // {
-        //   to: "/link",
-        //   icon: require("./assets/icon/link.png"),
-        //   title: "友链",
-        // },
         {
           to: "/about",
           icon: require("./assets/icon/candy.png"),
           title: "关于",
         },
       ],
+      isDisabled: false,
+      notificationMessage2:
+        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
     });
     // 方法体
     const methods = {
+      checkPage(e) {
+        if (e.to !== "") {
+          router.push(e.to);
+        }
+        if (e.title === "音乐盒") {
+          state.isDisabled = true;
+          var data = [
+            {
+              to: "/music",
+              icon: require("./assets/icon/search.png"),
+              title: "搜索",
+            },
+            {
+              to: "/discovery",
+              icon: require("./assets/icon/discovery.png"),
+              title: "发现音乐",
+            },
+            {
+              to: "/playlists",
+              icon: require("./assets/icon/playlist.png"),
+              title: "推荐歌单",
+            },
+            {
+              to: "/songs",
+              icon: require("./assets/icon/new.png"),
+              title: "最新音乐",
+            },
+            {
+              to: "/mv",
+              icon: require("./assets/icon/MV.png"),
+              title: "最新MV",
+            },
+            {
+              to: "/",
+              icon: require("./assets/icon/home.png"),
+              title: "首页",
+            },
+          ];
+          const oldList = setInterval(() => {
+            state.titleList.shift();
+            if (state.titleList.length === 0) {
+              clearInterval(oldList);
+              var i = -1;
+              const newList = setInterval(() => {
+                i += 1;
+                state.titleList.push(data[i]);
+                if (state.titleList.length === data.length) {
+                  clearInterval(newList);
+                  state.isDisabled = false;
+                }
+              }, 15);
+            }
+          }, 15);
+        }
+        if (e.title === "首页") {
+          state.isDisabled = true;
+          var data = [
+            {
+              to: "/",
+              icon: require("./assets/icon/home.png"),
+              title: "首页",
+            },
+            {
+              to: "/archives",
+              icon: require("./assets/icon/archive.png"),
+              title: "归档",
+            },
+            {
+              to: "/chat",
+              icon: require("./assets/icon/chat.png"),
+              title: "聊天室",
+            },
+            {
+              to: "/message",
+              icon: require("./assets/icon/message.png"),
+              title: "留言",
+            },
+            {
+              to: "/games",
+              icon: require("./assets/icon/game.png"),
+              title: "游戏",
+            },
+            {
+              to: "/music",
+              icon: require("./assets/icon/listen.png"),
+              title: "音乐盒",
+            },
+            {
+              to: "/about",
+              icon: require("./assets/icon/candy.png"),
+              title: "关于",
+            },
+          ];
+          const oldList = setInterval(() => {
+            state.titleList.shift();
+            if (state.titleList.length === 0) {
+              clearInterval(oldList);
+              var j = -1;
+              const newList = setInterval(() => {
+                j += 1;
+                state.titleList.push(data[j]);
+                if (state.titleList.length === data.length) {
+                  clearInterval(newList);
+                  state.isDisabled = false;
+                }
+              }, 15);
+            }
+          }, 15);
+        }
+      },
       // 通知提醒
       openNotification1() {
         ElNotification({
@@ -76,11 +198,22 @@ export default defineComponent({
         });
       },
       openNotification2() {
+        // var timeNum = 10;
+        // const countdown = setInterval(() => {
+        //   timeNum -= 1;
+        //   var data =
+        //     '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">' +
+        //     timeNum +
+        //     "s后自动关闭</div>";
+        //   state.notificationMessage2 = data;
+        //   if (timeNum === 0) {
+        //     clearInterval(countdown);
+        //   }
+        // }, 1000);
         ElNotification({
           title: "通知",
           dangerouslyUseHTMLString: true,
-          message:
-            '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
+          message: state.notificationMessage2,
           position: "top-left",
           duration: 10000,
         });
@@ -120,12 +253,15 @@ body {
   height: 100vh;
   overflow: auto;
 }
-
+.el-button.is-disabled {
+  cursor: pointer !important;
+}
 .icon_img {
   height: 0.9rem;
   width: 0.9rem;
 }
 .router_title {
+  color: #fff;
   margin-left: 0.1rem;
 }
 .icon_module {
@@ -134,8 +270,8 @@ body {
 }
 .top {
   position: fixed;
-  top: 3vh;
-  right: 2.2vw;
+  top: 1.5vh;
+  right: 2vw;
   /* height: 1vh; */
   /* float: right; */
   z-index: 99;
@@ -151,18 +287,24 @@ body {
 
 .router {
   color: #fff;
-  text-decoration: none;
-  display: flex;
+  /* text-decoration: none; */
+  /* display: flex;
   align-items: center;
+  justify-content: center; */
   /* flex: 1 1 auto; */
   /* margin: 10px; */
-  padding-bottom: 0.5rem;
+  /* padding-bottom: 0.5rem; */
   /* border: 2px solid #f7f7f7; */
   /* text-align: center; */
   /* text-transform: uppercase; */
   position: relative;
   /* overflow: hidden; */
   transition: 0.3s;
+}
+.router_item_center {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
 }
 .router:after {
   position: absolute;

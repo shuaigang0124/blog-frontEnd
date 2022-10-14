@@ -195,7 +195,7 @@ export default defineComponent({
         // state.rightData = 
       },
       goToDetail(e) {
-        ElMessage.warning("敬请期待，标题：" + e.content);
+        ElMessage.warning("敬请期待");
       },
     };
     onMounted(() => {});
