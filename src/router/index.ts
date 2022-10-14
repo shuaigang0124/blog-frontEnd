@@ -12,9 +12,9 @@ const routes: Array<RouteRecordRaw> = [
     component: Home
   },
   {
-    path: '/discovery',
-    name: 'Discovery',
-    component: () => import('../views/home/Discovery.vue')
+    path: '/music',
+    name: 'Music',
+    component: () => import('../views/home/Music.vue')
   },
   {
     path: '/chat',
@@ -45,6 +45,26 @@ const routes: Array<RouteRecordRaw> = [
     path: '/about',
     name: 'About',
     component: () => import('../views/home/About.vue')
+  },
+  {
+    path: '/discovery',
+    name: 'Discovery',
+    component: () => import('../views/music/Discovery.vue')
+  },
+  {
+    path: '/playlists',
+    name: 'Playlists',
+    component: () => import('../views/music/Playlists.vue')
+  },
+  {
+    path: '/songs',
+    name: 'Songs',
+    component: () => import('../views/music/Songs.vue')
+  },
+  {
+    path: '/mv',
+    name: 'MV',
+    component: () => import('../views/music/MV.vue')
   }
 ]
 

@@ -12,14 +12,14 @@
               <div class="not-indent">Hi:</div>
               <div class="indent">欢迎来到隔江明月照莲华</div>
               <div class="indent">
-                很高兴你能够在百忙之中访问：隔江明月照莲华
+                很高兴你能够在百忙之中访问本站
               </div>
               <div class="indent">
                 我是作者帅刚，一个来自重庆居于杭州的底层码农
               </div>
-              <div class="indent">我在2021首次创办了这个属于自己的个人空间</div>
+              <div class="indent">我在2021年首次创办了这个属于自己的个人空间</div>
               <div class="indent">
-                2022年9月，我推翻了最开始的设计，重构了当前网站
+                2022年9月，我推翻了最开始的设计，重写了当前网站
               </div>
               <div class="indent">
                 想借次机会引导自己写博客来保留日常的技术笔记，也能够在不断折腾的同时提升自己专业能力
@@ -32,9 +32,9 @@
               <div class="indent">希望你能够爱惜自己，每天早点睡</div>
               <div class="indent">祝你身体安康，并且希望我们能够成为朋友</div>
               <div class="not-indent">本站信息：</div>
-              <div class="indent">名称：隔江明月照莲华</div>
-              <div class="indent">链接：https://shuaigang.top</div>
-              <div class="indent">描述：争取早日攻克全栈，做上架构师</div>
+              <div class="indent">about：© 2022 - 2023 By ShuaiGang</div>
+              <div class="indent">备案号：渝ICP备2021011002号</div>
+              <div class="indent">愿景：争取早日攻克全栈，做上架构师</div>
             </div>
           </div>
         </div>

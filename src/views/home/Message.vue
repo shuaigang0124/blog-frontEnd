@@ -33,11 +33,11 @@
         class="danmuku"
         v-model:danmus="danmus"
         useSlot
-        :loop="true"
         :randomChannel="true"
         :speeds="100"
-        :debounce="200"
-        :isSuspend="true"
+        :debounce="700"
+        :isSuspend="false"
+        :loop="true"
       >
         <!-- 弹幕插槽 -->
         <template v-slot:dm="{ danmu }">
@@ -89,37 +89,30 @@ export default defineComponent({
     });
     const methods = {
       addToList() {
-        let data = { color: "blue", name: "帅刚", text: "到此一游" };
-        let data2 = { color: "yellow", name: "俊俊", text: "我是豪豪的爹" };
-        let data3 = { color: "red", name: "淼淼", text: "豪豪好大儿" };
-        let data4 = { color: "#00ff00", name: "查查", text: "qwertyuioasdfgh" };
-        let data5 = { color: "#00ffff", name: "柯柯", text: "爱川川❤" };
-        let data6 = { color: "#cfe2f3", name: "峰峰", text: "查查是sb" };
-        let data7 = { color: "#7f6000", name: "多多", text: "asdfghjkl" };
-        let data8 = { color: "#674ea7", name: "川川", text: "我是化学小天才" };
-        let data9 = {
-          color: "#ff00ff",
-          name: "豪豪",
-          text: "呜呜呜，想要文文的幸福",
-        };
-        let data10 = {
-          color: "#2d8cbb",
-          name: "喵喵",
-          text: "圣火昭昭，圣光耀耀，凡我弟子，喵喵喵喵。",
-        };
-        for (var i = 0; i < 10; i++) {
-          state.danmus.push(
-            data,
-            data2,
-            data3,
-            data4,
-            data5,
-            data6,
-            data7,
-            data8,
-            data9,
-            data10
-          );
+        let data = [
+          { color: "blue", name: "帅刚", text: "到此一游" },
+          { color: "yellow", name: "俊俊", text: "我是豪豪的爹" },
+          { color: "red", name: "淼淼", text: "豪豪好大儿" },
+          { color: "#00ff00", name: "查查", text: "qwertyuioasdfgh" },
+          { color: "#00ffff", name: "柯柯", text: "爱川川❤" },
+          { color: "#cfe2f3", name: "峰峰", text: "查查是sb" },
+          { color: "#7f6000", name: "多多", text: "asdfghjkl" },
+          { color: "#674ea7", name: "川川", text: "我是化学小天才" },
+          {
+            color: "#ff00ff",
+            name: "豪豪",
+            text: "呜呜呜，想要文文的幸福",
+          },
+          {
+            color: "#2d8cbb",
+            name: "喵喵",
+            text: "圣火昭昭，圣光耀耀，凡我弟子，喵喵喵喵。",
+          },
+        ];
+        for (var i = 0; i < 5; i++) {
+          for (var j = 0; j < data.length; j++) {
+            state.danmus.push(data[j]);
+          }
         }
       },
       sendMsg() {
@@ -128,10 +121,10 @@ export default defineComponent({
           for (var i = 0; i < 2; i++) {
             str +=
               String.fromCharCode(
-                Math.floor(Math.random() * 26) + "a".charCodeAt(0)
+                Math.floor(Math.random() * 26) + "A".charCodeAt(0)
               ) +
               String.fromCharCode(
-                Math.floor(Math.random() * 26) + "A".charCodeAt(0)
+                Math.floor(Math.random() * 26) + "a".charCodeAt(0)
               );
           }
           str += Math.floor(Math.random() * (9999 - 1000)) + 1000;
