@@ -56,7 +56,14 @@
 
 <script lang="ts">
 import { ElMessage } from "element-plus";
-import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 import vueDanmaku from "vue3-danmaku";
 export default defineComponent({
   name: "",
@@ -147,6 +154,9 @@ export default defineComponent({
     onMounted(() => {
       document.getElementById("inputMsg").focus();
       methods.addToList();
+    });
+    onUnmounted(() => {
+      state.danmus = [];
     });
     return { ...methods, ...toRefs(state), danmakuRef };
   },
