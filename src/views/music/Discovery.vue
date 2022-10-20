@@ -46,7 +46,7 @@ export default defineComponent({
           customData: {},
         };
         // post请求
-        post("/gsg/user/getAllUser", data).then((res: any) => {
+        post("/user/getAllUser", data).then((res: any) => {
           console.log(res);
           let { message, customData } = res;
         });

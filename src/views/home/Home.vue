@@ -85,7 +85,8 @@
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 // import HelloWorld from '@/components/HelloWorld.vue';
 import HomeBottom from "@/components/HomeBottom.vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Home",
@@ -98,10 +99,12 @@ export default defineComponent({
       dialogVisible: false,
       content:
         "<b>博客的代码是开源的，位置在:</b><br><br>前端：https://github.com/shuaigang0124/blog-frontEnd<br>后端：https://github.com/shuaigang0124/blog-backEnd<br><br><b>此外，博主的第一版网站也在GitHub上面，有兴趣的小伙伴可以去看看：</b><br><br>web端地址：https://github.com/shuaigang0124/website-frontend<br><br>小程序地址：https://github.com/shuaigang0124/website-uniapp-vx<br><br>后台地址：https://github.com/shuaigang0124/website-backend<br><br><b>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！</b><br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
+      notificationMessage2:
+        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
     });
     const methods = {
       openGitHub() {
-        window.open('https://github.com/shuaigang0124/blog-frontEnd', '_blank')
+        window.open("https://github.com/shuaigang0124/blog-frontEnd", "_blank");
       },
       open() {
         state.dialogVisible = true;
@@ -138,8 +141,59 @@ export default defineComponent({
           ElMessage.warning("已置于顶部");
         }
       },
+      // 通知提醒
+      openNotification1() {
+        ElNotification({
+          title: "消息",
+          dangerouslyUseHTMLString: true,
+          message:
+            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
+          duration: 0,
+        });
+      },
+      openNotification2() {
+        // var timeNum = 10;
+        // const countdown = setInterval(() => {
+        //   timeNum -= 1;
+        //   var data =
+        //     '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">' +
+        //     timeNum +
+        //     "s后自动关闭</div>";
+        //   state.notificationMessage2 = data;
+        //   if (timeNum === 0) {
+        //     clearInterval(countdown);
+        //   }
+        // }, 1000);
+        ElNotification({
+          title: "通知",
+          dangerouslyUseHTMLString: true,
+          message: state.notificationMessage2,
+          position: "top-left",
+          duration: 10000,
+        });
+      },
     };
-    onMounted(() => {});
+    onMounted(() => {
+      useRouter().addRoute({
+        path: "/login",
+        name: "Login",
+        component: () => import("@/views/login/Login.vue"),
+      });
+      let ntf = localStorage.getItem("notification");
+      let nowTime = new Date().getTime();
+      if (ntf) {
+        let time = Number(ntf);
+        if (time < nowTime - 24 * 60 * 60 * 1000) {
+          methods.openNotification1();
+          localStorage.setItem("notification", nowTime.toString());
+        }
+      } else {
+        localStorage.setItem("notification", nowTime.toString());
+        methods.openNotification1();
+      }
+      // methods.openNotification1();
+      methods.openNotification2();
+    });
     return { ...methods, ...toRefs(state) };
   },
 });

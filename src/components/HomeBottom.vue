@@ -352,7 +352,6 @@ export default defineComponent({
     };
     // 页面默认请求
     onMounted(() => {
-      request.getList();
       // var homeState = localStorage.getItem('if_home');
       // if (!homeState) {
       //   localStorage.setItem('if_home', 'true');
@@ -363,7 +362,6 @@ export default defineComponent({
       // }
       state.winState = true;
       methods.watchWin();
-      // request.getList();
       let data = {
         title: "入站需知！！",
         describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
@@ -390,15 +388,7 @@ export default defineComponent({
     });
     // 请求
     const request = {
-      getList() {
-        // 请求体数据
-        const data = {};
-        // post请求
-        post("/gsg/authentication/form", data).then((res, any) => {
-          console.log(res);
-          let { code, message, customData } = res;
-        });
-      },
+
     };
     return { ...methods, ...toRefs(state) };
   },
