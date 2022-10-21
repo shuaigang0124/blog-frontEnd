@@ -206,6 +206,7 @@ export default defineComponent({
 <style scoped>
 .body_img {
   background-image: url(../../assets/backgroundImg/6.jpg);
+  /* background-image: url(../../assets/backgroundImg/hmbb/5.jpg); */
 }
 .archives_body {
   min-height: 90vh;

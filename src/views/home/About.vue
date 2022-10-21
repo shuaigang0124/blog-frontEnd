@@ -61,7 +61,8 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb04.jpg);
+  /* background-image: url(../../assets/backgroundImg/wb04.jpg); */
+  background-image: url(../../assets/backgroundImg/hmbb/13.jpg);
 }
 .about_me {
   color: #6d69e9;

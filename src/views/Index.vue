@@ -78,7 +78,7 @@ export default defineComponent({
         if (e.to !== "") {
           router.push(e.to);
         }
-        if (e.title === "音乐盒") {
+        if (e.title === "音乐盒" && state.titleList.length === 7) {
           state.isDisabled = true;
           var data = [
             {
@@ -128,7 +128,7 @@ export default defineComponent({
             }
           }, 15);
         }
-        if (e.title === "首页") {
+        if (e.title === "首页" && state.titleList.length !== 7) {
           state.isDisabled = true;
           var data = [
             {

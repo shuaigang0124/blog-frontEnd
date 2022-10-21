@@ -157,6 +157,7 @@ export default defineComponent({
 <style scoped>
 .body_img {
   background-image: url(../../assets/backgroundImg/wb03.jpg);
+  /* background-image: url(../../assets/backgroundImg/hmbb/4.jpg); */
 }
 .info_input {
   position: absolute;

@@ -378,7 +378,7 @@ export default defineComponent({
       }
       setTimeout(function () {
         methods.setParentHeight();
-        methods.par();
+        // methods.par();
       }, 1);
     });
     onUnmounted(() => {
