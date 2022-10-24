@@ -133,7 +133,7 @@ export default defineComponent({
         //   title: "入站需知！！",
         //   describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
         //   avatar:
-        //     "http://175.178.9.64/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
+        //     "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
         //   userName: "shuaigang",
         //   time: "2022-09-19 16:05",
         //   readNum: "99",
