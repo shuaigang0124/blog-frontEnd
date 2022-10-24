@@ -15,7 +15,7 @@ module.exports = {
                 '/gsg': {
                     //对应自己的 跨域地址 即请求的后端地址
                     // 服务器
-                    target: 'http://175.178.9.64:5200',
+                    target: 'http://*****:5200',
                     ws: true,   //代理websokets
                     changeOrigin: true,  //是否跨域，虚拟的站点需要更管origin
                     pathRewrite: {

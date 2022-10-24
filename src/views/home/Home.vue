@@ -85,7 +85,8 @@
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 // import HelloWorld from '@/components/HelloWorld.vue';
 import HomeBottom from "@/components/HomeBottom.vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Home",
@@ -101,7 +102,7 @@ export default defineComponent({
     });
     const methods = {
       openGitHub() {
-        window.open('https://github.com/shuaigang0124/blog-frontEnd', '_blank')
+        window.open("https://github.com/shuaigang0124/blog-frontEnd", "_blank");
       },
       open() {
         state.dialogVisible = true;
@@ -139,7 +140,13 @@ export default defineComponent({
         }
       },
     };
-    onMounted(() => {});
+    onMounted(() => {
+      useRouter().addRoute({
+        path: "/login",
+        name: "Login",
+        component: () => import("@/views/login/Login.vue"),
+      });
+    });
     return { ...methods, ...toRefs(state) };
   },
 });
@@ -148,6 +155,7 @@ export default defineComponent({
 <style scoped>
 .body_img {
   background-image: url(../../assets/backgroundImg/1.jpg);
+  /* background-image: url(../../assets/backgroundImg/hmbb/1.jpg); */
 }
 
 .info_text {

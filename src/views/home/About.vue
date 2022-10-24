@@ -11,13 +11,13 @@
             <div class="scanner">
               <div class="not-indent">Hi:</div>
               <div class="indent">欢迎来到隔江明月照莲华</div>
-              <div class="indent">
-                很高兴你能够在百忙之中访问本站
-              </div>
+              <div class="indent">很高兴你能够在百忙之中访问本站</div>
               <div class="indent">
                 我是作者帅刚，一个来自重庆居于杭州的底层码农
               </div>
-              <div class="indent">我在2021年首次创办了这个属于自己的个人空间</div>
+              <div class="indent">
+                我在2021年首次创办了这个属于自己的个人空间
+              </div>
               <div class="indent">
                 2022年9月，我推翻了最开始的设计，重写了当前网站
               </div>
@@ -62,6 +62,7 @@ export default defineComponent({
 <style scoped>
 .body_img {
   background-image: url(../../assets/backgroundImg/wb04.jpg);
+  /* background-image: url(../../assets/backgroundImg/hmbb/13.jpg); */
 }
 .about_me {
   color: #6d69e9;

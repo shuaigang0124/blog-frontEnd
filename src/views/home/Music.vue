@@ -5,7 +5,9 @@
     </div>
     <div class="cover">
       <div class="info">
-        <div class="info_title">MUSIC-HOME</div>
+        <div class="info_title">
+          <div style="color: #0024ff; font-size: 3.5rem">MUSIC-HOME</div>
+        </div>
       </div>
     </div>
   </div>
@@ -30,6 +32,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/20.jpg);
+  /* background-image: url(../../assets/backgroundImg/20.jpg); */
+  background-image: url(../../assets/backgroundImg/hmbb/7.jpg);
 }
 </style>

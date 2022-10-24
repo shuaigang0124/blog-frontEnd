@@ -34,17 +34,17 @@ instance.interceptors.response.use(
 let baseUrl = ""
 if (process.env.NODE_ENV === 'production') {
     // 生产环境
-    baseUrl = "/"
+    baseUrl = "/gsg"
 } else {
     // 本地环境
-    baseUrl = "/api"
+    baseUrl = "/api/gsg"
 }
 
 const post = async (url: string, param?: any) => {
     let token = await getToken()
     let userInfo = await getUserInfo()
     let myData = {
-        customData: param,
+        customData: param || {},
     }
     let paramData = {
         encryption_type: "base64",

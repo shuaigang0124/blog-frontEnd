@@ -1,24 +1,5 @@
 <template>
-  <div class="archives">
-    <div class="body_style">
-      <div class="body_img"></div>
-    </div>
-    <div class="cover">
-      <div class="info">
-        <div class="info_title">
-          <div
-            style="
-              padding: 2vh 2vw;
-              border-radius: 5px;
-              background-color: rgba(0, 0, 0, 0.2);
-            "
-          >
-            最新音乐
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div style="color: red">4564555</div>
 </template>
 <script lang="ts">
 import post from "@/http/axios";
@@ -33,7 +14,9 @@ export default defineComponent({
     // 方法体
     const methods = {};
     // 页面默认请求
-    onMounted(() => {});
+    onMounted(() => {
+      request.getList();
+    });
     // 请求
     const request = {
       getList() {
@@ -52,9 +35,4 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-.body_img {
-  /* background-image: url(../../assets/backgroundImg/6.jpg); */
-  background-color: burlywood;
-}
-</style>
+<style></style>

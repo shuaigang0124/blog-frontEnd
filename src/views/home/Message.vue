@@ -43,7 +43,7 @@
         <template v-slot:dm="{ danmu }">
           <!-- <el-tag effect="light" type="info" round> -->
           <span class="danmu_info" :style="{ color: danmu.color }"
-            >{{ danmu.name }}：{{ danmu.text }}</span
+            >{{ danmu.userName }}：{{ danmu.content }}</span
           >
           <!-- </el-tag> -->
         </template>
@@ -56,8 +56,16 @@
 
 <script lang="ts">
 import { ElMessage } from "element-plus";
-import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
+import {
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 import vueDanmaku from "vue3-danmaku";
+import post from "@/http/axios";
 export default defineComponent({
   name: "",
   components: {
@@ -69,6 +77,7 @@ export default defineComponent({
     const state = reactive({
       danmus: [],
       content: "",
+      userId: "",
       contentColor: "#303133",
       predefineColors: [
         "#ff4500",
@@ -88,53 +97,25 @@ export default defineComponent({
       ],
     });
     const methods = {
-      addToList() {
-        let data = [
-          { color: "blue", name: "帅刚", text: "到此一游" },
-          { color: "yellow", name: "俊俊", text: "我是豪豪的爹" },
-          { color: "red", name: "淼淼", text: "豪豪好大儿" },
-          { color: "#00ff00", name: "查查", text: "qwertyuioasdfgh" },
-          { color: "#00ffff", name: "柯柯", text: "爱川川❤" },
-          { color: "#cfe2f3", name: "峰峰", text: "查查是sb" },
-          { color: "#7f6000", name: "多多", text: "asdfghjkl" },
-          { color: "#674ea7", name: "川川", text: "我是化学小天才" },
-          {
-            color: "#ff00ff",
-            name: "豪豪",
-            text: "呜呜呜，想要文文的幸福",
-          },
-          {
-            color: "#2d8cbb",
-            name: "喵喵",
-            text: "圣火昭昭，圣光耀耀，凡我弟子，喵喵喵喵。",
-          },
-        ];
-        for (var i = 0; i < 5; i++) {
-          for (var j = 0; j < data.length; j++) {
-            state.danmus.push(data[j]);
-          }
-        }
-      },
       sendMsg() {
         if (state.content) {
-          var str = "";
-          for (var i = 0; i < 2; i++) {
-            str +=
-              String.fromCharCode(
-                Math.floor(Math.random() * 26) + "A".charCodeAt(0)
-              ) +
-              String.fromCharCode(
-                Math.floor(Math.random() * 26) + "a".charCodeAt(0)
-              );
+          let data = {};
+          if (state.userId !== "") {
+            data = {
+              color: state.contentColor,
+              content: state.content,
+              userId: state.userId,
+            };
+          } else {
+            data = {
+              color: state.contentColor,
+              content: state.content,
+              userName: "游客",
+            };
           }
-          str += Math.floor(Math.random() * (9999 - 1000)) + 1000;
-          let data = {
-            color: state.contentColor,
-            name: "游客" + str,
-            text: state.content,
-          };
           // 发送弹幕（插入到当前播放位置，实时显示）
           danmakuRef.value.add(data);
+          request.insertMsg(data);
           state.content = "";
         } else {
           ElMessage.warning("发送内容不能为空！");
@@ -146,8 +127,29 @@ export default defineComponent({
     };
     onMounted(() => {
       document.getElementById("inputMsg").focus();
-      methods.addToList();
+      // methods.addToList();
+      request.getMsgList();
     });
+    onUnmounted(() => {
+      state.danmus = [];
+    });
+    // 请求
+    const request = {
+      getMsgList() {
+        // post请求
+        post("/msg/getMsg", null).then((res: any) => {
+          console.log(res);
+          let { message, customData } = res;
+          state.danmus = customData;
+        });
+      },
+      insertMsg(data) {
+        post("/msg/insertMsg", data).then((res: any) => {
+          console.log(res);
+          let { message, customData } = res;
+        });
+      },
+    };
     return { ...methods, ...toRefs(state), danmakuRef };
   },
 });
@@ -155,6 +157,7 @@ export default defineComponent({
 <style scoped>
 .body_img {
   background-image: url(../../assets/backgroundImg/wb03.jpg);
+  /* background-image: url(../../assets/backgroundImg/hmbb/4.jpg); */
 }
 .info_input {
   position: absolute;
