@@ -57,26 +57,26 @@ export default defineComponent({
     };
     // 页面默认请求
     onMounted(() => {
-      if (methods.isMobile()) {
-        router.push({
-          path: "/500",
-        });
-      } else {
-        let ntf = localStorage.getItem("notification");
-        let nowTime = new Date().getTime();
-        if (ntf) {
-          let time = Number(ntf);
-          if (time < nowTime - 24 * 60 * 60 * 1000) {
-            methods.openNotification1();
-            localStorage.setItem("notification", nowTime.toString());
-          }
-        } else {
-          localStorage.setItem("notification", nowTime.toString());
-          methods.openNotification1();
-        }
-        // methods.openNotification1();
-        methods.openNotification2();
-      }
+      // if (methods.isMobile()) {
+      //   router.push({
+      //     path: "/500",
+      //   });
+      // } else {
+        // let ntf = localStorage.getItem("notification");
+        // let nowTime = new Date().getTime();
+        // if (ntf) {
+        //   let time = Number(ntf);
+        //   if (time < nowTime - 24 * 60 * 60 * 1000) {
+        //     methods.openNotification1();
+        //     localStorage.setItem("notification", nowTime.toString());
+        //   }
+        // } else {
+        //   localStorage.setItem("notification", nowTime.toString());
+        //   methods.openNotification1();
+        // }
+        // // methods.openNotification1();
+        // methods.openNotification2();
+      // }
     });
     // 请求
     const request = {};

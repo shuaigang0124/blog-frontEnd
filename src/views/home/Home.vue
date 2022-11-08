@@ -141,11 +141,11 @@ export default defineComponent({
       },
     };
     onMounted(() => {
-      useRouter().addRoute({
-        path: "/login",
-        name: "Login",
-        component: () => import("@/views/login/Login.vue"),
-      });
+      // useRouter().addRoute({
+      //   path: "/login",
+      //   name: "Login",
+      //   component: () => import("@/views/login/Login.vue"),
+      // });
     });
     return { ...methods, ...toRefs(state) };
   },
