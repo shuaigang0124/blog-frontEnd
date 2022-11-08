@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Index from '../views/Index.vue'
 import Home from '../views/home/Home.vue'
 import NotFound from "../views/other/404.vue"
+import BeatingHeart from "../views/other/BeatingHeart.vue"
+import RotateBeatingHeart from "../views/other/RotateBeatingHeart.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -75,6 +77,16 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/music/MV.vue')
       },
     ]
+  },
+  {
+    path: '/beatingHeart',
+    name: 'BeatingHeart',
+    component: BeatingHeart
+  },
+  {
+    path: '/rotateBeatingHeart',
+    name: 'RotateBeatingHeart',
+    component: RotateBeatingHeart
   },
   {
     path: '/:catchAll(.*)',

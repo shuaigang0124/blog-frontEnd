@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts">
+import { ElNotification } from "element-plus";
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 import router from "../router";
 export default defineComponent({
@@ -71,6 +72,8 @@ export default defineComponent({
         },
       ],
       isDisabled: false,
+      notificationMessage2:
+        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
     });
     // 方法体
     const methods = {
@@ -184,9 +187,67 @@ export default defineComponent({
           }, 15);
         }
       },
+      // 通知提醒
+      openNotification1() {
+        ElNotification({
+          title: "消息",
+          dangerouslyUseHTMLString: true,
+          message:
+            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
+          duration: 0,
+        });
+      },
+      openNotification2() {
+        // var timeNum = 10;
+        // const countdown = setInterval(() => {
+        //   timeNum -= 1;
+        //   var data =
+        //     '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">' +
+        //     timeNum +
+        //     "s后自动关闭</div>";
+        //   state.notificationMessage2 = data;
+        //   if (timeNum === 0) {
+        //     clearInterval(countdown);
+        //   }
+        // }, 1000);
+        ElNotification({
+          title: "通知",
+          dangerouslyUseHTMLString: true,
+          message: state.notificationMessage2,
+          position: "top-left",
+          duration: 10000,
+        });
+      },
+      isMobile() {
+        let flag = navigator.userAgent.match(
+          /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+        );
+        return flag;
+      },
     };
     // 页面默认请求
-    onMounted(() => {});
+    onMounted(() => {
+      if (methods.isMobile()) {
+        router.push({
+          path: "/500",
+        });
+      } else {
+        let ntf = localStorage.getItem("notification");
+        let nowTime = new Date().getTime();
+        if (ntf) {
+          let time = Number(ntf);
+          if (time < nowTime - 24 * 60 * 60 * 1000) {
+            methods.openNotification1();
+            localStorage.setItem("notification", nowTime.toString());
+          }
+        } else {
+          localStorage.setItem("notification", nowTime.toString());
+          methods.openNotification1();
+        }
+        // methods.openNotification1();
+        methods.openNotification2();
+      }
+    });
     // 请求
     const request = {};
     return { ...methods, ...toRefs(state) };

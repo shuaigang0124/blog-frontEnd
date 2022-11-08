@@ -112,7 +112,7 @@
 </template>
 <script lang="js">
 import post from "@/http/axios";
-import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from "vue";
+import { defineComponent, nextTick, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../js/particles.min.js";
 import { ElMessage } from "element-plus";
@@ -376,9 +376,11 @@ export default defineComponent({
       for (var i = 0; i < 5; i++) {
         state.articleList.push(data);
       }
+      // request.getArticleList();
       setTimeout(function () {
         methods.setParentHeight();
-        // methods.par();
+        // 粒子背景
+        methods.par();
       }, 1);
     });
     onUnmounted(() => {
@@ -388,6 +390,23 @@ export default defineComponent({
     });
     // 请求
     const request = {
+      getArticleList() {
+        let page = {
+          index: 1,
+          size: 10,
+        }
+        // post请求
+        post("/atc/getArticle", null).then((res, any) => {
+          console.log(res);
+          let { message, customData } = res;
+          // for (let i = 0; i < customData.resultList.length; i) {
+          //   var date = new Date(customData.resultList[i].gmtCreate);
+
+          //   customData.resultList[i].gmtCreate = customData.resultList[i].gmtCreate;
+          // }
+          // state.articleList = customData;
+        });
+      }
 
     };
     return { ...methods, ...toRefs(state) };
