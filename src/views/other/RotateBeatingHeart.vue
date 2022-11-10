@@ -133,7 +133,7 @@ export default defineComponent({
       scene.add(toRaw(group));
 
       new OBJLoader().load(
-        "https://assets.codepen.io/127738/heart_2.obj",
+        "https://shuaigang.top/gsg/static-resource/heart_2.obj",
         (obj) => {
           heart = obj.children[0];
           heart.geometry.rotateX(-Math.PI * 0.5);
