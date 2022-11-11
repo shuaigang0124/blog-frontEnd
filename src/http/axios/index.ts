@@ -47,7 +47,7 @@ const post = async (url: string, param?: any) => {
         customData: param || {},
     }
     let paramData = {
-        encryption_type: "base64",
+        // encryption_type: "base64",
         data: Base64.encode(JSON.stringify(myData)),
     }
     return new Promise((resolve, reject) => {
