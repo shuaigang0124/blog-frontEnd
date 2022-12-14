@@ -31,22 +31,22 @@ export default defineComponent({
     const state = reactive({
       gamesList: [
         {
-          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/stick.webp"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/stick.webp",
           msg: "小飞棍来咯！",
           router: "/html/stick.html",
         },
         {
-          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/plane.webp"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/plane.webp",
           msg: "飞船保卫战",
           router: "/html/plane.html",
         },
         {
-          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/brick.webp"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/brick.webp",
           msg: "2D打砖块",
           router: "/html/brick.html",
         },
         {
-          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/spaceship.webp"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/spaceship.webp",
           msg: "飞机大战",
           router: "/html/spaceship.html",
         },
