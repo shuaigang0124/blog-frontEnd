@@ -30,9 +30,9 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(../../assets/backgroundImg/333.jpg); */
-   /* background-image: url(../../assets/backgroundImg/hmbb/5.jpg); */
-  /* background-image: url(../../assets/backgroundImg/hmbb/6.jpg); */
-  background-image: url(../../assets/backgroundImg/hmbb/13.jpg);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/333.webp); */
+   /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/5.webp); */
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/6.webp); */
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/13.webp);
 }
 </style>

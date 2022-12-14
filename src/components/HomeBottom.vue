@@ -429,7 +429,7 @@ export default defineComponent({
   margin-top: 2vh;
   width: 100%;
   height: 20vh;
-  background-image: url(../assets/backgroundImg/20.jpg);
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/20.webp);
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: cover;
@@ -497,7 +497,7 @@ export default defineComponent({
 }
 
 .HomeBottom {
-  /* background-image: url("../assets/backgroundImg/beijing.webp"); */
+  /* background-image: url("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/beijing.webp"); */
   background-color: #e74c3c;
   animation: bg-color 10s infinite;
   -webkit-animation: bg-color 10s infinite;

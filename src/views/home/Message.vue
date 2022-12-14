@@ -156,8 +156,8 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb03.jpg);
-  /* background-image: url(../../assets/backgroundImg/hmbb/4.jpg); */
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb03.webp);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/4.webp); */
 }
 .info_input {
   position: absolute;

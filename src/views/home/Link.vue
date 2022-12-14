@@ -30,6 +30,6 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb06.jpg);
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb06.webp);
 }
 </style>

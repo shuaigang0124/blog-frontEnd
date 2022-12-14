@@ -61,8 +61,8 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb04.jpg);
-  /* background-image: url(../../assets/backgroundImg/hmbb/13.jpg); */
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb04.webp);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb13.jpg); */
 }
 .about_me {
   color: #6d69e9;

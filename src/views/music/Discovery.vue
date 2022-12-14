@@ -58,7 +58,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(../../assets/backgroundImg/6.jpg); */
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
   background-color: burlywood;
 }
 </style>

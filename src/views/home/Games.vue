@@ -31,22 +31,22 @@ export default defineComponent({
     const state = reactive({
       gamesList: [
         {
-          img: require("../../assets/games/stick.jpg"),
+          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/stick.webp"),
           msg: "小飞棍来咯！",
           router: "/html/stick.html",
         },
         {
-          img: require("../../assets/games/plane.png"),
+          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/plane.webp"),
           msg: "飞船保卫战",
           router: "/html/plane.html",
         },
         {
-          img: require("../../assets/games/brick.png"),
+          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/brick.webp"),
           msg: "2D打砖块",
           router: "/html/brick.html",
         },
         {
-          img: require("../../assets/games/spaceship.jpg"),
+          img: require("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/spaceship.webp"),
           msg: "飞机大战",
           router: "/html/spaceship.html",
         },
@@ -64,7 +64,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb01.jpg);
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb01.webp);
 }
 
 .games_title {

@@ -32,7 +32,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(../../assets/backgroundImg/20.jpg); */
-  background-image: url(../../assets/backgroundImg/hmbb/7.jpg);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/20.webp); */
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/7.webp);
 }
 </style>
