@@ -50,6 +50,11 @@ export default defineComponent({
           msg: "飞机大战",
           router: "/html/spaceship.html",
         },
+        {
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/SinuousWorld.webp",
+          msg: "Sinuous World",
+          router: "/html/SinuousWorld.html",
+        },
       ],
     });
     const methods = {
