@@ -29,7 +29,7 @@ export default defineComponent({
           title: "消息",
           dangerouslyUseHTMLString: true,
           message:
-            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
+            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉<div>网站第一版地址：</div><div>https://shuaigang.top/website</div></div>",
           duration: 0,
         });
       },
@@ -62,26 +62,50 @@ export default defineComponent({
       //     path: "/500",
       //   });
       // } else {
-        // let ntf = localStorage.getItem("notification");
-        // let nowTime = new Date().getTime();
-        // if (ntf) {
-        //   let time = Number(ntf);
-        //   if (time < nowTime - 24 * 60 * 60 * 1000) {
-        //     methods.openNotification1();
-        //     localStorage.setItem("notification", nowTime.toString());
-        //   }
-        // } else {
-        //   localStorage.setItem("notification", nowTime.toString());
-        //   methods.openNotification1();
-        // }
-        // // methods.openNotification1();
-        // methods.openNotification2();
+      // let ntf = localStorage.getItem("notification");
+      // let nowTime = new Date().getTime();
+      // if (ntf) {
+      //   let time = Number(ntf);
+      //   if (time < nowTime - 24 * 60 * 60 * 1000) {
+      //     methods.openNotification1();
+      //     localStorage.setItem("notification", nowTime.toString());
+      //   }
+      // } else {
+      //   localStorage.setItem("notification", nowTime.toString());
+      //   methods.openNotification1();
+      // }
+      // // methods.openNotification1();
+      // methods.openNotification2();
       // }
     });
     // 请求
     const request = {};
     return { ...methods, ...toRefs(state) };
   },
+  // created() {
+  //   let imgs = [
+  //     "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp",
+  //     "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb03.webp",
+  //     "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb04.webp",
+  //     "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/13.webp",
+  //     "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/7.webp",
+  //   ];
+  //   let loadCount = 0;
+  //   for (let img of imgs) {
+  //     let image = new Image();
+  //     image.src = img;
+  //     image.onload = () => {
+  //       // console.log("image.onload:length:" + state.imgs.length);
+  //       console.log("image.onload:src:" + image.src);
+  //       loadCount++;
+  //       //判断是否结束
+  //       if (loadCount >= imgs.length) {
+  //         //loading end
+  //         console.log("end:");
+  //       }
+  //     };
+  //   }
+  // },
 });
 </script>
 <style>
@@ -109,3 +133,5 @@ export default defineComponent({
   cursor: pointer;
 } */
 </style>
+
+function created() { throw new Error("Function not implemented."); }

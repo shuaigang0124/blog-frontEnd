@@ -43,22 +43,20 @@ if (process.env.NODE_ENV === 'production') {
 const post = async (url: string, param?: any) => {
     let token = await getToken()
     let userInfo = await getUserInfo()
-    let myData = {
-        customData: param || {},
-    }
     let paramData = {
         // encryption_type: "base64",
-        data: Base64.encode(JSON.stringify(myData)),
+        data: Base64.encode(JSON.stringify(param)),
     }
     return new Promise((resolve, reject) => {
         instance
             .post(`${baseUrl}${url}`, paramData, {
                 headers: {
                     "Authorization": token || '',
-                    "userInfo": userInfo || '',
+                    // "userInfo": userInfo || '',
                 }
             })
             .then(res => {
+                console.log(Base64.decode(res.data))
                 resolve(JSON.parse(Base64.decode(res.data)));
             })
             .catch(err =>
@@ -67,10 +65,10 @@ const post = async (url: string, param?: any) => {
 
 }
 const getToken = () => {
-    return localStorage.getItem('token')
+    return sessionStorage.getItem('token')
 }
 const getUserInfo = () => {
-    return localStorage.getItem('userInfo')
+    return sessionStorage.getItem('userInfo')
 }
 
 export default post

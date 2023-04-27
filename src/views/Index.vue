@@ -73,7 +73,7 @@ export default defineComponent({
       ],
       isDisabled: false,
       notificationMessage2:
-        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
+        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">3s后自动关闭</div>',
     });
     // 方法体
     const methods = {
@@ -193,7 +193,7 @@ export default defineComponent({
           title: "消息",
           dangerouslyUseHTMLString: true,
           message:
-            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
+            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉<div>网站第一版地址：</div><div>https://shuaigang.top/website</div></div>",
           duration: 0,
         });
       },
@@ -210,13 +210,13 @@ export default defineComponent({
         //     clearInterval(countdown);
         //   }
         // }, 1000);
-        ElNotification({
-          title: "通知",
-          dangerouslyUseHTMLString: true,
-          message: state.notificationMessage2,
-          position: "top-left",
-          duration: 10000,
-        });
+        // ElNotification({
+        //   title: "通知",
+        //   dangerouslyUseHTMLString: true,
+        //   message: state.notificationMessage2,
+        //   position: "top-left",
+        //   duration: 3000,
+        // });
       },
       isMobile() {
         let flag = navigator.userAgent.match(

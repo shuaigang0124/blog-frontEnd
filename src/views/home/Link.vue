@@ -12,7 +12,6 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from "element-plus";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",

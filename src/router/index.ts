@@ -4,6 +4,8 @@ import Home from '../views/home/Home.vue'
 import NotFound from "../views/other/404.vue"
 import BeatingHeart from "../views/other/BeatingHeart.vue"
 import RotateBeatingHeart from "../views/other/RotateBeatingHeart.vue"
+import Login from "../views/login/Login.vue"
+import Register from "../views/login/Register.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -78,6 +80,16 @@ const routes: Array<RouteRecordRaw> = [
       },
     ]
   },
+  {
+    path: '/login',
+    name: '/Login',
+    component: Login
+  },
+  // {
+  //   path: '/register',
+  //   name: '/Register',
+  //   component: Register
+  // },
   {
     path: '/beatingHeart',
     name: 'BeatingHeart',

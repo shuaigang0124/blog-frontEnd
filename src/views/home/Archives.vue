@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from "element-plus";
+import { ElNotification } from "element-plus";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -192,10 +192,15 @@ export default defineComponent({
       aaaa(e) {
         state.indexNum = e;
         // 获取并更改右边数据
-        // state.rightData = 
+        // state.rightData =
       },
       goToDetail(e) {
-        ElMessage.warning("敬请期待");
+        ElNotification.warning({
+          title: "",
+          message: "暂未开放",
+          showClose: true,
+          duration: 3000,
+        });
       },
     };
     onMounted(() => {});
@@ -205,7 +210,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp);
+  background-image: url(../../assets/backgroundImg/26.webp);
   /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb5.webp); */
 }
 .archives_body {

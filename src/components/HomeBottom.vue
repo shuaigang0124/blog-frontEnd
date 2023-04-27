@@ -115,7 +115,7 @@ import post from "@/http/axios";
 import { defineComponent, nextTick, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../js/particles.min.js";
-import { ElMessage } from "element-plus";
+import { ElNotification  } from "element-plus";
 export default defineComponent({
   name: "",
   components: {},
@@ -181,13 +181,28 @@ export default defineComponent({
     // 方法体
     const methods = {
       readArticle() {
-        ElMessage.warning("敬请期待");
+        ElNotification.warning({
+          title: '',
+          message: '暂未开放',
+          showClose: true,
+          duration: 3000
+        })
       },
       tagToList() {
-        ElMessage.warning("敬请期待");
+        ElNotification.warning({
+          title: '',
+          message: '暂未开放',
+          showClose: true,
+          duration: 3000
+        })
       },
       readGuide() {
-        ElMessage.warning("敬请期待");
+        ElNotification.warning({
+          title: '',
+          message: '暂未开放',
+          showClose: true,
+          duration: 3000
+        })
       },
       par() {
         particlesJS("particles-js", {

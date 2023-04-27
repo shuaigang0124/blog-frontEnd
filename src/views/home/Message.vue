@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from "element-plus";
+import { ElNotification } from "element-plus";
 import {
   defineComponent,
   onMounted,
@@ -118,7 +118,12 @@ export default defineComponent({
           request.insertMsg(data);
           state.content = "";
         } else {
-          ElMessage.warning("发送内容不能为空！");
+          ElNotification.warning({
+            title: "",
+            message: "发送内容不能为空！",
+            showClose: true,
+            duration: 3000,
+          });
         }
       },
       enterClick() {
