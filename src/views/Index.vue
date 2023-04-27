@@ -190,34 +190,26 @@ export default defineComponent({
       },
       // 通知提醒
       openNotification1() {
-        ElNotification({
-          title: "消息",
-          dangerouslyUseHTMLString: true,
+        ElNotification.info({
+          title: "通知",
           message:
             "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉<div>网站第一版地址：</div><div>https://shuaigang.top/website</div></div>",
+          showClose: true,
+          dangerouslyUseHTMLString: true,
           duration: 0,
+          offset: 50,
+          position: 'top-left',
         });
       },
       openNotification2() {
-        // var timeNum = 10;
-        // const countdown = setInterval(() => {
-        //   timeNum -= 1;
-        //   var data =
-        //     '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">' +
-        //     timeNum +
-        //     "s后自动关闭</div>";
-        //   state.notificationMessage2 = data;
-        //   if (timeNum === 0) {
-        //     clearInterval(countdown);
-        //   }
-        // }, 1000);
-        // ElNotification({
-        //   title: "通知",
-        //   dangerouslyUseHTMLString: true,
-        //   message: state.notificationMessage2,
-        //   position: "top-left",
-        //   duration: 3000,
-        // });
+        ElNotification.success({
+          title: "通知",
+          message: state.notificationMessage2,
+          showClose: true,
+          dangerouslyUseHTMLString: true,
+          duration: 2000,
+          offset: 50,
+        });
       },
       isMobile() {
         let flag = navigator.userAgent.match(
@@ -229,7 +221,7 @@ export default defineComponent({
     // 页面默认请求
     onMounted(() => {
       if (methods.isMobile()) {
-        window.location.href='/500'
+        window.location.href = "/500";
         router.push("/500");
       } else {
         let ntf = localStorage.getItem("notification");

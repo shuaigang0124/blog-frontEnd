@@ -115,7 +115,7 @@ import post from "@/http/axios";
 import { defineComponent, nextTick, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../js/particles.min.js";
-import { ElNotification  } from "element-plus";
+import myMessage from '@/utils/common'
 export default defineComponent({
   name: "",
   components: {},
@@ -181,28 +181,13 @@ export default defineComponent({
     // 方法体
     const methods = {
       readArticle() {
-        ElNotification.warning({
-          title: '',
-          message: '暂未开放',
-          showClose: true,
-          duration: 3000
-        })
+        myMessage('暂未开放', '提示', 1);
       },
       tagToList() {
-        ElNotification.warning({
-          title: '',
-          message: '暂未开放',
-          showClose: true,
-          duration: 3000
-        })
+        myMessage('暂未开放', '提示', 1);
       },
       readGuide() {
-        ElNotification.warning({
-          title: '',
-          message: '暂未开放',
-          showClose: true,
-          duration: 3000
-        })
+        myMessage('暂未开放', '提示', 1);
       },
       par() {
         particlesJS("particles-js", {
@@ -413,13 +398,13 @@ export default defineComponent({
         // post请求
         post("/atc/getArticle", null).then((res, any) => {
           console.log(res);
-          let { message, customData } = res;
-          // for (let i = 0; i < customData.resultList.length; i) {
-          //   var date = new Date(customData.resultList[i].gmtCreate);
+          let { message, data } = res;
+          // for (let i = 0; i < data.resultList.length; i) {
+          //   var date = new Date(data.resultList[i].gmtCreate);
 
-          //   customData.resultList[i].gmtCreate = customData.resultList[i].gmtCreate;
+          //   data.resultList[i].gmtCreate = data.resultList[i].gmtCreate;
           // }
-          // state.articleList = customData;
+          // state.articleList = data;
         });
       }
 

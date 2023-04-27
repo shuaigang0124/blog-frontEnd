@@ -39,12 +39,12 @@ export default defineComponent({
       getList() {
         // 请求体数据
         const data = {
-          customData: {},
+          data: {},
         };
         // post请求
         post("/user/getAllUser", data).then((res: any) => {
           console.log(res);
-          let { message, customData } = res;
+          let { message, data } = res;
         });
       },
     };

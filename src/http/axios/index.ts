@@ -45,7 +45,7 @@ const post = async (url: string, param?: any) => {
     let userInfo = await getUserInfo()
     let paramData = {
         // encryption_type: "base64",
-        data: Base64.encode(JSON.stringify(param)),
+        data: Base64.encode(JSON.stringify(param !== null ? param : {})),
     }
     return new Promise((resolve, reject) => {
         instance
@@ -56,7 +56,7 @@ const post = async (url: string, param?: any) => {
                 }
             })
             .then(res => {
-                console.log(Base64.decode(res.data))
+                // console.log(Base64.decode(res.data))
                 resolve(JSON.parse(Base64.decode(res.data)));
             })
             .catch(err =>

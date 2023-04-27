@@ -382,7 +382,7 @@
 <script lang="js">
 import post from "@/http/axios";
 import { h } from 'vue'
-import { ElNotification } from "element-plus";
+import myMessage from "@/utils/common"
 import router from "@/router";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import "../../js/TweenMax.min.js";
@@ -393,12 +393,7 @@ export default defineComponent({
     // 方法体
     const methods = {
       msg() {
-        ElNotification.warning({
-          title: '',
-          message: '暂未开放',
-          showClose: true,
-          duration: 3000
-        })
+        myMessage('暂未开放', '提示', 1);
       },
       init() {
         var emailLabel = document.querySelector("#loginEmailLabel"),
@@ -1058,31 +1053,16 @@ export default defineComponent({
         var email = document.getElementById("loginEmail").value;
         var password = document.getElementById("loginPassword").value;
         if (email.length == 0) {
-          ElNotification.error({
-            // title: '',
-            message: '请输入邮箱',
-            showClose: true,
-            duration: 300000
-          })
+          myMessage('请输入邮箱', '提示', 1);
         } else {
           if (password.length == 0) {
-            ElNotification.warning({
-              // title: '',
-              message: '请输入密码',
-              showClose: true,
-              duration: 3000
-            })
+            myMessage('请输入密码', '提示', 1);
           } else {
             let regex = new RegExp("^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$");
             if (regex.test(email)) {
               request.userLogin(email, password);
             } else {
-              ElNotification.warning({
-                title: '',
-                message: '邮箱格式错误',
-                showClose: true,
-                duration: 3000
-              })
+              myMessage('邮箱格式错误', '提示', 1);
             }
           }
         }
@@ -1121,12 +1101,7 @@ export default defineComponent({
               router.push("/index/home");
             }
           } else {
-            ElNotification.error({
-              title: '',
-              message: message,
-              showClose: true,
-              duration: 3000
-            })
+            myMessage(message, '提示', 2);
           }
         });
       },

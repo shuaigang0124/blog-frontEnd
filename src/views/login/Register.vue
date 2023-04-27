@@ -116,7 +116,7 @@
 import post from "@/http/axios";
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import router from "../../router/index";
-import { ElNotification } from "element-plus";
+import myMessage from "@/utils/common";
 import moment from "moment";
 export default defineComponent({
   components: {},
@@ -221,12 +221,7 @@ export default defineComponent({
         if (state.user.email) {
           request.sendMailCode();
         } else {
-          ElNotification.warning({
-            title: "",
-            message: "邮箱不能为空",
-            showClose: true,
-            duration: 3000,
-          });
+          myMessage("邮箱不能为空", "提示", 1);
         }
       },
       // 验证码校验
@@ -251,19 +246,9 @@ export default defineComponent({
               )),
                 request.insert();
             } else if (state.Code !== 2) {
-              ElNotification.warning({
-                title: "",
-                message: "验证码错误",
-                showClose: true,
-                duration: 3000,
-              });
+              myMessage("验证码错误", "提示", 1);
             } else if (state.user.email !== state.email) {
-              ElNotification.warning({
-                title: "",
-                message: "发送邮箱验证码后请勿在做更改！",
-                showClose: true,
-                duration: 3000,
-              });
+              myMessage("发送邮箱验证码后请勿在做更改！", "提示", 1);
             }
           }
         });
@@ -279,21 +264,11 @@ export default defineComponent({
         post("/gsg/user/insertUser", param).then((res: any) => {
           let { code, message, data } = res;
           if (code === 200) {
-            ElNotification.success({
-              title: "",
-              message: message,
-              showClose: true,
-              duration: 3000,
-            });
+            myMessage(message, "提示", 0);
             // window.location.href='/login'
             router.push("/login");
           } else {
-            ElNotification.error({
-              title: "",
-              message: "暂未开放",
-              showClose: true,
-              duration: 3000,
-            });
+            myMessage(message, "提示", 2);
           }
         });
       },
@@ -305,20 +280,10 @@ export default defineComponent({
         post("/custom/v1/email/sendMailCode", param).then((res: any) => {
           let { code, message, data } = res;
           if (code === 200) {
-            ElNotification.success({
-              title: "",
-              message: message,
-              showClose: true,
-              duration: 3000,
-            });
+            myMessage(message, '提示', 0);
             state.email = state.user.email;
           } else {
-            ElNotification.info({
-              title: "",
-              message: message,
-              showClose: true,
-              duration: 3000,
-            });
+            myMessage(message, '提示', 2);
           }
         });
       },
@@ -331,21 +296,11 @@ export default defineComponent({
         post("/custom/v1/email/checkMailCode", param).then((res: any) => {
           let { code, message, data } = res;
           if (code === 200) {
-            ElNotification.success({
-              title: "",
-              message: message,
-              showClose: true,
-              duration: 3000,
-            });
+            myMessage(message, '提示', 0);
             state.Code = 2;
             state.inputDisabled = true;
           } else {
-            ElNotification.info({
-              title: "",
-              message: message,
-              showClose: true,
-              duration: 3000,
-            });
+            myMessage(message, '提示', 2);
           }
         });
       },

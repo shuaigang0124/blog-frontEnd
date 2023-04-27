@@ -9,7 +9,18 @@
           <div>聊天室</div>
         </div>
         <div class="chat_box_bot">
-          <div class="chat_message_box" id="chat_chat_message_list_box">
+          <div
+            class="chat_message_box"
+            @scroll="onScroll()"
+            id="chat_chat_message_list_box"
+          >
+            <div class="chat_time" v-if="refreshState">
+              <el-button
+                type="text"
+                color="rgba(0,0,0,0.5)"
+                loading
+              ></el-button>
+            </div>
             <div
               class="chat_message_list"
               v-for="(item, index) in chatList"
@@ -84,7 +95,8 @@
 
 <script lang="js">
 import post from "@/http/axios";
-import { ElMessageBox,ElNotification  } from "element-plus";
+import myMessage from "@/utils/common"
+import { ElMessageBox  } from "element-plus";
 import { Base64 } from "js-base64";
 import router from "@/router";
 import moment from "moment";
@@ -100,25 +112,19 @@ export default defineComponent({
       userName: "",
       userAvatar: "",
       client: null,
-      chatList: []
+      chatList: [],
+      refreshState: false,
+      refreshHeight: 0,
+      pageNum: 1,
+      pageSize: 10
     });
     // 方法体
     const methods = {
       openEmoji() {
-        ElNotification.warning({
-          title: '',
-          message: '暂未开放',
-          showClose: true,
-          duration: 3000
-        })
+        myMessage("暂未开放", '提示', 1);
       },
       openPhoto() {
-        ElNotification.warning({
-          title: '',
-          message: '暂未开放',
-          showClose: true,
-          duration: 3000
-        })
+        myMessage("暂未开放", '提示', 1);
       },
       keydown(e) {
         if (e.ctrlKey && e.keyCode === 13) {
@@ -126,12 +132,7 @@ export default defineComponent({
           if (a.innerHTML) {
             methods.sendMsg();
           } else {
-            ElNotification.warning({
-              title: '',
-              message: '发送消息不能为空！',
-              showClose: true,
-              duration: 3000
-            })
+            myMessage("发送消息不能为空", '提示', 1);
           }
         }
       },
@@ -157,12 +158,7 @@ export default defineComponent({
           request.send(message);
           // state.client.disconnect();
         } else {
-          ElNotification.warning({
-            title: '',
-            message: '发送消息不能为空！',
-            showClose: true,
-            duration: 3000
-          })
+          myMessage("发送消息不能为空", '提示', 1);
         }
       },
       connect() {
@@ -271,6 +267,19 @@ export default defineComponent({
             // window.location.href='/index/home'
           })
       },
+      onScroll() {
+        var div = document.getElementById('chat_chat_message_list_box')
+        let t = div.scrollTop
+        let h = div.scrollHeight
+        let ch = div.clientHeight
+        if (t <= h/2 && !state.refreshState) {
+          console.log(t)
+          state.refreshState = true;
+          state.pageNum += 1
+          state.refreshHeight = h
+          request.getChatList(state.roomId);
+        }
+      },
     };
     // 页面默认请求
     onMounted(() => {
@@ -280,9 +289,9 @@ export default defineComponent({
         state.userId = userId
         request.getUserDetails(userId);
       } else {
-        request.getChatList(state.roomId, 1, 10);
+        request.getChatList(state.roomId);
         // setInterval(() => {
-        //   request.getChatList(state.roomId, 1, 10);
+        //   request.getChatList(state.roomId);
         // }, 10000);
       }
 
@@ -311,7 +320,7 @@ export default defineComponent({
           if (code === 200) {
             state.userName = data.userName;
             state.userAvatar = data.avatar;
-            request.getChatList(state.roomId, 1, 10);
+            request.getChatList(state.roomId);
             methods.connect();
           }
         });
@@ -324,32 +333,44 @@ export default defineComponent({
             // 更新lastMsg
             console.log("发送成功")
           } else {
-            ElNotification.error({
-              title: '',
-              message: message,
-              showClose: true,
-              duration: 3000
-            })
+            myMessage(message, '提示', 2);
           }
         });
       },
-      getChatList(roomId, pageNum, pageSize) {
+      getChatList(roomId) {
         // 请求体数据
         const data = {
           roomId,
-          pageNum,
-          pageSize,
+          pageNum: state.pageNum,
+          pageSize: state.pageSize,
         };
         post("/chat/getChatList", data).then((res, any) => {
           let { code,message, data } = res;
           if (code === 200) {
             data.sort((a, b) => a.sendTime.localeCompare(b.sendTime));
-            state.chatList = data;
-            // 定位到滚动条末尾
-            const container = document.getElementById("chat_chat_message_list_box");
-            setTimeout(() => {
-              container.scrollTop = container.scrollHeight;
-            }, 1);
+            if (state.pageNum === 1) {
+              state.chatList = data;
+              // 定位到滚动条末尾
+              const container = document.getElementById("chat_chat_message_list_box");
+              setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+              }, 1);
+            } else {
+              if (data.length > 0) {
+                for (var j = 0; j < data.length; j++) {
+                state.chatList.push(data[j]);
+                }
+                state.chatList.sort((a, b) => a.sendTime.localeCompare(b.sendTime));
+                // 定位到滚动条末尾
+                const container = document.getElementById("chat_chat_message_list_box");
+                setTimeout(() => {
+                  container.scrollTop = container.scrollHeight - state.refreshHeight + 20;
+                  state.refreshState = false;
+                }, 1000);
+              } else {
+                state.refreshState = false;
+              }
+            }
           }
         });
       },

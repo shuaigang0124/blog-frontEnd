@@ -64,8 +64,8 @@
 </template>
 
 <script lang="ts">
-import { ElNotification } from "element-plus";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import myMessage from "@/utils/common"
 export default defineComponent({
   name: "",
   components: {},
@@ -195,12 +195,7 @@ export default defineComponent({
         // state.rightData =
       },
       goToDetail(e) {
-        ElNotification.warning({
-          title: "",
-          message: "暂未开放",
-          showClose: true,
-          duration: 3000,
-        });
+        myMessage('暂未开放', '提示', 1);
       },
     };
     onMounted(() => {});

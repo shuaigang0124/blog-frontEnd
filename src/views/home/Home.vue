@@ -73,7 +73,7 @@
     <el-dialog
       v-model="dialogVisible"
       title="整合资料"
-      width="30%"
+      width="33%"
       :before-close="handleClose"
     >
       <span v-html="content"></span>
@@ -85,7 +85,7 @@
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 // import HelloWorld from '@/components/HelloWorld.vue';
 import HomeBottom from "@/components/HomeBottom.vue";
-import { ElNotification } from "element-plus";
+import myMessage from "@/utils/common"
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -98,7 +98,7 @@ export default defineComponent({
     const state = reactive({
       dialogVisible: false,
       content:
-        "<b>博客的代码是开源的，位置在:</b><br><br>前端：https://github.com/shuaigang0124/blog-frontEnd<br>后端：https://github.com/shuaigang0124/blog-backEnd<br><br><b>此外，博主的第一版网站也在GitHub上面，有兴趣的小伙伴可以去看看：</b><br><br>web端地址：https://github.com/shuaigang0124/website-frontend<br><br>小程序地址：https://github.com/shuaigang0124/website-uniapp-vx<br><br>后台地址：https://github.com/shuaigang0124/website-backend<br><br><b>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！</b><br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
+        "<b>博客的代码是开源的，位置在:</b><br>前端：https://github.com/shuaigang0124/blog-frontEnd<br>后端：https://github.com/shuaigang0124/blog-backEnd<br><br><b>此外，博主的第一版网站也在GitHub上面，有兴趣的小伙伴可以去看看：</b><br>项目预览地址：shuaigang.top/website<br>web端地址：https://github.com/shuaigang0124/website-frontend<br>小程序地址：https://github.com/shuaigang0124/website-uniapp-vx<br>后台地址：https://github.com/shuaigang0124/website-backend<br><br><b>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！</b><br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
     });
     const methods = {
       openGitHub() {
@@ -136,12 +136,7 @@ export default defineComponent({
             }
           }, 10);
         } else {
-          ElNotification.warning({
-            title: "",
-            message: "已置于顶部",
-            showClose: true,
-            duration: 3000,
-          });
+          myMessage('已置于顶部', '', 1);
         }
       },
     };

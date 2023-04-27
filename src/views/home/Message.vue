@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { ElNotification } from "element-plus";
+import myMessage from "@/utils/common";
 import {
   defineComponent,
   onMounted,
@@ -65,7 +65,9 @@ import {
   toRefs,
 } from "vue";
 import vueDanmaku from "vue3-danmaku";
+import { ElMessageBox } from "element-plus";
 import post from "@/http/axios";
+import router from "@/router";
 export default defineComponent({
   name: "",
   components: {
@@ -100,30 +102,32 @@ export default defineComponent({
       sendMsg() {
         if (state.content) {
           let data = {};
-          if (state.userId !== "") {
+          if (state.userId) {
             data = {
               color: state.contentColor,
               content: state.content,
               userId: state.userId,
             };
           } else {
-            data = {
-              color: state.contentColor,
-              content: state.content,
-              userName: "游客",
-            };
+            ElMessageBox.confirm("是否前往登录?", "Warning", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+            })
+              .then(() => {
+                sessionStorage.setItem("router", "/index/chat");
+                // window.location.href='/login'
+                router.push("/login");
+              })
+              .catch(() => {
+                // window.location.href='/index/home'
+              });
+            return;
           }
-          // 发送弹幕（插入到当前播放位置，实时显示）
-          danmakuRef.value.add(data);
           request.insertMsg(data);
           state.content = "";
         } else {
-          ElNotification.warning({
-            title: "",
-            message: "发送内容不能为空！",
-            showClose: true,
-            duration: 3000,
-          });
+          myMessage("发送内容不能为空！", "提示", 1);
         }
       },
       enterClick() {
@@ -144,14 +148,21 @@ export default defineComponent({
         // post请求
         post("/msg/getMsg", null).then((res: any) => {
           console.log(res);
-          let { message, customData } = res;
-          state.danmus = customData;
+          let { message, data } = res;
+          state.danmus = data;
         });
       },
       insertMsg(data) {
         post("/msg/insertMsg", data).then((res: any) => {
           console.log(res);
-          let { message, customData } = res;
+          let { message, data, code } = res;
+          if (code === 200) {
+            // 发送弹幕（插入到当前播放位置，实时显示）
+            danmakuRef.value.add(data);
+            myMessage(message, "提示", 0);
+          } else {
+            myMessage(message, "提示", 2);
+          }
         });
       },
     };
