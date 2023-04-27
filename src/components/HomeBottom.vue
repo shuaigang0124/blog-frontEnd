@@ -181,13 +181,13 @@ export default defineComponent({
     // 方法体
     const methods = {
       readArticle() {
-        myMessage('暂未开放', '提示', 1);
+        myMessage('暂未开放', null, 1, null, null);
       },
       tagToList() {
-        myMessage('暂未开放', '提示', 1);
+        myMessage('暂未开放', null, 1, null, null);
       },
       readGuide() {
-        myMessage('暂未开放', '提示', 1);
+        myMessage('暂未开放', null, 1, null, null);
       },
       par() {
         particlesJS("particles-js", {

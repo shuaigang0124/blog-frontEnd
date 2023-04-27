@@ -393,7 +393,7 @@ export default defineComponent({
     // 方法体
     const methods = {
       msg() {
-        myMessage('暂未开放', '提示', 1);
+        myMessage('暂未开放', null, 1, null, null);
       },
       init() {
         var emailLabel = document.querySelector("#loginEmailLabel"),
@@ -1053,16 +1053,16 @@ export default defineComponent({
         var email = document.getElementById("loginEmail").value;
         var password = document.getElementById("loginPassword").value;
         if (email.length == 0) {
-          myMessage('请输入邮箱', '提示', 1);
+          myMessage('请输入邮箱', null, 1, null, null);
         } else {
           if (password.length == 0) {
-            myMessage('请输入密码', '提示', 1);
+            myMessage('请输入密码', null, 1, null, null);
           } else {
             let regex = new RegExp("^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$");
             if (regex.test(email)) {
               request.userLogin(email, password);
             } else {
-              myMessage('邮箱格式错误', '提示', 1);
+              myMessage('邮箱格式错误', null, 1, null, null);
             }
           }
         }
@@ -1101,7 +1101,7 @@ export default defineComponent({
               router.push("/index/home");
             }
           } else {
-            myMessage(message, '提示', 2);
+            myMessage(message, null, 2, null, null);
           }
         });
       },

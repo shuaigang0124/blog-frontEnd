@@ -195,7 +195,7 @@ export default defineComponent({
         // state.rightData =
       },
       goToDetail(e) {
-        myMessage('暂未开放', '提示', 1);
+        myMessage('暂未开放', null, 1, null, null);
       },
     };
     onMounted(() => {});

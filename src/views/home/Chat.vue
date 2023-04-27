@@ -121,10 +121,10 @@ export default defineComponent({
     // 方法体
     const methods = {
       openEmoji() {
-        myMessage("暂未开放", '提示', 1);
+        myMessage("暂未开放", null, 1, null, null, null, null);
       },
       openPhoto() {
-        myMessage("暂未开放", '提示', 1);
+        myMessage("暂未开放", null, 1, null, null, null, null);
       },
       keydown(e) {
         if (e.ctrlKey && e.keyCode === 13) {
@@ -132,7 +132,7 @@ export default defineComponent({
           if (a.innerHTML) {
             methods.sendMsg();
           } else {
-            myMessage("发送消息不能为空", '提示', 1);
+            myMessage("发送消息不能为空", null, 1, null, null);
           }
         }
       },
@@ -158,7 +158,7 @@ export default defineComponent({
           request.send(message);
           // state.client.disconnect();
         } else {
-          myMessage("发送消息不能为空", '提示', 1);
+          myMessage("发送消息不能为空", null, 1, null, null);
         }
       },
       connect() {
@@ -272,7 +272,7 @@ export default defineComponent({
         let t = div.scrollTop
         let h = div.scrollHeight
         let ch = div.clientHeight
-        if (t <= h/2 && !state.refreshState) {
+        if (t <= ch/5 && !state.refreshState) {
           console.log(t)
           state.refreshState = true;
           state.pageNum += 1
@@ -333,7 +333,7 @@ export default defineComponent({
             // 更新lastMsg
             console.log("发送成功")
           } else {
-            myMessage(message, '提示', 2);
+            myMessage(message, null, 2, null, null);
           }
         });
       },

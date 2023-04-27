@@ -136,7 +136,7 @@ export default defineComponent({
             }
           }, 10);
         } else {
-          myMessage('已置于顶部', '', 1);
+          myMessage('已置于顶部', null, 1, null, null);
         }
       },
     };

@@ -1,13 +1,16 @@
 import { ElNotification } from "element-plus"
 
-const myMessage = (title: string, message: string, tt: number) => {
+const myMessage = (message: string, title: string, tt: number, d: number, p: any) => {
     ElNotification({
-        title,
-        type: tt === 0 ? 'success' : tt === 1 ? 'warning' : tt === 2 ? 'error' : '',
+        title: title === null ? '提示' : title,
+        type: tt === 0 ? 'success' : tt === 1 ? 'warning' : tt === 2 ? 'error' : 'info',
         message,
         showClose: true,
-        duration: 2000,
-        offset: 50
+        duration: d !== null ? d : 2000,
+        offset: 50,
+        dangerouslyUseHTMLString: true,
+        position: p === 'BL' ? 'bottom-left' : p === 'BR' ? 'bottom-right' :
+            p === 'TL' ? 'top-left' : 'top-right'
     });
 }
 

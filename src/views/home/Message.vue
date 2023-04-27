@@ -115,7 +115,7 @@ export default defineComponent({
               type: "warning",
             })
               .then(() => {
-                sessionStorage.setItem("router", "/index/chat");
+                sessionStorage.setItem("router", "/index/message");
                 // window.location.href='/login'
                 router.push("/login");
               })
@@ -127,7 +127,7 @@ export default defineComponent({
           request.insertMsg(data);
           state.content = "";
         } else {
-          myMessage("发送内容不能为空！", "提示", 1);
+          myMessage("发送内容不能为空！", null, 1, null, null);
         }
       },
       enterClick() {
@@ -159,9 +159,9 @@ export default defineComponent({
           if (code === 200) {
             // 发送弹幕（插入到当前播放位置，实时显示）
             danmakuRef.value.add(data);
-            myMessage(message, "提示", 0);
+            myMessage(message, null, 0, null, null);
           } else {
-            myMessage(message, "提示", 2);
+            myMessage(message, null, 2, null, null);
           }
         });
       },

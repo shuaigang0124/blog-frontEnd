@@ -24,9 +24,9 @@
 </template>
 
 <script lang="ts">
-import { ElNotification } from "element-plus";
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 import router from "../router";
+import myMessage from "@/utils/common";
 export default defineComponent({
   name: "",
   components: {},
@@ -72,8 +72,10 @@ export default defineComponent({
         },
       ],
       isDisabled: false,
+      notificationMessage1:
+        "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉<div>网站第一版地址：</div><div>https://shuaigang.top/website</div></div>",
       notificationMessage2:
-        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">3s后自动关闭</div>',
+        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">2s后自动关闭</div>',
     });
     // 方法体
     const methods = {
@@ -190,26 +192,10 @@ export default defineComponent({
       },
       // 通知提醒
       openNotification1() {
-        ElNotification.info({
-          title: "通知",
-          message:
-            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉<div>网站第一版地址：</div><div>https://shuaigang.top/website</div></div>",
-          showClose: true,
-          dangerouslyUseHTMLString: true,
-          duration: 0,
-          offset: 50,
-          position: 'top-left',
-        });
+        myMessage(state.notificationMessage1, "通知", 3, 0, "TL");
       },
       openNotification2() {
-        ElNotification.success({
-          title: "通知",
-          message: state.notificationMessage2,
-          showClose: true,
-          dangerouslyUseHTMLString: true,
-          duration: 2000,
-          offset: 50,
-        });
+        myMessage(state.notificationMessage2, "通知", 3, null, null);
       },
       isMobile() {
         let flag = navigator.userAgent.match(
@@ -224,6 +210,7 @@ export default defineComponent({
         window.location.href = "/500";
         router.push("/500");
       } else {
+        methods.openNotification2();
         let ntf = localStorage.getItem("notification");
         let nowTime = new Date().getTime();
         if (ntf) {
@@ -236,8 +223,6 @@ export default defineComponent({
           localStorage.setItem("notification", nowTime.toString());
           methods.openNotification1();
         }
-        // methods.openNotification1();
-        methods.openNotification2();
       }
     });
     // 请求
@@ -248,6 +233,18 @@ export default defineComponent({
 </script>
 
 <style>
+.el-notification .el-icon-success {
+  color: #67c23a !important;
+}
+.el-notification .el-icon-info {
+  color: #909399 !important;
+}
+.el-notification .el-icon-warning {
+  color: #e6a32c !important;
+}
+.el-notification .el-icon-error {
+  color: #f56c6c !important;
+}
 body {
   margin: 0;
   height: 100vh;
