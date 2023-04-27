@@ -3,9 +3,7 @@
 </template>
 
 <script lang="ts">
-import myMessage from "@/utils/common";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import router from "./router";
 export default defineComponent({
   components: {},
   props: {},

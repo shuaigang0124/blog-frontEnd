@@ -56,8 +56,10 @@ const post = async (url: string, param?: any) => {
                 }
             })
             .then(res => {
-                // console.log(Base64.decode(res.data))
-                resolve(JSON.parse(Base64.decode(res.data)));
+                if (res.data) {
+                    // console.log(Base64.decode(res.data))
+                    resolve(JSON.parse(Base64.decode(res.data)));
+                }
             })
             .catch(err =>
                 reject(err));

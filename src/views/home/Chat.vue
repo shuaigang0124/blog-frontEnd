@@ -8,18 +8,18 @@
         <div class="chat_box_top">
           <div>聊天室</div>
         </div>
-        <div class="chat_box_bot">
+        <div
+          class="chat_box_bot"
+          v-loading="loading"
+          element-loading-background="rgba(0, 0, 0, 0.5)"
+        >
           <div
             class="chat_message_box"
             @scroll="onScroll()"
             id="chat_chat_message_list_box"
           >
-            <div class="chat_time" v-if="refreshState">
-              <el-button
-                type="text"
-                color="rgba(0,0,0,0.5)"
-                loading
-              ></el-button>
+            <div class="chat_time" v-if="messageHistory">
+              暂无更多历史消息...
             </div>
             <div
               class="chat_message_list"
@@ -114,9 +114,12 @@ export default defineComponent({
       client: null,
       chatList: [],
       refreshState: false,
+      refreshTop: 0,
       refreshHeight: 0,
       pageNum: 1,
-      pageSize: 10
+      pageSize: 10,
+      loading: true,
+      messageHistory: false,
     });
     // 方法体
     const methods = {
@@ -238,15 +241,15 @@ export default defineComponent({
 
         // 接收消息事件
         state.client.onMessageArrived = function (message) {
-          console.log(message)
-          let data = JSON.parse(Base64.decode(JSON.parse(message.payloadString).data));
-          console.log(data)
-          state.chatList.push(data);
+          // console.log(message)
+          let result = JSON.parse(Base64.decode(JSON.parse(message.payloadString).data));
+          // console.log(result)
+          state.chatList.push(result);
           const container = document.getElementById("chat_chat_message_list_box");
           setTimeout(() => {
             container.scrollTop = container.scrollHeight;
           }, 1);
-          // request.updateReadState(data.id);
+          // request.updateReadState(result.id);
         };
       },
       open() {
@@ -272,13 +275,18 @@ export default defineComponent({
         let t = div.scrollTop
         let h = div.scrollHeight
         let ch = div.clientHeight
-        if (t <= ch/5 && !state.refreshState) {
+        if (t <= ch/4 && !state.refreshState
+            && t - state.refreshTop < 0
+            && !state.messageHistory) {
+          div.style.overflow='hidden';
           console.log(t)
           state.refreshState = true;
           state.pageNum += 1
           state.refreshHeight = h
+          state.loading = true;
           request.getChatList(state.roomId);
         }
+        state.refreshTop = t
       },
     };
     // 页面默认请求
@@ -354,24 +362,31 @@ export default defineComponent({
               const container = document.getElementById("chat_chat_message_list_box");
               setTimeout(() => {
                 container.scrollTop = container.scrollHeight;
+                state.refreshTop = container.scrollHeight - container.clientHeight;
               }, 1);
             } else {
               if (data.length > 0) {
                 for (var j = 0; j < data.length; j++) {
-                state.chatList.push(data[j]);
+                state.chatList.unshift(data[j]);
                 }
                 state.chatList.sort((a, b) => a.sendTime.localeCompare(b.sendTime));
-                // 定位到滚动条末尾
+                // 定位到刷新时的高度
                 const container = document.getElementById("chat_chat_message_list_box");
                 setTimeout(() => {
-                  container.scrollTop = container.scrollHeight - state.refreshHeight + 20;
+                  container.scrollTop = container.scrollHeight - state.refreshHeight;
                   state.refreshState = false;
-                }, 1000);
+                }, 1000)
+
               } else {
+                state.messageHistory = true;
                 state.refreshState = false;
               }
             }
           }
+          setTimeout(() => {
+            state.loading = false;
+            document.getElementById('chat_chat_message_list_box').style.overflow='';
+          }, 1000)
         });
       },
     };

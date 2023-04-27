@@ -68,6 +68,7 @@ import vueDanmaku from "vue3-danmaku";
 import { ElMessageBox } from "element-plus";
 import post from "@/http/axios";
 import router from "@/router";
+import { Base64 } from "js-base64";
 export default defineComponent({
   name: "",
   components: {
@@ -135,6 +136,7 @@ export default defineComponent({
       },
     };
     onMounted(() => {
+      state.userId = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
       document.getElementById("inputMsg").focus();
       // methods.addToList();
       request.getMsgList();
@@ -159,9 +161,9 @@ export default defineComponent({
           if (code === 200) {
             // 发送弹幕（插入到当前播放位置，实时显示）
             danmakuRef.value.add(data);
-            myMessage(message, null, 0, null, null);
+            // myMessage(message, null, 0, null, null);
           } else {
-            myMessage(message, null, 2, null, null);
+            // myMessage(message, null, 2, null, null);
           }
         });
       },
