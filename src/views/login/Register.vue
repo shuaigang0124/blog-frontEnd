@@ -285,6 +285,7 @@ export default defineComponent({
               showClose: true,
               duration: 3000,
             });
+            // window.location.href='/login'
             router.push("/login");
           } else {
             ElNotification.error({

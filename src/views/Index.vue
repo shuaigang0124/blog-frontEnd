@@ -79,6 +79,7 @@ export default defineComponent({
     const methods = {
       checkPage(e) {
         if (e.to !== "") {
+          // window.location.href=e.to
           router.push(e.to);
         }
         if (e.title === "音乐盒" && state.titleList.length === 7) {
@@ -228,9 +229,8 @@ export default defineComponent({
     // 页面默认请求
     onMounted(() => {
       if (methods.isMobile()) {
-        router.push({
-          path: "/500",
-        });
+        window.location.href='/500'
+        router.push("/500");
       } else {
         let ntf = localStorage.getItem("notification");
         let nowTime = new Date().getTime();

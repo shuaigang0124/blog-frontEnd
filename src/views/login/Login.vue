@@ -1106,10 +1106,6 @@ export default defineComponent({
         post("/authentication/form", paramData).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
-            ElNotification({
-              message: h('div', { style: 'color: #67c23a' }, '登陆成功，正在返回上一页'),
-              duration: 3000
-            })
             // console.log(data.Authorization);
             // 缓存到store中
             // 缓存到浏览器中 Local Storage 中
@@ -1117,9 +1113,11 @@ export default defineComponent({
             sessionStorage.setItem("shuaigangOVO", data.userId);
             sessionStorage.setItem("shuaigangQWQ", data.role);
             if (sessionStorage.getItem("router")) {
+              // window.location.href=sessionStorage.getItem("router")
               router.push(sessionStorage.getItem("router"));
               sessionStorage.removeItem("router")
             } else {
+              // window.location.href='/index/home'
               router.push("/index/home");
             }
           } else {
@@ -1231,7 +1229,7 @@ form input[type="password"] {
   background-color: #f3fafd;
   border: solid 2px #217093;
   border-radius: 4px;
-  -webkit-appearance: none;
+  /* -webkit-appearance: none; */
   box-sizing: border-box;
   width: 100%;
   height: 65px;

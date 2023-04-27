@@ -1,74 +1,79 @@
 <template>
-  <div class="main_conter">
-    <div class="chat_box">
-      <div class="chat_box_top">
-        <div>聊天室</div>
-      </div>
-      <div class="chat_box_bot">
-        <div class="message_box" id="message_list_box">
-          <div
-            class="message_list"
-            v-for="(item, index) in chatList"
-            :key="index"
-          >
-            <div class="time">{{ item.sendTime }}</div>
-            <div class="other_user" v-if="item.userId !== userId">
-              <div>
-                <img
-                  class="user_avatar"
-                  :src="'https://shuaigang.top' + item.userAvatar"
-                />
+  <div class="chat">
+    <div class="body_style">
+      <div class="body_img"></div>
+    </div>
+    <div class="cover">
+      <div class="chat_box">
+        <div class="chat_box_top">
+          <div>聊天室</div>
+        </div>
+        <div class="chat_box_bot">
+          <div class="chat_message_box" id="chat_chat_message_list_box">
+            <div
+              class="chat_message_list"
+              v-for="(item, index) in chatList"
+              :key="index"
+            >
+              <div class="chat_time">{{ item.sendTime }}</div>
+              <div class="chat_other_user" v-if="item.userId !== userId">
+                <div>
+                  <img
+                    class="chat_user_avatar"
+                    :src="'https://shuaigang.top' + item.userAvatar"
+                  />
+                </div>
+                <div>
+                  <div class="chat_user_pet_name">{{ item.userName }}</div>
+                  <div class="user_content1">
+                    <div class="chat_content" v-html="item.content" />
+                  </div>
+                </div>
               </div>
-              <div>
-                <div class="user_pet_name">{{ item.userName }}</div>
-                <div class="user_content1">
-                  <div class="content" v-html="item.content" />
+              <div class="chat_oneself_user" v-if="item.userId === userId">
+                <div class="user_content2">
+                  <div class="chat_content" v-html="item.content" />
+                </div>
+                <div>
+                  <img
+                    class="chat_user_avatar"
+                    :src="'https://shuaigang.top' + userAvatar"
+                  />
                 </div>
               </div>
             </div>
-            <div class="oneself_user" v-if="item.userId === userId">
-              <div class="user_content2">
-                <div class="content" v-html="item.content" />
-              </div>
-              <div>
+          </div>
+          <div class="chat_message_enter">
+            <div class="chat_choose">
+              <div class="emo">
                 <img
-                  class="user_avatar"
-                  :src="'https://shuaigang.top' + userAvatar"
+                  class="ep"
+                  src="../../assets/chat/emoji.png"
+                  @click="openEmoji"
+                />
+              </div>
+              <div class="pho">
+                <img
+                  class="ep"
+                  src="../../assets/chat/photo.png"
+                  @click="openPhoto"
                 />
               </div>
             </div>
-          </div>
-        </div>
-        <div class="message_enter">
-          <div class="choose">
-            <div class="emo">
-              <img
-                class="ep"
-                src="../../assets/chat/emoji.png"
-                @click="openEmoji"
-              />
-            </div>
-            <div class="pho">
-              <img
-                class="ep"
-                src="../../assets/chat/photo.png"
-                @click="openPhoto"
-              />
-            </div>
-          </div>
-          <div
-            id="input_content"
-            class="input_content"
-            @keydown="keydown($event)"
-            contenteditable="true"
-            placeholder="请填写"
-          ></div>
-          <div class="send">
-            <div class="hint">Ctrl+Enter快捷发送</div>
-            <div class="enter">
-              <el-button size="mini" @click="sendMsg"
-                >发送<img class="enter_img" src="../../assets/chat/enter.png"
-              /></el-button>
+            <div
+              id="chat_input_content"
+              class="chat_input_content"
+              @keydown="keydown($event)"
+              contenteditable="true"
+              placeholder="请填写"
+            ></div>
+            <div class="send">
+              <div class="hint">Ctrl+Enter快捷发送</div>
+              <div class="enter">
+                <el-button size="mini" @click="sendMsg"
+                  >发送<img class="enter_img" src="../../assets/chat/enter.png"
+                /></el-button>
+              </div>
             </div>
           </div>
         </div>
@@ -85,12 +90,8 @@ import router from "@/router";
 import moment from "moment";
 import mqtt from "mqtt";
 import "../../js/mqttws31";
-// import stomp from "stompjs";
 import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from "vue";
 export default defineComponent({
-  name: "",
-  components: {},
-  props: {},
   setup() {
     // 页面数据
     const state = reactive({
@@ -119,30 +120,9 @@ export default defineComponent({
           duration: 3000
         })
       },
-      //换行并重新定位光标位置
-      textareaRange() {
-        var el = document.getElementById("input_content");
-        // var range = document.createRange();
-        // //返回用户当前的选区
-        var sel =  document.getSelection();
-        //获取当前光标位置
-        var offset = sel.focusOffset
-        //div当前内容
-        var content = el.innerHTML
-        //添加换行符\n
-        el.innerHTML = content.slice(0,offset)+'<br>'+content.slice(offset)
-        // //设置光标为当前位置
-        // range.setStart(el.childNodes[0], offset + 1);
-        // //使得选区(光标)开始与结束位置重叠
-        // range.collapse(true);
-        // //移除现有其他的选区
-        // sel.removeAllRanges();
-        // //加入光标的选区
-        // sel.addRange(range);
-      },
       keydown(e) {
         if (e.ctrlKey && e.keyCode === 13) {
-          var a = document.getElementById("input_content");
+          var a = document.getElementById("chat_input_content");
           if (a.innerHTML) {
             methods.sendMsg();
           } else {
@@ -156,7 +136,11 @@ export default defineComponent({
         }
       },
       sendMsg() {
-        var a = document.getElementById("input_content");
+        if (!sessionStorage.getItem("shuaigangOVO")) {
+          methods.open();
+          return;
+        }
+        var a = document.getElementById("chat_input_content");
         let content = a.innerHTML;
         if (content) {
           let message = {
@@ -166,7 +150,7 @@ export default defineComponent({
             sendTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss").toString(),
           };
           a.innerHTML = "";
-          const container = document.getElementById("message_list_box");
+          const container = document.getElementById("chat_chat_message_list_box");
           setTimeout(() => {
             container.scrollTop = container.scrollHeight;
           }, 1);
@@ -262,7 +246,7 @@ export default defineComponent({
           let data = JSON.parse(Base64.decode(JSON.parse(message.payloadString).data));
           console.log(data)
           state.chatList.push(data);
-          const container = document.getElementById("message_list_box");
+          const container = document.getElementById("chat_chat_message_list_box");
           setTimeout(() => {
             container.scrollTop = container.scrollHeight;
           }, 1);
@@ -275,18 +259,16 @@ export default defineComponent({
           'Warning',
           {
             confirmButtonText: '确定',
-            cancelButtonText: '返回首页',
+            cancelButtonText: '取消',
             type: 'warning',
           }
         ).then(() => {
             sessionStorage.setItem("router", "/index/chat")
-            window.open("/login", "_blank")
-            window.close()
+            // window.location.href='/login'
+            router.push("/login")
           })
           .catch(() => {
-            // router.push("/index/home")
-            window.open("/index/home", "_blank")
-            window.close()
+            // window.location.href='/index/home'
           })
       },
     };
@@ -298,22 +280,24 @@ export default defineComponent({
         state.userId = userId
         request.getUserDetails(userId);
       } else {
-        methods.open();
-        // sessionStorage.setItem("router", "/index/chat")
-        // window.open("/login", "_blank")
-        // window.close()
+        request.getChatList(state.roomId, 1, 10);
+        // setInterval(() => {
+        //   request.getChatList(state.roomId, 1, 10);
+        // }, 10000);
       }
 
-      // state.chatList.sort((a, b) => a.time.localeCompare(b.time));
-      // console.log(state.chatList);
-      // 让滚动条始终在最底部
-      // const container = document.getElementById("message_list_box");
-      // setTimeout(() => {
-      //   container.scrollTop = container.scrollHeight;
-      // }, 1);
+//       // state.chatList.sort((a, b) => a.time.localeCompare(b.time));
+//       // console.log(state.chatList);
+//       // 让滚动条始终在最底部
+//       // const container = document.getElementById("chat_chat_message_list_box");
+//       // setTimeout(() => {
+//       //   container.scrollTop = container.scrollHeight;
+//       // }, 1);
     });
     onUnmounted(() => {
-      state.client.disconnect();
+      if (state.client) {
+        state.client.disconnect();
+      }
     });
     // 请求
     const request = {
@@ -362,7 +346,7 @@ export default defineComponent({
             data.sort((a, b) => a.sendTime.localeCompare(b.sendTime));
             state.chatList = data;
             // 定位到滚动条末尾
-            const container = document.getElementById("message_list_box");
+            const container = document.getElementById("chat_chat_message_list_box");
             setTimeout(() => {
               container.scrollTop = container.scrollHeight;
             }, 1);
@@ -375,17 +359,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.main_conter {
-  width: 100vw;
-  height: 100vh;
-  z-index: -10;
-  background-repeat: no-repeat;
-  background-size: cover;
+.body_img {
   background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/13.webp);
-  background-color: gray;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .chat_box {
@@ -408,92 +383,40 @@ export default defineComponent({
 .chat_box_bot {
   height: 70vh;
 }
-.chat_list {
-  width: 100%;
-}
-.chat_list_item {
-  min-height: 10vh;
-  align-items: center;
-  border-bottom: 1px solid #e8e8e8;
-  /* background-color: #fff; */
-  background-color: rgba(0, 0, 0, 0.1);
-  display: flex;
-}
-.item_left {
-  margin-left: 0.6vw;
-}
-.item_avatar {
-  width: 5.5vh;
-  height: 5.5vh;
-  border-radius: 50%;
-}
-.item_center {
-  margin-left: 0.6vw;
-}
-.item_name {
-  font-size: 12px;
-  color: black;
-  width: 12vw;
-  word-wrap: break-word; /* 强制换行 */
-  overflow: hidden; /*超出隐藏*/
-  text-overflow: ellipsis; /*隐藏后添加省略号*/
-  white-space: nowrap; /*强制不换行*/
-}
-.item_last_massage {
-  margin-top: 0.4vh;
-  font-size: 12px;
-  color: gray;
-  width: 10vw;
-  word-wrap: break-word; /* 强制换行 */
-  overflow: hidden; /*超出隐藏*/
-  text-overflow: ellipsis; /*隐藏后添加省略号*/
-  white-space: nowrap; /*强制不换行*/
-}
-.item_right {
-  width: 3.5vw;
-}
-.item_tag {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.el-tag {
-  border-radius: 10px;
-}
 
-.message_box {
+.chat_message_box {
   /* background-color: green; */
   overflow: auto;
   height: 50vh;
   padding: 1vh 0 1vh 0;
   border-bottom: 1px solid #e5e5e6;
 }
-.message_list {
+.chat_message_list {
   margin: 1vh 1vw 1vh 1vw;
 }
-.time {
+.chat_time {
   font-size: 12px;
   text-align: center;
 }
 
-.other_user {
+.chat_other_user {
   margin-top: 1vh;
   display: flex;
   justify-content: flex-start;
 }
 
-.oneself_user {
+.chat_oneself_user {
   margin-top: 1vh;
   display: flex;
   justify-content: flex-end;
 }
 
-.user_avatar {
+.chat_user_avatar {
   width: 35px;
   height: 35px;
   /* border-radius: 50%; */
 }
-.user_pet_name {
+.chat_user_pet_name {
   margin-left: 1vw;
   font-size: 13px;
   color: black;
@@ -537,19 +460,19 @@ export default defineComponent({
   top: 0;
 }
 
-.content {
+.chat_content {
   max-width: 14vw;
   word-wrap: break-word;
   padding: 1vh 0.5vw;
 }
 
-.message_enter {
+.chat_message_enter {
   /* background-color: blue; */
   border-radius: 0 0 10px 0;
   height: 18vh;
 }
 
-.choose {
+.chat_choose {
   height: 6vh;
   display: flex;
   align-items: center;
@@ -564,7 +487,7 @@ export default defineComponent({
   width: 3vh;
   height: 3vh;
 }
-.input_content {
+.chat_input_content {
   height: 5vh;
   padding: 0 1vw 1vh 1vw;
   font-size: 12px;
@@ -577,7 +500,7 @@ export default defineComponent({
   overflow-y: auto;
 }
 
-.input_content:empty:before {
+.chat_input_content:empty:before {
   color: #adadad;
   content: attr(placeholder);
   font-size: 12px;
@@ -601,29 +524,5 @@ export default defineComponent({
 .enter_img {
   width: 1.5vh;
   height: 1.5vh;
-}
-
-/*滚动条整体粗细样式*/
-::-webkit-scrollbar {
-  /*高宽分别对应横竖滚动条的尺寸*/
-  width: 5px;
-  height: 5px;
-}
-
-/*滚动条里面小方块*/
-::-webkit-scrollbar-thumb {
-  border-radius: 10px !important;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
-  /* 颜色rgb(232, 232, 232) */
-  background: rgba(0, 0, 0, 0.5) !important;
-  /* 线性渐变背景 */
-  /* background-image: linear-gradient(45deg, #ffbd61 25%,#ffbd61 25%, #ff8800 25%, #ff8800 50%,#ffbd61 50%, #ffbd61 75%, #ff8800 75%, #ff8800 100%)!important; */
-}
-
-/*滚动条轨道*/
-::-webkit-scrollbar-track {
-  border-radius: 10px !important;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2) !important;
-  background: #fff !important;
 }
 </style>

@@ -133,5 +133,3 @@ export default defineComponent({
   cursor: pointer;
 } */
 </style>
-
-function created() { throw new Error("Function not implemented."); }
