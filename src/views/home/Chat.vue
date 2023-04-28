@@ -362,7 +362,7 @@ export default defineComponent({
                 state.refreshTop = container.clientHeight;
               }, 1);
             } else {
-              if (state.pageSize >= data.length > 0) {
+              if (data.length > 0) {
                 const container = document.getElementById(
                   "chat_chat_message_list_box"
                 );
