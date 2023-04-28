@@ -20,7 +20,6 @@ instance.interceptors.response.use(
         const responseData = response.data
         if (responseData.data) {
             let { code } = JSON.parse(Base64.decode(response.data.data));
-            console.log(code)
             if (!code) {
                 return responseData;
             }

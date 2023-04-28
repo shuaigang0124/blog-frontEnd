@@ -226,7 +226,6 @@ export default defineComponent({
       },
       // 验证码校验
       change: function () {
-        // console.log(state.validCode )
         if (state.validCode > 999 && state.validCode < 10000) {
           request.checkMailCode();
         } else {

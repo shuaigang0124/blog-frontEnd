@@ -152,19 +152,16 @@ export default defineComponent({
       getMsgList() {
         // post请求
         post("/msg/getMsg", null).then((res: any) => {
-          console.log(res);
           let { message, data } = res;
           state.danmus = data;
         });
       },
       insertMsg(param) {
         post("/msg/insertMsg", param).then((res: any) => {
-          console.log(res);
           let { code } = res;
           if (code === 200) {
             // 发送弹幕（插入到当前播放位置，实时显示）
             danmakuRef.value.add(param);
-            console.log(danmakuRef.value)
           } else {
           }
         });

@@ -397,7 +397,6 @@ export default defineComponent({
         }
         // post请求
         post("/atc/getArticle", null).then((res, any) => {
-          console.log(res);
           let { message, data } = res;
           // for (let i = 0; i < data.resultList.length; i) {
           //   var date = new Date(data.resultList[i].gmtCreate);

@@ -242,16 +242,21 @@ export default defineComponent({
 
         // 接收消息事件
         state.client.onMessageArrived = function (message) {
-          // console.log(message)
           let result = JSON.parse(
             Base64.decode(JSON.parse(message.payloadString).data)
           );
           // console.log(result)
-          state.chatList.push(result);
-          const container = document.getElementById(
-            "chat_chat_message_list_box"
-          );
-          if (container.scrollTop > container.scrollHeight - container.clientHeight) {
+          let pushStatus = true;
+          for (let i = 0; i < state.chatList.length; i++) {
+            if (result.id === state.chatList[i].id) {
+              pushStatus = false;
+            }
+          }
+          if (pushStatus) {
+            const container = document.getElementById(
+              "chat_chat_message_list_box"
+            );
+            state.chatList.push(result);
             setTimeout(() => {
               container.scrollTop = container.scrollHeight;
             }, 1);
@@ -288,7 +293,6 @@ export default defineComponent({
           state.refreshState = true;
           state.pageNum += 1;
           state.refreshHeight = h;
-          console.log(state.refreshHeight, t);
           state.loading = true;
           request.getChatList(state.roomId);
         }
@@ -330,7 +334,6 @@ export default defineComponent({
       },
       send(msg) {
         post("/chat/sendMsg", msg).then((res, any) => {
-          // console.log(res);
           let { code, message, data } = res;
           if (code === 200) {
             // 更新lastMsg

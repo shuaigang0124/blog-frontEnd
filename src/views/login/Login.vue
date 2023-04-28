@@ -794,7 +794,6 @@ export default defineComponent({
         }
         // 密码单击
         function onPasswordToggleClick(e) {
-          //console.log("click: " + e.target.id);
           e.target.focus();
         }
         // 移动手指
@@ -946,7 +945,6 @@ export default defineComponent({
 
             el = el.offsetParent;
           }
-          //console.log("xPos: " + xPos + ", yPos: " + yPos);
           return {
             x: xPos,
             y: yPos,
@@ -1086,7 +1084,6 @@ export default defineComponent({
         post("/authentication/form", paramData).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
-            // console.log(data.Authorization);
             // 缓存到store中
             // 缓存到浏览器中 Local Storage 中
             sessionStorage.setItem("token", data.Authorization);

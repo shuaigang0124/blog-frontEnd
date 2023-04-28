@@ -43,7 +43,6 @@ export default defineComponent({
         };
         // post请求
         post("/user/getAllUser", data).then((res: any) => {
-          console.log(res);
           let { message, data } = res;
         });
       },
