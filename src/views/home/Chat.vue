@@ -76,7 +76,7 @@
               class="chat_input_content"
               @keydown="keydown($event)"
               contenteditable="true"
-              placeholder="请填写"
+              placeholder="发送消息加入聊天~"
             ></div>
             <div class="send">
               <div class="hint">Ctrl+Enter快捷发送</div>
@@ -95,8 +95,8 @@
 
 <script lang="js">
 import post from "@/http/axios";
-import myMessage from "@/utils/common"
-import { ElMessageBox  } from "element-plus";
+import myMessage from "@/utils/common";
+import { ElMessageBox } from "element-plus";
 import { Base64 } from "js-base64";
 import router from "@/router";
 import moment from "moment";
@@ -124,10 +124,10 @@ export default defineComponent({
     // 方法体
     const methods = {
       openEmoji() {
-        myMessage("暂未开放", null, 1, null, null, null, null);
+        myMessage("暂未开放", null, 1, null, null);
       },
       openPhoto() {
-        myMessage("暂未开放", null, 1, null, null, null, null);
+        myMessage("暂未开放", null, 1, null, null);
       },
       keydown(e) {
         if (e.ctrlKey && e.keyCode === 13) {
@@ -151,10 +151,14 @@ export default defineComponent({
             userId: state.userId,
             roomId: state.roomId,
             content: content,
-            sendTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss").toString(),
+            sendTime: moment(new Date())
+              .format("YYYY-MM-DD HH:mm:ss")
+              .toString(),
           };
           a.innerHTML = "";
-          const container = document.getElementById("chat_chat_message_list_box");
+          const container = document.getElementById(
+            "chat_chat_message_list_box"
+          );
           setTimeout(() => {
             container.scrollTop = container.scrollHeight;
           }, 1);
@@ -166,7 +170,7 @@ export default defineComponent({
       },
       connect() {
         // mqtt连接
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === "production") {
           // 生产环境
           state.client = new Paho.MQTT.Client(
             "shuaigang.top",
@@ -203,20 +207,17 @@ export default defineComponent({
           },
           onSuccess: (e, any) => {
             console.log("连接成功~");
-            state.client.subscribe(
-              state.userId,
-              {
-                qos: 1,
-                invocationContext: {},
-                onSuccess: () => {
-                  console.log("订阅成功");
-                },
-                onFailure: () => {
-                  console.log("订阅失败");
-                },
-                timeout: 300,
-              }
-            );
+            state.client.subscribe(state.userId, {
+              qos: 1,
+              invocationContext: {},
+              onSuccess: () => {
+                console.log("订阅成功");
+              },
+              onFailure: () => {
+                console.log("订阅失败");
+              },
+              timeout: 300,
+            });
           },
           onFailure: (message, any) => {
             console.log("连接失败~");
@@ -227,7 +228,7 @@ export default defineComponent({
         if (location.protocol == "https:") {
           options.useSSL = true;
         }
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === "production") {
           options.useSSL = true;
         }
         state.client.connect(options);
@@ -242,51 +243,56 @@ export default defineComponent({
         // 接收消息事件
         state.client.onMessageArrived = function (message) {
           // console.log(message)
-          let result = JSON.parse(Base64.decode(JSON.parse(message.payloadString).data));
+          let result = JSON.parse(
+            Base64.decode(JSON.parse(message.payloadString).data)
+          );
           // console.log(result)
           state.chatList.push(result);
-          const container = document.getElementById("chat_chat_message_list_box");
-          setTimeout(() => {
-            container.scrollTop = container.scrollHeight;
-          }, 1);
-          // request.updateReadState(result.id);
+          const container = document.getElementById(
+            "chat_chat_message_list_box"
+          );
+          if (container.scrollTop > container.scrollHeight - container.clientHeight) {
+            setTimeout(() => {
+              container.scrollTop = container.scrollHeight;
+            }, 1);
+          }
         };
       },
       open() {
-        ElMessageBox.confirm(
-          '是否前往登录?',
-          'Warning',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }
-        ).then(() => {
-            sessionStorage.setItem("router", "/index/chat")
+        ElMessageBox.confirm("是否前往登录?", "Warning", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            sessionStorage.setItem("router", "/index/chat");
             // window.location.href='/login'
-            router.push("/login")
+            router.push("/login");
           })
           .catch(() => {
             // window.location.href='/index/home'
-          })
+          });
       },
       onScroll() {
-        var div = document.getElementById('chat_chat_message_list_box')
-        let t = div.scrollTop
-        let h = div.scrollHeight
-        let ch = div.clientHeight
-        if (t <= ch/4 && !state.refreshState
-            && t - state.refreshTop < 0
-            && !state.messageHistory) {
-          div.style.overflow='hidden';
-          console.log(t)
+        var div = document.getElementById("chat_chat_message_list_box");
+        let t = div.scrollTop;
+        let h = div.scrollHeight;
+        let ch = div.clientHeight;
+        if (
+          t <= ch / 4 &&
+          !state.refreshState &&
+          t - state.refreshTop < 0 &&
+          !state.messageHistory
+        ) {
+          div.style.overflow = "hidden";
           state.refreshState = true;
-          state.pageNum += 1
-          state.refreshHeight = h
+          state.pageNum += 1;
+          state.refreshHeight = h;
+          console.log(state.refreshHeight, t);
           state.loading = true;
           request.getChatList(state.roomId);
         }
-        state.refreshTop = t
+        state.refreshTop = t;
       },
     };
     // 页面默认请求
@@ -294,22 +300,11 @@ export default defineComponent({
       let userId = sessionStorage.getItem("shuaigangOVO");
       if (userId) {
         userId = Base64.decode(userId);
-        state.userId = userId
+        state.userId = userId;
         request.getUserDetails(userId);
       } else {
         request.getChatList(state.roomId);
-        // setInterval(() => {
-        //   request.getChatList(state.roomId);
-        // }, 10000);
       }
-
-//       // state.chatList.sort((a, b) => a.time.localeCompare(b.time));
-//       // console.log(state.chatList);
-//       // 让滚动条始终在最底部
-//       // const container = document.getElementById("chat_chat_message_list_box");
-//       // setTimeout(() => {
-//       //   container.scrollTop = container.scrollHeight;
-//       // }, 1);
     });
     onUnmounted(() => {
       if (state.client) {
@@ -321,25 +316,25 @@ export default defineComponent({
       getUserDetails(id) {
         // 请求体数据
         const data = {
-            userId: id,
+          userId: id,
         };
         post("/user/getUserDetails", data).then((res, any) => {
           let { code, data } = res;
           if (code === 200) {
             state.userName = data.userName;
             state.userAvatar = data.avatar;
-            request.getChatList(state.roomId);
             methods.connect();
+            request.getChatList(state.roomId);
           }
         });
       },
       send(msg) {
         post("/chat/sendMsg", msg).then((res, any) => {
           // console.log(res);
-          let { code,message, data } = res;
+          let { code, message, data } = res;
           if (code === 200) {
             // 更新lastMsg
-            console.log("发送成功")
+            console.log("发送成功");
           } else {
             myMessage(message, null, 2, null, null);
           }
@@ -353,30 +348,36 @@ export default defineComponent({
           pageSize: state.pageSize,
         };
         post("/chat/getChatList", data).then((res, any) => {
-          let { code,message, data } = res;
+          let { code, message, data } = res;
           if (code === 200) {
             data.sort((a, b) => a.sendTime.localeCompare(b.sendTime));
             if (state.pageNum === 1) {
               state.chatList = data;
               // 定位到滚动条末尾
-              const container = document.getElementById("chat_chat_message_list_box");
+              const container = document.getElementById(
+                "chat_chat_message_list_box"
+              );
               setTimeout(() => {
                 container.scrollTop = container.scrollHeight;
-                state.refreshTop = container.scrollHeight - container.clientHeight;
+                state.refreshTop = container.clientHeight;
               }, 1);
             } else {
-              if (data.length > 0) {
+              if (state.pageSize >= data.length > 0) {
+                const container = document.getElementById(
+                  "chat_chat_message_list_box"
+                );
                 for (var j = 0; j < data.length; j++) {
-                state.chatList.unshift(data[j]);
+                  state.chatList.unshift(data[j]);
                 }
-                state.chatList.sort((a, b) => a.sendTime.localeCompare(b.sendTime));
+                state.chatList.sort((a, b) =>
+                  a.sendTime.localeCompare(b.sendTime)
+                );
                 // 定位到刷新时的高度
-                const container = document.getElementById("chat_chat_message_list_box");
                 setTimeout(() => {
-                  container.scrollTop = container.scrollHeight - state.refreshHeight;
+                  container.scrollTop =
+                    container.scrollHeight - state.refreshHeight;
                   state.refreshState = false;
-                }, 1000)
-
+                }, 1);
               } else {
                 state.messageHistory = true;
                 state.refreshState = false;
@@ -385,8 +386,10 @@ export default defineComponent({
           }
           setTimeout(() => {
             state.loading = false;
-            document.getElementById('chat_chat_message_list_box').style.overflow='';
-          }, 1000)
+            document.getElementById(
+              "chat_chat_message_list_box"
+            ).style.overflow = "";
+          }, 1000);
         });
       },
     };

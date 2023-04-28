@@ -206,10 +206,10 @@ export default defineComponent({
     };
     // 页面默认请求
     onMounted(() => {
-      if (methods.isMobile()) {
-        window.location.href = "/500";
-        router.push("/500");
-      } else {
+      // if (methods.isMobile()) {
+        // window.location.href = "/500";
+        // router.push("/500");
+      // } else {
         methods.openNotification2();
         let ntf = localStorage.getItem("notification");
         let nowTime = new Date().getTime();
@@ -223,7 +223,7 @@ export default defineComponent({
           localStorage.setItem("notification", nowTime.toString());
           methods.openNotification1();
         }
-      }
+      // }
     });
     // 请求
     const request = {};

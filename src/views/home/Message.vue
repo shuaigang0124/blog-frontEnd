@@ -108,6 +108,7 @@ export default defineComponent({
               color: state.contentColor,
               content: state.content,
               userId: state.userId,
+              userName: "【当前发送】"
             };
           } else {
             ElMessageBox.confirm("是否前往登录?", "Warning", {
@@ -136,10 +137,12 @@ export default defineComponent({
       },
     };
     onMounted(() => {
-      state.userId = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
       document.getElementById("inputMsg").focus();
       // methods.addToList();
       request.getMsgList();
+      if (sessionStorage.getItem("shuaigangOVO")) {
+        state.userId = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
+      }
     });
     onUnmounted(() => {
       state.danmus = [];
@@ -154,16 +157,15 @@ export default defineComponent({
           state.danmus = data;
         });
       },
-      insertMsg(data) {
-        post("/msg/insertMsg", data).then((res: any) => {
+      insertMsg(param) {
+        post("/msg/insertMsg", param).then((res: any) => {
           console.log(res);
-          let { message, data, code } = res;
+          let { code } = res;
           if (code === 200) {
             // 发送弹幕（插入到当前播放位置，实时显示）
-            danmakuRef.value.add(data);
-            // myMessage(message, null, 0, null, null);
+            danmakuRef.value.add(param);
+            console.log(danmakuRef.value)
           } else {
-            // myMessage(message, null, 2, null, null);
           }
         });
       },

@@ -7,25 +7,41 @@ const instance = axios.create({
 })
 
 let codes = {
-    CODE_SUCCESS: 200,
+    SUCCESS: 200,
     CODE_NOT_FOUND: 404,
     CODE_ERROR: 500,
-    CODE_ERROR_PARAMETER: 500,
-    CODE_NET_ERROR: 500,
-    CODE_NGINX_ERROR: 500
+    TOKEN_IS_EXPIRED: 4006,
+    UNAUTHORIZED: 4001
 }
 // 添加响应拦截器
 instance.interceptors.response.use(
 
     response => {
         const responseData = response.data
-        // const ERRCOR_CODE = responseData.code
-
-        // switch (ERRCOR_CODE) {
-        //     case codes.CODE_SUCCESS:
-        //         // 返回的数据
-        //         return responseData
-        // }
+        if (responseData.data) {
+            let { code } = JSON.parse(Base64.decode(response.data.data));
+            console.log(code)
+            if (!code) {
+                return responseData;
+            }
+            switch (code) {
+                // token失效
+                case codes.TOKEN_IS_EXPIRED:
+                    let userId = sessionStorage.getItem("shuaigangOVO");
+                    if (userId) {
+                        post("/gsg/authentication/generateToken", { userId }).then((res: any) => {
+                            if (res.code === codes.SUCCESS && res.data.Authorization) {
+                                sessionStorage.setItem("shuaigangOVO", res.data.Authorization)
+                            }
+                        })
+                    } else {
+                        sessionStorage.clear();
+                    }
+                // 未认证
+                case codes.UNAUTHORIZED:
+                    sessionStorage.clear();
+            }
+        }
         return responseData
     },
 )
