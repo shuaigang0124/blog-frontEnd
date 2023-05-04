@@ -105,13 +105,15 @@ export default defineComponent({
   line-height: calc(var(--font-size) * 1.5);
   font-size: var(--font-size);
   font-weight: bold;
-  -webkit-background-clip: text;
+  /* -webkit-background-clip: text; */
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   /* background-color: var(--font-bgcolor); */
   background-image: linear-gradient(var(--font-color), var(--font-color));
   background-size: 0% 100%;
   background-repeat: no-repeat;
-  -webkit-animation: printing var(--animation-duration) linear
+  /* -webkit-animation: ; */
+  animation: printing var(--animation-duration) linear
     var(--animation-iteration);
   animation-fill-mode: forwards;
 }
@@ -123,59 +125,9 @@ export default defineComponent({
 }
 .scanner div:nth-child(3) {
   animation-delay: calc(2 * var(--animation-duration));
-}
-.scanner div:nth-child(4) {
-  animation-delay: calc(3 * var(--animation-duration));
-}
-.scanner div:nth-child(5) {
-  animation-delay: calc(4 * var(--animation-duration));
-}
-.scanner div:nth-child(6) {
-  animation-delay: calc(5 * var(--animation-duration));
-}
-.scanner div:nth-child(7) {
-  animation-delay: calc(6 * var(--animation-duration));
-}
-.scanner div:nth-child(8) {
-  animation-delay: calc(7 * var(--animation-duration));
-}
-.scanner div:nth-child(9) {
-  animation-delay: calc(8 * var(--animation-duration));
-}
-.scanner div:nth-child(10) {
-  animation-delay: calc(9 * var(--animation-duration));
-}
-.scanner div:nth-child(11) {
-  animation-delay: calc(10 * var(--animation-duration));
-}
-.scanner div:nth-child(12) {
-  animation-delay: calc(11 * var(--animation-duration));
-}
-.scanner div:nth-child(13) {
-  animation-delay: calc(12 * var(--animation-duration));
-}
-.scanner div:nth-child(14) {
-  animation-delay: calc(13 * var(--animation-duration));
-}
-.scanner div:nth-child(15) {
-  animation-delay: calc(14 * var(--animation-duration));
-}
-.scanner div:nth-child(16) {
-  animation-delay: calc(15 * var(--animation-duration));
-}
-.scanner div:nth-child(17) {
-  animation-delay: calc(16 * var(--animation-duration));
-}
-.scanner div:nth-child(18) {
-  animation-delay: calc(17 * var(--animation-duration));
-}
-.scanner div:nth-child(19) {
-  animation-delay: calc(18 * var(--animation-duration));
-}
-.scanner div:nth-child(20) {
-  animation-delay: calc(19 * var(--animation-duration));
 } */
-@-webkit-keyframes printing {
+/* @-webkit-keyframes printing { */
+@keyframes printing {
   0% {
     background-size: 0% 100%;
   }
