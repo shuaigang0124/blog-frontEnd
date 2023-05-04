@@ -17,7 +17,7 @@
                   <div class="article_describe">{{ item.describe }}</div>
                   <div class="article_user_info">
                     <div class="article_avatar">
-                      <el-image class="article_avatar_img" :src="'h' +item.avatar">
+                      <el-image class="article_avatar_img" :src="item.avatar">
                         <template #error>
                           <img
                             class="article_avatar_img"
@@ -516,7 +516,7 @@ export default defineComponent({
 * 内容
 */
 .HomeBottom_body {
-  padding: 5vh 11vw 18vh 13vw;
+  padding: 5vh 11vw 12vh 13vw;
 }
 .HomeBottom_body_info {
   display: flex;
@@ -654,7 +654,7 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 15vh;
+  height: 10vh;
   width: 100%;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 600% 600%;
