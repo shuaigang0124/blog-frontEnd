@@ -112,7 +112,7 @@
 </template>
 <script lang="js">
 import post from "@/http/axios";
-import { defineComponent, nextTick, onMounted, onUnmounted, reactive, toRefs } from "vue";
+import { defineComponent, nextTick, onBeforeUnmount, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../js/particles.min.js";
 import myMessage from '@/utils/common'
@@ -129,17 +129,6 @@ export default defineComponent({
       screenHeight: 0,
       totalNum: 99,
       articleList: [
-        // {
-        //   title: "入站需知！！",
-        //   describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
-        //   avatar:
-        //     "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
-        //   userName: "shuaigang",
-        //   time: "2022-09-19 16:05",
-        //   readNum: "99",
-        //   clickNum: "52",
-        //   tag: "公告",
-        // },
       ],
       tagList: [
         { color: "#036564", name: "java" },
@@ -251,27 +240,6 @@ export default defineComponent({
           },
           retina_detect: true,
         });
-        // var count_particles, stats, update = null;
-        // stats = new Stats();
-        // stats.setMode(0);
-        // stats.domElement.style.position = "absolute";
-        // stats.domElement.style.left = "0px";
-        // stats.domElement.style.top = "0px";
-        // document.body.appendChild(stats.domElement);
-        // count_particles = document.querySelector(".js-count-particles");
-        // update = function () {
-        //   stats.begin();
-        //   stats.end();
-        //   if (
-        //     window.pJSDom[0].pJS.particles &&
-        //     window.pJSDom[0].pJS.particles.array
-        //   ) {
-        //     count_particles.innerText =
-        //       window.pJSDom[0].pJS.particles.array.length;
-        //   }
-        //   requestAnimationFrame(update);
-        // };
-        // requestAnimationFrame(update);
       },
       //监听容器高度变化
       listenParentHeight() {
@@ -341,25 +309,9 @@ export default defineComponent({
           })();
         };
       },
-      // beforeDestroy () {
-      //   // 销毁 particlesJS
-      //   if (pJSDom && pJSDom.length > 0) {
-      //     pJSDom.forEach(pJSDomItem => {
-      //         pJSDomItem.pJS.fn.vendors.destroypJS();
-      //     })
-      //   }
-      // },
     };
     // 页面默认请求
     onMounted(() => {
-      // var homeState = localStorage.getItem('if_home');
-      // if (!homeState) {
-      //   localStorage.setItem('if_home', 'true');
-      // }
-      // if (homeState === 'false') {
-      //   localStorage.setItem('if_home', 'true');
-      //   location.reload();
-      // }
       state.winState = true;
       methods.watchWin();
       let data = {
@@ -385,8 +337,14 @@ export default defineComponent({
     });
     onUnmounted(() => {
       state.winState = false;
-      // methods.beforeDestroy();
-      // localStorage.setItem('if_home', 'false');
+    });
+    onBeforeUnmount(()=> {
+      // 销毁 particlesJS
+      if (pJSDom && pJSDom.length > 0) {
+        pJSDom.forEach(pJSDomItem => {
+            pJSDomItem.pJS.fn.vendors.destroypJS();
+        })
+      }
     });
     // 请求
     const request = {

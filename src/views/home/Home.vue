@@ -86,7 +86,6 @@ import { defineComponent, onMounted, reactive, toRefs } from "vue";
 // import HelloWorld from '@/components/HelloWorld.vue';
 import HomeBottom from "@/components/HomeBottom.vue";
 import myMessage from "@/utils/common"
-import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Home",
@@ -141,11 +140,6 @@ export default defineComponent({
       },
     };
     onMounted(() => {
-      // useRouter().addRoute({
-      //   path: "/login",
-      //   name: "Login",
-      //   component: () => import("@/views/login/Login.vue"),
-      // });
     });
     return { ...methods, ...toRefs(state) };
   },

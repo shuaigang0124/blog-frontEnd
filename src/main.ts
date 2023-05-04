@@ -7,7 +7,6 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import ElementPlus from 'element-plus'
 import lazyPlugin from 'vue3-lazy'
 const app = createApp(App)
-app.use(ElementPlus)
 app.use(store)
     .use(router)
     .use(lazyPlugin, {
