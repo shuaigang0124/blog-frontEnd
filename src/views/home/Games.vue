@@ -10,7 +10,11 @@
           <div class="games_list">
             <div class="games_info" v-for="games in gamesList" :key="games">
               <div class="games_item" @click="playGame(games.router)">
-                <el-image class="game_img" :src="games.img" />
+                <el-image class="game_img" :src="games.img">
+                  <template #error>
+                    <img class="game_img" src="../../assets/error.png" />
+                  </template>
+                </el-image>
                 <div class="game_msg">{{ games.msg }}</div>
               </div>
             </div>

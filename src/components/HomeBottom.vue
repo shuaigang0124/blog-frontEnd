@@ -17,7 +17,14 @@
                   <div class="article_describe">{{ item.describe }}</div>
                   <div class="article_user_info">
                     <div class="article_avatar">
-                      <img class="article_avatar_img" :src="item.avatar" />
+                      <el-image class="article_avatar_img" :src="'h' +item.avatar">
+                        <template #error>
+                          <img
+                            class="article_avatar_img"
+                            src="../assets/error.png"
+                          />
+                        </template>
+                      </el-image>
                       <div class="article_user_name">{{ item.userName }}</div>
                       <div class="article_time">
                         <img
@@ -319,7 +326,7 @@ export default defineComponent({
         describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
         avatar:
           "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
-        userName: "shuaigang",
+        userName: "帅刚",
         time: "2022-09-19 16:05",
         readNum: "99",
         clickNum: "52",

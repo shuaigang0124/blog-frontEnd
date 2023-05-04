@@ -368,6 +368,7 @@ body {
 }
 
 .body_img {
+  background-color: burlywood;
   animation: grow1 1s 1 forwards;
   height: 100vh;
   width: 100vw;

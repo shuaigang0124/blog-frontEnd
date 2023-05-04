@@ -29,10 +29,15 @@
               <div class="chat_time">{{ item.sendTime }}</div>
               <div class="chat_other_user" v-if="item.userId !== userId">
                 <div>
-                  <img
+                  <el-image
                     class="chat_user_avatar"
                     :src="'https://shuaigang.top' + item.userAvatar"
-                  />
+                  >
+                    <template #error>
+                      <img
+                        class="chat_user_avatar"
+                        src="../../assets/error.png" /></template
+                  ></el-image>
                 </div>
                 <div>
                   <div class="chat_user_pet_name">{{ item.userName }}</div>
@@ -46,10 +51,14 @@
                   <div class="chat_content" v-html="item.content" />
                 </div>
                 <div>
-                  <img
+                  <el-image
                     class="chat_user_avatar"
                     :src="'https://shuaigang.top' + userAvatar"
-                  />
+                    ><template #error>
+                      <img
+                        class="chat_user_avatar"
+                        src="../../assets/error.png" /></template
+                  ></el-image>
                 </div>
               </div>
             </div>
