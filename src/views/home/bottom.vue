@@ -21,7 +21,7 @@
                         <template #error>
                           <img
                             class="article_avatar_img"
-                            src="../assets/error.png"
+                            src="../../assets/error.png"
                           />
                         </template>
                       </el-image>
@@ -29,21 +29,21 @@
                       <div class="article_time">
                         <img
                           class="article_icon"
-                          src="../assets/icon/calendar.png"
+                          src="../../assets/icon/calendar.png"
                         />
                         {{ item.time }}
                       </div>
                       <div class="article_read_num">
                         <img
                           class="article_icon"
-                          src="../assets/icon/browse.png"
+                          src="../../assets/icon/browse.png"
                         />
                         {{ item.readNum }}
                       </div>
                       <div class="article_click_num">
                         <img
                           class="article_icon"
-                          src="../assets/icon/praise.png"
+                          src="../../assets/icon/praise.png"
                         />
                         {{ item.clickNum }}
                       </div>
@@ -121,7 +121,7 @@
 import post from "@/http/axios";
 import { defineComponent, nextTick, onBeforeUnmount, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
-import "../js/particles.min.js";
+import "../../js/particles.min.js";
 import myMessage from '@/utils/common'
 export default defineComponent({
   name: "",

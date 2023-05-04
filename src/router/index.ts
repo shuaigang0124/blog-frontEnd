@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Index from '../views/Index.vue'
-import Home from '../views/home/Home.vue'
+import Home from '../views/home/index.vue'
 import NotFound from "../views/other/404.vue"
 import BeatingHeart from "../views/other/BeatingHeart.vue"
 import RotateBeatingHeart from "../views/other/RotateBeatingHeart.vue"
@@ -26,37 +26,32 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/index/music',
         name: 'Music',
-        component: () => import('../views/home/Music.vue')
+        component: () => import('../views/music/index.vue')
       },
       {
         path: '/index/chat',
         name: 'Chat',
-        component: () => import('../views/home/Chat.vue')
+        component: () => import('../views/chat/index.vue')
       },
       {
         path: '/index/games',
         name: 'Games',
-        component: () => import('../views/home/Games.vue')
+        component: () => import('../views/games/index.vue')
       },
       {
         path: '/index/archives',
         name: 'Archives',
-        component: () => import('../views/home/Archives.vue')
-      },
-      {
-        path: '/index/link',
-        name: 'Link',
-        component: () => import('../views/home/Link.vue')
+        component: () => import('../views/archives/index.vue')
       },
       {
         path: '/index/message',
         name: 'Message',
-        component: () => import('../views/home/Message.vue')
+        component: () => import('../views/message/index.vue')
       },
       {
         path: '/index/about',
         name: 'About',
-        component: () => import('../views/home/About.vue')
+        component: () => import('../views/about/index.vue')
       },
       {
         path: '/index/discovery',

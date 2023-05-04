@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <HomeBottom />
+    <Bottom />
     <div class="my_backtop" @click="upTop()">
       <div class="my_backtop_msg">
         <img class="my_backtop_img" src="../../assets/icon/backTop.png" />
@@ -84,14 +84,14 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 // import HelloWorld from '@/components/HelloWorld.vue';
-import HomeBottom from "@/components/HomeBottom.vue";
+import Bottom from "@/views/home/bottom.vue";
 import myMessage from "@/utils/common"
 
 export default defineComponent({
   name: "Home",
   components: {
     // HelloWorld,
-    HomeBottom,
+    Bottom,
   },
   setup() {
     const state = reactive({
