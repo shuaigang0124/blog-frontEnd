@@ -109,7 +109,11 @@
         <div class="beian_info">
           <div>
             <div class="beian_info_content">© 2022 - 2023 By ShuaiGang</div>
-            <div class="beian_info_content">渝ICP备2021011002号</div>
+            <el-link
+              @click="openBeian"
+              class="beian_info_content"
+              >渝ICP备2021011002号</el-link
+            >
           </div>
         </div>
       </div>
@@ -316,6 +320,9 @@ export default defineComponent({
           })();
         };
       },
+      openBeian() {
+        window.open("https://beian.miit.gov.cn");
+      }
     };
     // 页面默认请求
     onMounted(() => {
