@@ -22,9 +22,6 @@
                 2022年9月，我推翻了最开始的设计，重写了当前网站
               </div>
               <div class="indent">
-                第一版网站地址：https://shuaigang.top/website
-              </div>
-              <div class="indent">
                 想借次机会引导自己写博客来保留日常的技术笔记，也能够在不断折腾的同时提升自己专业能力
               </div>
               <div class="indent">大千世界之中，我们的一面之缘实属不易</div>

@@ -108,7 +108,7 @@
       <div class="beian">
         <div class="beian_info">
           <div>
-            <div class="beian_info_content">© 2022 - 2023 By ShuaiGang</div>
+            <div class="beian_info_content">© 2021 - 2023 By ShuaiGang</div>
             <el-link
               @click="openBeian"
               class="beian_info_content"
