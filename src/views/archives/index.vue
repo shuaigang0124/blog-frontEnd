@@ -265,7 +265,7 @@ export default defineComponent({
 }
 .go_to_read:hover {
   border: 1px solid #f44336;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: #f44336;
 }
 .but_content_center {

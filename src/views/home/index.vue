@@ -179,7 +179,7 @@ export default defineComponent({
   bottom: 15px;
   right: 15px;
   /* z-index: 999; */
-  cursor: pointer;
+  /* cursor: pointer; */
   border-radius: 0 0 5px 5px;
   background-color: #e0e1e2;
 }
@@ -208,7 +208,7 @@ export default defineComponent({
   bottom: 50px;
   right: 15px;
   z-index: 999;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: #2185d0;
   border-radius: 5px 5px 0 0;
 }

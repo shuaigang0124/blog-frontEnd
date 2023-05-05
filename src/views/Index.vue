@@ -207,22 +207,22 @@ export default defineComponent({
     // 页面默认请求
     onMounted(() => {
       // if (methods.isMobile()) {
-        // window.location.href = "/500";
-        // router.push("/500");
+      // window.location.href = "/500";
+      // router.push("/500");
       // } else {
-        methods.openNotification2();
-        let ntf = localStorage.getItem("notification");
-        let nowTime = new Date().getTime();
-        if (ntf) {
-          let time = Number(ntf);
-          if (time < nowTime - 24 * 60 * 60 * 1000) {
-            methods.openNotification1();
-            localStorage.setItem("notification", nowTime.toString());
-          }
-        } else {
-          localStorage.setItem("notification", nowTime.toString());
+      methods.openNotification2();
+      let ntf = localStorage.getItem("notification");
+      let nowTime = new Date().getTime();
+      if (ntf) {
+        let time = Number(ntf);
+        if (time < nowTime - 24 * 60 * 60 * 1000) {
           methods.openNotification1();
+          localStorage.setItem("notification", nowTime.toString());
         }
+      } else {
+        localStorage.setItem("notification", nowTime.toString());
+        methods.openNotification1();
+      }
       // }
     });
     // 请求
@@ -249,10 +249,12 @@ body {
   margin: 0;
   height: 100vh;
   overflow: auto;
+  cursor: url(https://shuaigang.top/gsg/static-resource/formal/resource/my.cur),
+    default;
 }
-.el-button.is-disabled {
+/* .el-button.is-disabled {
   cursor: pointer !important;
-}
+} */
 .icon_img {
   height: 0.9rem;
   width: 0.9rem;
@@ -317,7 +319,7 @@ body {
   /* color: #80c8f8; */
   /* transform: translateY(-1rem); */
   /* filter: drop-shadow(#80c8f8 0 1rem); */
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .router:hover:after {
   width: 100%;

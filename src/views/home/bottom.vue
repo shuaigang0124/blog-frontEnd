@@ -420,7 +420,7 @@ export default defineComponent({
 }
 .guide_info_button:hover {
   color: black;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: #fff;
 }
 
@@ -436,10 +436,10 @@ export default defineComponent({
   background-color: #ffffff;
 }
 .module_one:hover {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .module_two:hover {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .my_el_tags {
   margin-right: 0.5vw;
@@ -573,7 +573,7 @@ export default defineComponent({
 .article_item {
   padding: 1vh 1vw 1vh 1vw;
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-  cursor: pointer;
+  /* cursor: pointer; */
   /* background-color: #00000066; */
 }
 .article_item:hover {

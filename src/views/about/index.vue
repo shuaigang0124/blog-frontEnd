@@ -32,7 +32,7 @@
               <div class="indent">希望你能够爱惜自己，每天早点睡</div>
               <div class="indent">祝你身体安康，并且希望我们能够成为朋友</div>
               <div class="not-indent">本站信息：</div>
-              <div class="indent">about：© 2022 - 2023 By ShuaiGang</div>
+              <div class="indent">about：© 2021 - 2023 By ShuaiGang</div>
               <div class="indent">备案号：渝ICP备2021011002号</div>
               <div class="indent">愿景：争取早日攻克全栈，做上架构师</div>
             </div>
