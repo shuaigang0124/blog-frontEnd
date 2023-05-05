@@ -315,12 +315,12 @@ body {
   height: 3px;
   background: #80c8f8;
 }
-.router:hover {
+/* .router:hover { */
   /* color: #80c8f8; */
   /* transform: translateY(-1rem); */
   /* filter: drop-shadow(#80c8f8 0 1rem); */
   /* cursor: pointer; */
-}
+/* } */
 .router:hover:after {
   width: 100%;
   left: 0;
