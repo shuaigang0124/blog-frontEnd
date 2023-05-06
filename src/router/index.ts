@@ -24,11 +24,6 @@ const routes: Array<RouteRecordRaw> = [
         component: Home
       },
       {
-        path: '/index/music',
-        name: 'Music',
-        component: () => import('../views/music/index.vue')
-      },
-      {
         path: '/index/chat',
         name: 'Chat',
         component: () => import('../views/chat/index.vue')

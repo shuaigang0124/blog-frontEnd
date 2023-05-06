@@ -113,7 +113,7 @@
 </template>
 
 <script lang="ts">
-import post from "@/http/axios";
+import {post} from "@/http/axios";
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import router from "../../router/index";
 import myMessage from "@/utils/common";

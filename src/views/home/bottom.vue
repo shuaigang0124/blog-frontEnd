@@ -109,9 +109,7 @@
         <div class="beian_info">
           <div>
             <div class="beian_info_content">© 2021 - 2023 By ShuaiGang</div>
-            <el-link
-              @click="openBeian"
-              class="beian_info_content"
+            <el-link @click="openBeian" class="beian_info_content"
               >渝ICP备2021011002号</el-link
             >
           </div>
@@ -122,7 +120,7 @@
   </div>
 </template>
 <script lang="js">
-import post from "@/http/axios";
+import {post} from "@/http/axios";
 import { defineComponent, nextTick, onBeforeUnmount, onMounted, onUnmounted, reactive, toRefs } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import "../../js/particles.min.js";

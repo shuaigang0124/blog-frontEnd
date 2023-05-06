@@ -66,7 +66,7 @@ import {
 } from "vue";
 import vueDanmaku from "vue3-danmaku";
 import { ElMessageBox } from "element-plus";
-import post from "@/http/axios";
+import {post} from "@/http/axios";
 import router from "@/router";
 import { Base64 } from "js-base64";
 export default defineComponent({

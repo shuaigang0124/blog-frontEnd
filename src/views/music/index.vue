@@ -1,37 +1,59 @@
 <template>
-  <div class="music">
+  <div class="search">
     <div class="body_style">
       <div class="body_img"></div>
     </div>
     <div class="cover">
       <div class="info">
         <div class="info_title">
-          <div style="color: #0024ff; font-size: 3.5rem">MUSIC-HOME</div>
+          <div
+            style="
+              padding: 2vh 2vw;
+              border-radius: 5px;
+              background-color: rgba(0, 0, 0, 0.2);
+            "
+          >
+            搜索
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script lang="ts">
+import {post} from "@/http/axios";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
   components: {},
   props: {},
   setup() {
-    const state = reactive({
-      data: "",
-    });
+    // 页面数据
+    const state = reactive({});
+    // 方法体
     const methods = {};
+    // 页面默认请求
     onMounted(() => {});
+    // 请求
+    const request = {
+      getList() {
+        // 请求体数据
+        const data = {
+          data: {},
+        };
+        // post请求
+        post("/user/getAllUser", data).then((res: any) => {
+          let { message, data } = res;
+        });
+      },
+    };
     return { ...methods, ...toRefs(state) };
   },
 });
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/20.webp); */
-  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/7.webp);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
+  background-color: burlywood;
 }
 </style>

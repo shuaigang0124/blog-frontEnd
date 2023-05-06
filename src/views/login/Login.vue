@@ -380,7 +380,7 @@
   </form>
 </template>
 <script lang="js">
-import post from "@/http/axios";
+import {post} from "@/http/axios";
 import { h } from 'vue'
 import myMessage from "@/utils/common"
 import router from "@/router";

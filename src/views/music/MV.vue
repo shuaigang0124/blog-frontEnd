@@ -1,5 +1,5 @@
 <template>
-  <div class="archives">
+  <div class="mv">
     <div class="body_style">
       <div class="body_img"></div>
     </div>
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script lang="ts">
-import post from "@/http/axios";
+import {post} from "@/http/axios";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",

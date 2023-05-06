@@ -1,13 +1,15 @@
 <template>
   <div class="top">
     <div class="item" v-for="item in titleList" :key="item">
-      <!-- <router-link class="router" :to="item.to">
-        <img class="icon_img" :src="item.icon" />
-        <span class="router_title">{{ item.title }}</span>
-        <div v-if="item.title === '音乐盒'" @click ="goMusic" />
-        <div v-if="item.title === '首页'" @click="goHome" />
-      </router-link> -->
+      <el-input
+        @keyup.enter="search"
+        v-model="inputCat"
+        placeholder="搜索"
+        v-if="item.title === '搜索' && searchInput"
+        prefix-icon="el-icon-search"
+      />
       <el-button
+        v-else
         class="router"
         @click="checkPage(item)"
         type="text"
@@ -27,6 +29,7 @@
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 import router from "../router";
 import myMessage from "@/utils/common";
+import { get } from "@/http/axios";
 export default defineComponent({
   name: "",
   components: {},
@@ -61,7 +64,7 @@ export default defineComponent({
           title: "游戏",
         },
         {
-          to: "/index/music",
+          to: "/index/discovery",
           icon: require("./../assets/icon/listen.png"),
           title: "音乐盒",
         },
@@ -72,6 +75,8 @@ export default defineComponent({
         },
       ],
       isDisabled: false,
+      searchInput: false,
+      inputCat: "",
       notificationMessage1:
         "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
       notificationMessage2:
@@ -80,15 +85,18 @@ export default defineComponent({
     // 方法体
     const methods = {
       checkPage(e) {
-        if (e.to !== "") {
+        if (e.to !== "" && e.to != "/index/search") {
           // window.location.href=e.to
+          state.searchInput = false;
           router.push(e.to);
+        } else {
+          state.searchInput = true;
         }
         if (e.title === "音乐盒" && state.titleList.length === 7) {
           state.isDisabled = true;
           var data = [
             {
-              to: "/index/music",
+              to: "/index/search",
               icon: require("./../assets/icon/search.png"),
               title: "搜索",
             },
@@ -118,6 +126,7 @@ export default defineComponent({
               title: "首页",
             },
           ];
+          sessionStorage.setItem("pageIndex", JSON.stringify(data));
           const oldList = setInterval(() => {
             state.titleList.shift();
             if (state.titleList.length === 0) {
@@ -163,7 +172,7 @@ export default defineComponent({
               title: "游戏",
             },
             {
-              to: "/index/music",
+              to: "/index/discovery",
               icon: require("./../assets/icon/listen.png"),
               title: "音乐盒",
             },
@@ -173,6 +182,7 @@ export default defineComponent({
               title: "关于",
             },
           ];
+          sessionStorage.setItem("pageIndex", JSON.stringify(data));
           const oldList = setInterval(() => {
             state.titleList.shift();
             if (state.titleList.length === 0) {
@@ -203,9 +213,40 @@ export default defineComponent({
         );
         return flag;
       },
+      search() {
+        console.log(state.inputCat);
+        get("https://www.tcefrep.site/music/search", {
+          keywords: state.inputCat,
+          type: 1,
+          limit: 10,
+        }).then((res) => {
+          console.log(res);
+          state.inputCat = "";
+        });
+      },
     };
     // 页面默认请求
     onMounted(() => {
+      let pageIndex = sessionStorage.getItem("pageIndex");
+      if (pageIndex) {
+        state.isDisabled = true;
+        let data = JSON.parse(pageIndex);
+        const oldList = setInterval(() => {
+          state.titleList.shift();
+          if (state.titleList.length === 0) {
+            clearInterval(oldList);
+            var i = -1;
+            const newList = setInterval(() => {
+              i += 1;
+              state.titleList.push(data[i]);
+              if (state.titleList.length === data.length) {
+                clearInterval(newList);
+                state.isDisabled = false;
+              }
+            }, 15);
+          }
+        }, 15);
+      }
       // if (methods.isMobile()) {
       // window.location.href = "/500";
       // router.push("/500");
@@ -316,10 +357,10 @@ body {
   background: #80c8f8;
 }
 /* .router:hover { */
-  /* color: #80c8f8; */
-  /* transform: translateY(-1rem); */
-  /* filter: drop-shadow(#80c8f8 0 1rem); */
-  /* cursor: pointer; */
+/* color: #80c8f8; */
+/* transform: translateY(-1rem); */
+/* filter: drop-shadow(#80c8f8 0 1rem); */
+/* cursor: pointer; */
 /* } */
 .router:hover:after {
   width: 100%;

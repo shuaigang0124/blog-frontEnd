@@ -81,6 +81,23 @@ const post = async (url: string, param?: any) => {
     })
 
 }
+
+const get = async (url: string, params?: any) => {
+    return new Promise((resolve, reject) => {
+        instance
+            .get(`${url}`, { params })
+            .then(res => {
+                // console.log(res)
+                if (res) {
+                    resolve(res);
+                }
+            })
+            .catch(err =>
+                reject(err));
+    })
+}
+
+
 const getToken = () => {
     return sessionStorage.getItem('token')
 }
@@ -88,4 +105,5 @@ const getUserInfo = () => {
     return sessionStorage.getItem('userInfo')
 }
 
-export default post
+// export default post
+export { post, get }

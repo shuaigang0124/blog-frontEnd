@@ -103,7 +103,7 @@
 </template>
 
 <script lang="js">
-import post from "@/http/axios";
+import {post} from "@/http/axios";
 import myMessage from "@/utils/common";
 import { ElMessageBox } from "element-plus";
 import { Base64 } from "js-base64";
