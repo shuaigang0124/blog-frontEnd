@@ -20,7 +20,7 @@
       </el-card>
       <div class="my_menu">
         <el-menu
-          :default-active="menuList[0].name"
+          :default-active="menuList[0]"
           mode="horizontal"
           text-color="#fff"
           active-text-color="burlywood"
@@ -31,8 +31,8 @@
           <el-menu-item
             v-for="(item, index) in menuList"
             :key="index"
-            :index="item.name"
-            >{{ item.name }}</el-menu-item
+            :index="item"
+            >{{ item }}</el-menu-item
           >
         </el-menu>
       </div>
@@ -68,48 +68,20 @@ export default defineComponent({
     const state = reactive({
       highquality: {},
       menuList: [
-        {
-          name: "全部",
-        },
-        {
-          name: "欧美",
-        },
-        {
-          name: "华语",
-        },
-        {
-          name: "流行",
-        },
-        {
-          name: "说唱",
-        },
-        {
-          name: "摇滚",
-        },
-        {
-          name: "民谣",
-        },
-        {
-          name: "电子",
-        },
-        {
-          name: "轻音乐",
-        },
-        {
-          name: "影视原声",
-        },
-        {
-          name: "ACG",
-        },
-        {
-          name: "怀旧",
-        },
-        {
-          name: "治愈",
-        },
-        {
-          name: "旅行",
-        },
+        "全部",
+        "欧美",
+        "华语",
+        "流行",
+        "说唱",
+        "摇滚",
+        "民谣",
+        "电子",
+        "轻音乐",
+        "影视原声",
+        "ACG",
+        "怀旧",
+        "治愈",
+        "旅行",
       ],
       menuPlaylists: [],
       cat: "全部",
@@ -134,7 +106,7 @@ export default defineComponent({
       getHighquality() {
         let params = {
           limit: 1,
-          cat: state.menuList[0].name,
+          cat: state.menuList[0],
         };
         get(
           "https://www.tcefrep.site/music/top/playlist/highquality",

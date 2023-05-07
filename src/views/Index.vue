@@ -80,7 +80,7 @@ export default defineComponent({
       notificationMessage1:
         "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
       notificationMessage2:
-        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">2s后自动关闭</div>',
+        '<div style="color: #008080"><i>shuaigang更新了音乐盒相关页面数据展示</i></div><div style="color: blue;font-size: 0.1rem;">2s后自动关闭</div>',
     });
     // 方法体
     const methods = {
@@ -111,7 +111,7 @@ export default defineComponent({
               title: "推荐歌单",
             },
             {
-              to: "/index/songs",
+              to: "/index/newsong",
               icon: require("./../assets/icon/new.png"),
               title: "最新音乐",
             },
@@ -411,7 +411,7 @@ body {
 }
 
 .body_img {
-  background-color: burlywood;
+  background-color: gray;
   animation: grow1 1s 1 forwards;
   height: 100vh;
   width: 100vw;

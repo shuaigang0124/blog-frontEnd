@@ -3,13 +3,13 @@
     <div class="body_style">
       <div class="body_img"></div>
     </div>
-    <div class="music_body">
-      <el-carousel :interval="2000" height="230px" type="card">
+    <div class="discovery_body">
+      <el-carousel :interval="200000" type="card">
         <el-carousel-item v-for="item in banners" :key="item">
           <el-image class="banners_image" :src="item.imageUrl" />
         </el-carousel-item>
       </el-carousel>
-      <div class="music_title">推荐歌单</div>
+      <div class="discovery_title">推荐歌单</div>
       <div class="recommended_playlist">
         <div v-for="item in palylist" :key="item">
           <div class="playlist_item">
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <div class="music_title">最新音乐</div>
+      <div class="discovery_title">最新音乐</div>
       <div class="new_song_list">
         <div v-for="item in newSongList" :key="item">
           <div class="new_song_item">
@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <div class="music_title">推荐MV</div>
+      <div class="discovery_title">推荐MV</div>
       <div class="recommended_mv_list">
         <div v-for="item in mvList" :key="item">
           <div class="mv_item">
@@ -137,8 +137,11 @@ export default defineComponent({
   /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/7.webp); */
   background-color: gray;
 }
-.music_body {
+.discovery_body {
   padding: 10vh 14vw 4vh 14vw;
+}
+:deep(.el-carousel__container) {
+  height: 16vw;
 }
 .banners_image {
   border-radius: 0.5vw;
@@ -152,7 +155,7 @@ export default defineComponent({
   background-color: black;
 }
 
-.music_title {
+.discovery_title {
   padding-top: 3vh;
   text-align: center;
   color: #fff;

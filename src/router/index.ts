@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Index from '../views/Index.vue'
+import Index from '../views/index.vue'
 import Home from '../views/home/index.vue'
 import NotFound from "../views/other/404.vue"
 import BeatingHeart from "../views/other/BeatingHeart.vue"
 import RotateBeatingHeart from "../views/other/RotateBeatingHeart.vue"
-import Login from "../views/login/Login.vue"
-import Register from "../views/login/Register.vue"
+import Login from "../views/login/login.vue"
+import Register from "../views/login/register.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -51,22 +51,22 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/index/discovery',
         name: 'Discovery',
-        component: () => import('../views/music/Discovery.vue')
+        component: () => import('../views/music/discovery.vue')
       },
       {
         path: '/index/playlists',
-        name: 'Playlists',
-        component: () => import('../views/music/Playlists.vue')
+        name: 'playlists',
+        component: () => import('../views/music/playlists.vue')
       },
       {
-        path: '/index/songs',
-        name: 'Songs',
-        component: () => import('../views/music/Songs.vue')
+        path: '/index/newsong',
+        name: 'newsong',
+        component: () => import('../views/music/newsong.vue')
       },
       {
         path: '/index/mv',
-        name: 'MV',
-        component: () => import('../views/music/MV.vue')
+        name: 'mv',
+        component: () => import('../views/music/mv.vue')
       },
     ]
   },

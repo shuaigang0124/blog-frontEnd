@@ -18,6 +18,10 @@ instance.interceptors.response.use(
 
     response => {
         const responseData = response.data
+        if (response.config.method === 'get') {
+            // get请求不做响应拦截处理
+            return responseData;
+        }
         if (responseData.data) {
             let { code } = JSON.parse(Base64.decode(response.data.data));
             if (!code) {
