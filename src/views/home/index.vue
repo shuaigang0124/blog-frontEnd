@@ -148,7 +148,7 @@ export default defineComponent({
 
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/1.webp);
+  background-image: url(../../assets/background/1.webp);
   /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/1.webp); */
 }
 

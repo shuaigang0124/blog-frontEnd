@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from '@/router'
 import store from './store'
 import 'element-plus/lib/theme-chalk/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'

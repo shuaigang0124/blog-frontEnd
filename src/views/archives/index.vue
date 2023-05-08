@@ -205,7 +205,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/26.webp);
+  background-image: url(../../assets/background/26.webp);
   /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb5.webp); */
 }
 .archives_body {

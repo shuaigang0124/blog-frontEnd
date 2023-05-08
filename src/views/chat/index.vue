@@ -279,12 +279,12 @@ export default defineComponent({
           type: "warning",
         })
           .then(() => {
-            sessionStorage.setItem("router", "/index/chat");
+            sessionStorage.setItem("router", "/chat");
             // window.location.href='/login'
             router.push("/login");
           })
           .catch(() => {
-            // window.location.href='/index/home'
+            // window.location.href='/home'
           });
       },
       onScroll() {

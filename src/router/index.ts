@@ -1,11 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Index from '../views/index.vue'
-import Home from '../views/home/index.vue'
-import NotFound from "../views/other/404.vue"
 import BeatingHeart from "../views/other/BeatingHeart.vue"
 import RotateBeatingHeart from "../views/other/RotateBeatingHeart.vue"
-import Login from "../views/login/login.vue"
-import Register from "../views/login/register.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -15,56 +10,61 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/index',
     name: 'Index',
-    component: Index,
-    redirect: "/index/home",
+    component: () => import('../views/index.vue'),
+    redirect: "/home",
     children: [
       {
-        path: '/index/home',
+        path: '/home',
         name: 'Home',
-        component: Home
+        component: () => import('../views/home/index.vue')
       },
       {
-        path: '/index/chat',
+        path: '/blog',
+        name: 'Blog',
+        component: () => import('../views/blog/index.vue')
+      },
+      {
+        path: '/chat',
         name: 'Chat',
         component: () => import('../views/chat/index.vue')
       },
       {
-        path: '/index/games',
+        path: '/games',
         name: 'Games',
         component: () => import('../views/games/index.vue')
       },
       {
-        path: '/index/archives',
+        path: '/archives',
         name: 'Archives',
         component: () => import('../views/archives/index.vue')
       },
       {
-        path: '/index/message',
+        path: '/message',
         name: 'Message',
         component: () => import('../views/message/index.vue')
       },
       {
-        path: '/index/about',
+        path: '/about',
         name: 'About',
         component: () => import('../views/about/index.vue')
       },
       {
-        path: '/index/discovery',
+        path: '/discovery',
         name: 'Discovery',
         component: () => import('../views/music/discovery.vue')
       },
       {
-        path: '/index/playlists',
+        path: '/playlists',
         name: 'playlists',
         component: () => import('../views/music/playlists.vue')
       },
       {
-        path: '/index/newsong',
+        path: '/newsong',
         name: 'newsong',
         component: () => import('../views/music/newsong.vue')
       },
       {
-        path: '/index/mv',
+        path: '/mv',
         name: 'mv',
         component: () => import('../views/music/mv.vue')
       },
@@ -73,12 +73,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: '/Login',
-    component: Login
+    component: () => import('../views/login/login.vue')
   },
   // {
   //   path: '/register',
   //   name: '/Register',
-  //   component: Register
+  //   component: () => import('../views/login/register.vue')
   // },
   {
     path: '/beatingHeart',
@@ -93,7 +93,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/:catchAll(.*)',
     name: 'NotFound',
-    component: NotFound
+    component: () => import('../views/other/404.vue')
   },
 ]
 

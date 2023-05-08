@@ -115,7 +115,7 @@
 <script lang="ts">
 import {post} from "@/http/axios";
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
-import router from "../../router/index";
+import router from "@/router";
 import myMessage from "@/utils/common";
 import moment from "moment";
 export default defineComponent({
@@ -316,7 +316,7 @@ export default defineComponent({
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background-image: url(../../assets/backgroundImg/hmbb/6.jpg);
+  background-image: url(../../assets/background/hmbb/6.jpg);
   background-repeat: no-repeat;
   background-position: 50%;
   background-size: cover;

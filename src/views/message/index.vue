@@ -117,12 +117,12 @@ export default defineComponent({
               type: "warning",
             })
               .then(() => {
-                sessionStorage.setItem("router", "/index/message");
+                sessionStorage.setItem("router", "/message");
                 // window.location.href='/login'
                 router.push("/login");
               })
               .catch(() => {
-                // window.location.href='/index/home'
+                // window.location.href='/home'
               });
             return;
           }

@@ -370,7 +370,7 @@
     </div>
     <div class="bottom_info">
       <div>
-        <a style="color: #4eb8dd" href="../index/home">返回首页</a>
+        <a style="color: #4eb8dd" href="../home">返回首页</a>
       </div>
       <div>
         <!-- href="../register" -->
@@ -1094,8 +1094,8 @@ export default defineComponent({
               router.push(sessionStorage.getItem("router"));
               sessionStorage.removeItem("router")
             } else {
-              // window.location.href='/index/home'
-              router.push("/index/home");
+              // window.location.href='/home'
+              router.push("/home");
             }
           } else {
             myMessage(message, null, 2, null, null);

@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
-import router from "../router";
+import router from "@/router";
 import myMessage from "@/utils/common";
 import { get } from "@/http/axios";
 export default defineComponent({
@@ -39,37 +39,37 @@ export default defineComponent({
     const state = reactive({
       titleList: [
         {
-          to: "/index/home",
+          to: "/home",
           icon: require("./../assets/icon/home.png"),
           title: "首页",
         },
         {
-          to: "/index/archives",
+          to: "/archives",
           icon: require("./../assets/icon/archive.png"),
           title: "归档",
         },
         {
-          to: "/index/chat",
+          to: "/chat",
           icon: require("./../assets/icon/chat.png"),
           title: "聊天室",
         },
         {
-          to: "/index/message",
+          to: "/message",
           icon: require("./../assets/icon/message.png"),
           title: "留言",
         },
         {
-          to: "/index/games",
+          to: "/games",
           icon: require("./../assets/icon/game.png"),
           title: "游戏",
         },
         {
-          to: "/index/discovery",
+          to: "/discovery",
           icon: require("./../assets/icon/listen.png"),
           title: "音乐盒",
         },
         {
-          to: "/index/about",
+          to: "/about",
           icon: require("./../assets/icon/candy.png"),
           title: "关于",
         },
@@ -85,7 +85,7 @@ export default defineComponent({
     // 方法体
     const methods = {
       checkPage(e) {
-        if (e.to !== "" && e.to != "/index/search") {
+        if (e.to !== "" && e.to != "/search") {
           // window.location.href=e.to
           state.searchInput = false;
           router.push(e.to);
@@ -96,32 +96,32 @@ export default defineComponent({
           state.isDisabled = true;
           var data = [
             {
-              to: "/index/search",
+              to: "/search",
               icon: require("./../assets/icon/search.png"),
               title: "搜索",
             },
             {
-              to: "/index/discovery",
+              to: "/discovery",
               icon: require("./../assets/icon/discovery.png"),
               title: "发现音乐",
             },
             {
-              to: "/index/playlists",
+              to: "/playlists",
               icon: require("./../assets/icon/playlist.png"),
               title: "推荐歌单",
             },
             {
-              to: "/index/newsong",
+              to: "/newsong",
               icon: require("./../assets/icon/new.png"),
               title: "最新音乐",
             },
             {
-              to: "/index/mv",
+              to: "/mv",
               icon: require("./../assets/icon/MV.png"),
               title: "最新MV",
             },
             {
-              to: "/index/home",
+              to: "/home",
               icon: require("./../assets/icon/home.png"),
               title: "首页",
             },
@@ -147,37 +147,37 @@ export default defineComponent({
           state.isDisabled = true;
           var data = [
             {
-              to: "/index/home",
+              to: "/home",
               icon: require("./../assets/icon/home.png"),
               title: "首页",
             },
             {
-              to: "/index/archives",
+              to: "/archives",
               icon: require("./../assets/icon/archive.png"),
               title: "归档",
             },
             {
-              to: "/index/chat",
+              to: "/chat",
               icon: require("./../assets/icon/chat.png"),
               title: "聊天室",
             },
             {
-              to: "/index/message",
+              to: "/message",
               icon: require("./../assets/icon/message.png"),
               title: "留言",
             },
             {
-              to: "/index/games",
+              to: "/games",
               icon: require("./../assets/icon/game.png"),
               title: "游戏",
             },
             {
-              to: "/index/discovery",
+              to: "/discovery",
               icon: require("./../assets/icon/listen.png"),
               title: "音乐盒",
             },
             {
-              to: "/index/about",
+              to: "/about",
               icon: require("./../assets/icon/candy.png"),
               title: "关于",
             },
