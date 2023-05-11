@@ -205,7 +205,7 @@ export default defineComponent({
         myMessage(state.notificationMessage1, "通知", 3, 0, "TL");
       },
       openNotification2() {
-        myMessage(state.notificationMessage2, "通知", 3, null, null);
+        myMessage(state.notificationMessage2, "通知", 3, null, "TL");
       },
       isMobile() {
         let flag = navigator.userAgent.match(
@@ -214,7 +214,7 @@ export default defineComponent({
         return flag;
       },
       search() {
-        console.log(state.inputCat);
+        // console.log(state.inputCat);
         get("https://www.tcefrep.site/music/search", {
           keywords: state.inputCat,
           type: 1,

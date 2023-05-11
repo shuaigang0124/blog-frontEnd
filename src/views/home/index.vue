@@ -83,14 +83,12 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-// import HelloWorld from '@/components/HelloWorld.vue';
 import Bottom from "@/views/home/bottom.vue";
 import myMessage from "@/utils/common"
 
 export default defineComponent({
   name: "Home",
   components: {
-    // HelloWorld,
     Bottom,
   },
   setup() {
@@ -175,10 +173,9 @@ export default defineComponent({
 .my_backtop {
   /* box-shadow: 0 0 6px rgb(34, 36, 38, 0.15) inset; */
   position: fixed;
-  z-index: 999;
+  z-index: 9999;
   bottom: 15px;
   right: 15px;
-  /* z-index: 999; */
   /* cursor: pointer; */
   border-radius: 0 0 5px 5px;
   background-color: #e0e1e2;

@@ -1,9 +1,9 @@
 <template>
   <div class="HomeBottom" id="HomeBottom">
-    <div>
-      <div class="HomeBottom_body">
+    <div class="HomeBottom_particles">
+      <div class="HomeBottom_body" id="HomeBottom_body">
         <div class="HomeBottom_body_info">
-          <div class="HomeBottom_body_info_left" id="HomeBottom_body_left">
+          <div class="HomeBottom_body_info_left">
             <div class="top_info">
               <div class="top_left">博客</div>
               <div class="top_right">
@@ -12,19 +12,16 @@
             </div>
             <div class="article_info">
               <div class="article_list" v-for="item in articleList" :key="item">
-                <div class="article_item" @click="readArticle">
+                <div class="article_item" @click="readArticle(item.id)">
                   <div class="article_title">{{ item.title }}</div>
                   <div class="article_describe">{{ item.describe }}</div>
                   <div class="article_user_info">
                     <div class="article_avatar">
-                      <el-image class="article_avatar_img" :src="item.avatar">
-                        <template #error>
-                          <img
-                            class="article_avatar_img"
-                            src="../../assets/error.png"
-                          />
-                        </template>
-                      </el-image>
+                      <el-avatar :size="35" :src="item.avatar" @error="true">
+                        <img
+                          src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+                        />
+                      </el-avatar>
                       <div class="article_user_name">{{ item.userName }}</div>
                       <div class="article_time">
                         <img
@@ -56,7 +53,7 @@
               </div>
             </div>
           </div>
-          <div class="HomeBottom_body_info_right" id="HomeBottom_body_right">
+          <div class="HomeBottom_body_info_right">
             <div class="module_one">
               <div class="module_title">标签云</div>
               <div class="module_title_line" />
@@ -104,14 +101,14 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="beian">
-        <div class="beian_info">
-          <div>
-            <div class="beian_info_content">© 2021 - 2023 By ShuaiGang</div>
-            <el-link @click="openBeian" class="beian_info_content"
-              >渝ICP备2021011002号</el-link
-            >
+        <div class="beian">
+          <div class="beian_info">
+            <div>
+              <div class="beian_info_content">© 2021 - 2023 By ShuaiGang</div>
+              <el-link @click="openBeian" class="beian_info_content"
+                >渝ICP备2021011002号</el-link
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -120,11 +117,20 @@
   </div>
 </template>
 <script lang="js">
-import {post} from "@/http/axios";
-import { defineComponent, nextTick, onBeforeUnmount, onMounted, onUnmounted, reactive, toRefs } from "vue";
-import elementResizeDetectorMaker from "element-resize-detector";
+import { post } from "@/http/axios";
+import {
+  defineComponent,
+  watch,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  onUnmounted,
+  reactive,
+  toRefs,
+} from "vue";
 import "../../js/particles.min.js";
-import myMessage from '@/utils/common'
+import router from "@/router";
+import myMessage from "@/utils/common";
 export default defineComponent({
   name: "",
   components: {},
@@ -132,13 +138,15 @@ export default defineComponent({
   setup() {
     // 页面数据
     const state = reactive({
-      PH: 0,
       winState: false,
-      screenWidth: 0,
-      screenHeight: 0,
+      parWidth: 0,
+      parHeight: 0,
       totalNum: 99,
-      articleList: [
-      ],
+      page: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      articleList: [],
       tagList: [
         { color: "#036564", name: "java" },
         { color: "#EB6841", name: "vue" },
@@ -167,10 +175,12 @@ export default defineComponent({
         {
           name: "游戏三",
           url: "https://shuaigang.top/html/brick.html",
-        },{
+        },
+        {
           name: "游戏四",
           url: "https://shuaigang.top/html/spaceship.html",
-        },{
+        },
+        {
           name: "隔江明月照莲华",
           url: "https://shuaigang.top",
         },
@@ -178,25 +188,46 @@ export default defineComponent({
     });
     // 方法体
     const methods = {
-      readArticle() {
-        myMessage('暂未开放', null, 1, null, null);
+      readArticle(id) {
+        let data = {
+          title: "入站需知！！",
+          describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
+          avatar:
+            "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
+          userName: "帅刚",
+          time: "2022-09-19 16:05",
+          readNum: "99",
+          clickNum: "52",
+          tag: "公告",
+        };
+        state.articleList.push(data);
+        methods.setParentHeight();
+        // router.push({
+        //   path: '/blog',
+        //   query: { id },
+        // });
       },
       tagToList() {
-        myMessage('暂未开放', null, 1, null, null);
+        myMessage("暂未开放", null, 1, null, null);
       },
       readGuide() {
-        myMessage('暂未开放', null, 1, null, null);
+        myMessage("暂未开放", null, 1, null, null);
       },
       par() {
         particlesJS("particles-js", {
           particles: {
-            number: { value: 500, density: { enable: true, value_area: 800 } },
+            //粒子的数量以及密度;enable为false默认为50
+            number: { value: 250, density: { enable: false, value_area: 3200 } },
             color: { value: "#ffffff" },
             shape: {
               type: "circle",
               stroke: { width: 0, color: "#000000" },
               polygon: { nb_sides: 5 },
-              image: { src: "img/github.svg", width: 100, height: 100 },
+              image: {
+                src: "img/github.svg",
+                width: state.parWidth,
+                height: state.parHeight,
+              },
             },
             opacity: {
               value: 0.5,
@@ -250,77 +281,33 @@ export default defineComponent({
           retina_detect: true,
         });
       },
-      //监听容器高度变化
+      //监听容器宽高变化
       listenParentHeight() {
-        const erd = elementResizeDetectorMaker();
-        erd.listenTo(
-          document.getElementById("HomeBottom_body_left").offsetHeight,
-          (element) => {
-            nextTick(() => {
-              //监听到事件后执行的业务逻辑
-              var leftHeight = document.getElementById(
-                "HomeBottom_body_left"
-              ).offsetHeight;
-              var rightHeight = document.getElementById(
-                "HomeBottom_body_right"
-              ).offsetHeight;
-              var parent = document.getElementById("HomeBottom");
-              if (leftHeight > rightHeight) {
-                if (parent.offsetHeight < leftHeight) {
-                }
-                var height = state.PH + leftHeight;
-                document
-                  .getElementById("HomeBottom")
-                  .setAttribute(
-                    "style",
-                    "height: " + height.toString() + "px;"
-                  );
-              } else {
-              }
-            });
-          }
-        );
-        erd.listenTo(
-          document.getElementById("HomeBottom_body_right").offsetHeight,
-          (element) => {
-            nextTick(() => {
-              //监听到事件后执行的业务逻辑
-            });
-          }
-        );
+        window.addEventListener("resize", methods.setParentHeight());
       },
       //设置容器高度
       setParentHeight() {
-        var parent = document.getElementById("HomeBottom");
-        state.PH = parent.offsetHeight;
-        var childLeft = document.getElementById("HomeBottom_body_left");
-        var childRight = document.getElementById("HomeBottom_body_right");
-        if (
-          parent.offsetHeight < childLeft.offsetHeight ||
-          parent.offsetWidth < childRight.offsetWidth
-        ) {
-          if (childLeft.offsetHeight > childRight.offsetHeight) {
-            var height = parent.offsetHeight + childLeft.offsetHeight;
-          } else {
-            var height = parent.offsetHeight + childRight.offsetHeight;
-          }
-        }
-        parent.setAttribute("style", "height: " + height.toString() + "px;");
+        setTimeout(() => {
+          // 剪掉滚动条的样式大小
+          state.parWidth =
+            document.getElementById("HomeBottom_body").clientWidth - 5;
+          state.parHeight =
+            document.getElementById("HomeBottom_body").clientHeight - 5;
+        }, 1);
       },
-      //监听窗口变化
+      //监听视窗变化
       watchWin() {
         window.onresize = () => {
           return (() => {
             if (state.winState) {
               methods.setParentHeight();
             }
-            // methods.par();
           })();
         };
       },
       openBeian() {
         window.open("https://beian.miit.gov.cn");
-      }
+      },
     };
     // 页面默认请求
     onMounted(() => {
@@ -337,37 +324,56 @@ export default defineComponent({
         clickNum: "52",
         tag: "公告",
       };
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 3; i++) {
         state.articleList.push(data);
       }
       // request.getArticleList();
       setTimeout(function () {
         methods.setParentHeight();
-        // 粒子背景
         methods.par();
       }, 1);
     });
     onUnmounted(() => {
       state.winState = false;
     });
-    onBeforeUnmount(()=> {
+    onBeforeUnmount(() => {
       // 销毁 particlesJS
       if (pJSDom && pJSDom.length > 0) {
-        pJSDom.forEach(pJSDomItem => {
-            pJSDomItem.pJS.fn.vendors.destroypJS();
-        })
+        pJSDom.forEach((pJSDomItem) => {
+          pJSDomItem.pJS.fn.vendors.destroypJS();
+        });
       }
+    });
+    // 监听state值的变化
+    watch(state, (newValue, oldValue) => {
+      console.log(newValue, oldValue)
+      var hb = document.getElementById("HomeBottom");
+      hb.setAttribute(
+        "style",
+        "width: " + newValue.parWidth + "px;"
+      );
+      hb.setAttribute(
+        "style",
+        "height: " + newValue.parHeight + "px;"
+      );
+      // 粒子背景
+      if (pJSDom && pJSDom.length > 0) {
+        pJSDom.forEach((pJSDomItem) => {
+          pJSDomItem.pJS.fn.vendors.destroypJS();
+        });
+      }
+      methods.par();
     });
     // 请求
     const request = {
       getArticleList() {
-        let page = {
-          index: 1,
-          size: 10,
-        }
         // post请求
-        post("/atc/getArticle", null).then((res, any) => {
-          let { message, data } = res;
+        post("/article/getList", state.page).then((res, any) => {
+          let { code, message, data } = res;
+          if (code === 200) {
+            state.articleList = data.list;
+            state.totalNum = data.total;
+          }
           // for (let i = 0; i < data.resultList.length; i) {
           //   var date = new Date(data.resultList[i].gmtCreate);
 
@@ -375,8 +381,7 @@ export default defineComponent({
           // }
           // state.articleList = data;
         });
-      }
-
+      },
     };
     return { ...methods, ...toRefs(state) };
   },
@@ -422,23 +427,6 @@ export default defineComponent({
   background-color: #fff;
 }
 
-.module_one {
-  padding: 2vh 1vw 2vh 1vw;
-  border-radius: 5px;
-  background-color: #ffffff;
-}
-.module_two {
-  padding: 2vh 1vw 2vh 1vw;
-  margin-top: 2vh;
-  border-radius: 5px;
-  background-color: #ffffff;
-}
-.module_one:hover {
-  /* cursor: pointer; */
-}
-.module_two:hover {
-  /* cursor: pointer; */
-}
 .my_el_tags {
   margin-right: 0.5vw;
   margin-top: 1vh;
@@ -463,6 +451,8 @@ export default defineComponent({
   position: absolute;
   top: 0;
   bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .HomeBottom {
@@ -514,32 +504,54 @@ export default defineComponent({
   }
 }
 
-.HomeBottom_img {
-  width: 100%;
+.HomeBottom_particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
+
 /**
 * 内容
 */
 .HomeBottom_body {
-  padding: 5vh 11vw 12vh 13vw;
+  background-color: transparent;
 }
 .HomeBottom_body_info {
+  padding: 5vh 11vw 12vh 13vw;
   display: flex;
 }
 .HomeBottom_body_info_left {
-  /* width: 51vw; */
+  z-index: 999;
   border-radius: 5px;
   background-color: #ffffff;
-  position: absolute;
-  z-index: 99;
+  height: 100%;
 }
 .HomeBottom_body_info_right {
-  margin-left: 55vw;
-  /* height: 20vh; */
+  z-index: 999;
+  margin-left: 2vw;
   width: 21vw;
-  position: absolute;
-  z-index: 99;
+  height: 100%;
 }
+.module_one {
+  padding: 2vh 1vw 2vh 1vw;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.module_two {
+  padding: 2vh 1vw 2vh 1vw;
+  margin-top: 2vh;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.module_one:hover {
+  cursor: pointer;
+}
+.module_two:hover {
+  cursor: pointer;
+}
+
 /**
 * flex左--头部
 */
@@ -571,10 +583,10 @@ export default defineComponent({
 .article_item {
   padding: 1vh 1vw 1vh 1vw;
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-  /* cursor: pointer; */
   /* background-color: #00000066; */
 }
 .article_item:hover {
+  cursor: pointer;
   box-shadow: 0 0 0 100vw rgba(48, 55, 66, 0.15) inset;
   border-radius: 5px;
 }
@@ -603,11 +615,6 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.article_avatar_img {
-  width: 1.8rem;
-  height: 1.8rem;
-  border-radius: 50%;
 }
 .article_user_name {
   color: #4183c4;
@@ -645,16 +652,13 @@ export default defineComponent({
 * 底部
 */
 .beian {
-  /* margin-top: 5vh; */
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  z-index: 99;
-  bottom: -1vh;
   width: 100%;
 }
 .beian_info {
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;

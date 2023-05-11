@@ -380,9 +380,9 @@
   </form>
 </template>
 <script lang="js">
-import {post} from "@/http/axios";
-import { h } from 'vue'
-import myMessage from "@/utils/common"
+import { post } from "@/http/axios";
+import { h } from "vue";
+import myMessage from "@/utils/common";
 import router from "@/router";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import "../../js/TweenMax.min.js";
@@ -393,7 +393,7 @@ export default defineComponent({
     // 方法体
     const methods = {
       msg() {
-        myMessage('暂未开放', null, 1, null, null);
+        myMessage("暂未开放", null, 1, null, null);
       },
       init() {
         var emailLabel = document.querySelector("#loginEmailLabel"),
@@ -480,7 +480,7 @@ export default defineComponent({
             // if browser doesn't support 'selectionEnd' property on input[type="email"], use 'value.length' property instead
             carPos = email.value.length;
           }
-          [].forEach.call(copyStyle, function(prop) {
+          [].forEach.call(copyStyle, function (prop) {
             div.style[prop] = copyStyle[prop];
           });
           div.style.position = "absolute";
@@ -718,7 +718,7 @@ export default defineComponent({
 
         function onEmailBlur(e) {
           activeElement = null;
-          setTimeout(function() {
+          setTimeout(function () {
             if (activeElement == "email") {
             } else {
               if (e.target.value == "") {
@@ -743,7 +743,7 @@ export default defineComponent({
 
         function onPasswordBlur(e) {
           activeElement = null;
-          setTimeout(function() {
+          setTimeout(function () {
             if (activeElement == "toggle" || activeElement == "password") {
             } else {
               uncoverEyes();
@@ -761,7 +761,7 @@ export default defineComponent({
         function onPasswordToggleBlur(e) {
           activeElement = null;
           if (!showPasswordClicked) {
-            setTimeout(function() {
+            setTimeout(function () {
               if (activeElement == "password" || activeElement == "toggle") {
               } else {
                 uncoverEyes();
@@ -779,7 +779,7 @@ export default defineComponent({
         }
         // 密码改变
         function onPasswordToggleChange(e) {
-          setTimeout(function() {
+          setTimeout(function () {
             // if checkbox is checked, show password
             if (e.target.checked) {
               password.type = "text";
@@ -853,7 +853,7 @@ export default defineComponent({
             rotation: -105,
             ease: Quad.easeOut,
             delay: 0.1,
-            onComplete: function() {
+            onComplete: function () {
               TweenMax.set([armL, armR], { visibility: "hidden" });
             },
           });
@@ -903,7 +903,7 @@ export default defineComponent({
             yoyo: true,
             repeat: 1,
             transformOrigin: "center center",
-            onComplete: function() {
+            onComplete: function () {
               startBlinking(12);
             },
           });
@@ -953,7 +953,7 @@ export default defineComponent({
         // 检查是否为移动设备
         function isMobileDevice() {
           var check = false;
-          (function(a) {
+          (function (a) {
             if (
               /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(
                 a
@@ -1051,16 +1051,18 @@ export default defineComponent({
         var email = document.getElementById("loginEmail").value;
         var password = document.getElementById("loginPassword").value;
         if (email.length == 0) {
-          myMessage('请输入邮箱', null, 1, null, null);
+          myMessage("请输入邮箱", null, 1, null, null);
         } else {
           if (password.length == 0) {
-            myMessage('请输入密码', null, 1, null, null);
+            myMessage("请输入密码", null, 1, null, null);
           } else {
-            let regex = new RegExp("^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$");
+            let regex = new RegExp(
+              "^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
+            );
             if (regex.test(email)) {
               request.userLogin(email, password);
             } else {
-              myMessage('邮箱格式错误', null, 1, null, null);
+              myMessage("邮箱格式错误", null, 1, null, null);
             }
           }
         }
@@ -1084,6 +1086,7 @@ export default defineComponent({
         post("/authentication/form", paramData).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
+            getUserDetails(data.userId);
             // 缓存到store中
             // 缓存到浏览器中 Local Storage 中
             sessionStorage.setItem("token", data.Authorization);
@@ -1092,13 +1095,22 @@ export default defineComponent({
             if (sessionStorage.getItem("router")) {
               // window.location.href=sessionStorage.getItem("router")
               router.push(sessionStorage.getItem("router"));
-              sessionStorage.removeItem("router")
+              sessionStorage.removeItem("router");
             } else {
               // window.location.href='/home'
               router.push("/home");
             }
           } else {
             myMessage(message, null, 2, null, null);
+          }
+        });
+      },
+      getUserDetails(userId) {
+        post("/user/getUserDetails", { userId }).then((res, any) => {
+          let { code, data } = res;
+          if (code == 200) {
+            sessionStorage.setItem("avatar", data.avatar);
+            sessionStorage.setItem("username", data.userName);
           }
         });
       },

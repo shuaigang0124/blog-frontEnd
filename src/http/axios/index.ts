@@ -1,3 +1,4 @@
+import myMessage from "@/utils/common";
 import axios from "axios";
 import { Base64 } from "js-base64";
 
@@ -9,6 +10,7 @@ const instance = axios.create({
 let codes = {
     SUCCESS: 200,
     CODE_NOT_FOUND: 404,
+    ERROR_PARAMS: 4004,
     CODE_ERROR: 500,
     TOKEN_IS_EXPIRED: 4006,
     UNAUTHORIZED: 4001
@@ -23,7 +25,7 @@ instance.interceptors.response.use(
             return responseData;
         }
         if (responseData.data) {
-            let { code } = JSON.parse(Base64.decode(response.data.data));
+            let { code, message } = JSON.parse(Base64.decode(response.data.data));
             if (!code) {
                 return responseData;
             }
@@ -40,9 +42,14 @@ instance.interceptors.response.use(
                     } else {
                         sessionStorage.clear();
                     }
+                    break
                 // 未认证
                 case codes.UNAUTHORIZED:
                     sessionStorage.clear();
+                    break
+            }
+            if (code !== codes.SUCCESS) {
+                myMessage(null, message, 2, null, null);
             }
         }
         return responseData
