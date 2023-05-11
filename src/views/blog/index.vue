@@ -12,7 +12,11 @@
       <el-card shadow="always" class="my_el_card">
         <template #header>
           <div class="blog_top">
-            <el-avatar :size="40" :src="blog.avatar" @error="true">
+            <el-avatar
+              :size="40"
+              :src="'https://shuaigang.top' + blog.avatar"
+              @error="true"
+            >
               <img
                 src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
               />
@@ -60,7 +64,7 @@
           </el-tag>
           <el-tag
             class="blog_tag_info"
-            :type="blog.isOriginality === 0 ? 'danger' : 'success'"
+            :type="blog.isOriginality === 0 ? 'danger' : ''"
             >{{ blog.isOriginality === 0 ? "原创" : "转载" }}</el-tag
           >
         </div>
@@ -96,7 +100,7 @@
           </div>
         </div>
         <!-- 以下为评论 -->
-        <Comment :blog="blog" />
+        <Comment :v-bind:blog="blog" />
       </el-card>
     </div>
   </div>
@@ -166,7 +170,6 @@ export default defineComponent({
       clickBlog() {},
     };
     onMounted(() => {
-      console.log(route.query.id);
       if (!route.query.id) {
         myMessage("获取博客数据失败，路由参数未携带！", "警告", 2, null, null);
         return;

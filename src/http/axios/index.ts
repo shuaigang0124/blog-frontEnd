@@ -48,9 +48,9 @@ instance.interceptors.response.use(
                     sessionStorage.clear();
                     break
             }
-            if (code !== codes.SUCCESS) {
-                myMessage(null, message, 2, null, null);
-            }
+            // if (code !== codes.SUCCESS) {
+            //     myMessage(null, message, 2, null, null);
+            // }
         }
         return responseData
     },
@@ -83,7 +83,7 @@ const post = async (url: string, param?: any) => {
             })
             .then(res => {
                 if (res.data) {
-                    // console.log(Base64.decode(res.data))
+                    console.log(JSON.parse(Base64.decode(res.data)))
                     resolve(JSON.parse(Base64.decode(res.data)));
                 }
             })

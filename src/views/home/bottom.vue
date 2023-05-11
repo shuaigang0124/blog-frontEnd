@@ -14,10 +14,14 @@
               <div class="article_list" v-for="item in articleList" :key="item">
                 <div class="article_item" @click="readArticle(item.id)">
                   <div class="article_title">{{ item.title }}</div>
-                  <div class="article_describe">{{ item.describe }}</div>
+                  <div class="article_describe">{{ item.description }}</div>
                   <div class="article_user_info">
                     <div class="article_avatar">
-                      <el-avatar :size="35" :src="item.avatar" @error="true">
+                      <el-avatar
+                        :size="35"
+                        :src="'https://shuaigang.top' + item.avatar"
+                        @error="true"
+                      >
                         <img
                           src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
                         />
@@ -28,7 +32,7 @@
                           class="article_icon"
                           src="../../assets/icon/calendar.png"
                         />
-                        {{ item.time }}
+                        {{ item.gmtCreate }}
                       </div>
                       <div class="article_read_num">
                         <img
@@ -45,8 +49,17 @@
                         {{ item.clickNum }}
                       </div>
                     </div>
-                    <el-tag class="article_tag" type="info" size="small">
-                      {{ item.tag }}
+                    <el-tag
+                      v-if="item.isNotice !== 0"
+                      class="article_notice_tag"
+                      >公告
+                    </el-tag>
+                    <el-tag
+                      v-else
+                      :type="item.isOriginality === 0 ? 'danger' : ''"
+                      size="small"
+                    >
+                      {{ item.isOriginality === 0 ? "原创" : "转载" }}
                     </el-tag>
                   </div>
                 </div>
@@ -189,23 +202,10 @@ export default defineComponent({
     // 方法体
     const methods = {
       readArticle(id) {
-        let data = {
-          title: "入站需知！！",
-          describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
-          avatar:
-            "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
-          userName: "帅刚",
-          time: "2022-09-19 16:05",
-          readNum: "99",
-          clickNum: "52",
-          tag: "公告",
-        };
-        state.articleList.push(data);
-        methods.setParentHeight();
-        // router.push({
-        //   path: '/blog',
-        //   query: { id },
-        // });
+        router.push({
+          path: '/blog',
+          query: { id },
+        });
       },
       tagToList() {
         myMessage("暂未开放", null, 1, null, null);
@@ -313,25 +313,8 @@ export default defineComponent({
     onMounted(() => {
       state.winState = true;
       methods.watchWin();
-      let data = {
-        title: "入站需知！！",
-        describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
-        avatar:
-          "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
-        userName: "帅刚",
-        time: "2022-09-19 16:05",
-        readNum: "99",
-        clickNum: "52",
-        tag: "公告",
-      };
-      for (var i = 0; i < 3; i++) {
-        state.articleList.push(data);
-      }
-      // request.getArticleList();
-      setTimeout(function () {
-        methods.setParentHeight();
-        methods.par();
-      }, 1);
+      request.getArticleList();
+      methods.setParentHeight();
     });
     onUnmounted(() => {
       state.winState = false;
@@ -346,7 +329,6 @@ export default defineComponent({
     });
     // 监听state值的变化
     watch(state, (newValue, oldValue) => {
-      console.log(newValue, oldValue)
       var hb = document.getElementById("HomeBottom");
       hb.setAttribute(
         "style",
@@ -639,7 +621,7 @@ export default defineComponent({
   margin-left: 0.8vw;
   font-size: 0.9rem;
 }
-.article_tag {
+.article_notice_tag {
   background-color: #fff;
   color: #1685a9;
 }

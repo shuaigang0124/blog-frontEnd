@@ -3,7 +3,13 @@
     <h3 align="left">发表评论</h3>
     <div class="align_center">
       <div>
-        <el-avatar :size="60" :src="user.avatar" @error="true">
+        <el-avatar
+          :size="60"
+          :src="
+            user.avatar !== null ? 'https://shuaigang.top' + user.avatar : ''
+          "
+          @error="true"
+        >
           <img
             src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
           />
@@ -26,10 +32,18 @@
     <div v-if="commentTotal">
       <h4 align="left">评论列表（{{ commentTotal }}条）</h4>
       <div v-for="(commentData, index) in commentData" :key="commentData">
-        <div class="align_center">
+        <div class="align_center" style="margin-top: 10px">
           <!-- 一级头像 -->
           <div style="margin-right: 10px; display: flex; align-items: center">
-            <el-avatar :size="60" :src="commentData.avatar" @error="true">
+            <el-avatar
+              :size="50"
+              :src="
+                commentData.avatar !== null
+                  ? 'https://shuaigang.top' + commentData.avatar
+                  : ''
+              "
+              @error="true"
+            >
               <img
                 src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
               />
@@ -76,7 +90,7 @@
               <div class="align_center">
                 <div
                   icon="el-icon-chat-line-square"
-                  style="color: #000000; margin-right: 8px"
+                  style="margin-right: 8px"
                   @click="reply(commentData.id, index)"
                 >
                   回复
@@ -114,7 +128,7 @@
           </div>
         </div>
         <!-- 一级回复框 -->
-        <div v-if="commentData.reply === true" style="margin-left: 70px">
+        <div v-if="commentData.reply === true" style="margin-left: 60px">
           <el-form :inline="true" :model="form" class="demo-form-inline">
             <el-form-item
               :label="'回复' + commentData.userName + '：'"
@@ -136,7 +150,7 @@
         <!-- 子评论 -->
         <div
           v-if="commentData.total !== 0 && commentData.total !== null"
-          style="margin-left: 70px"
+          style="margin-left: 60px"
         >
           <div v-if="!commentData.openAndClose">
             <el-button type="text" style="color: black" @click="open(index)"
@@ -152,12 +166,20 @@
               :key="children"
               style="padding: 2px"
             >
-              <div class="align_center">
+              <div class="align_center" style="margin-top: 10px">
                 <!-- 二级头像 -->
                 <div
                   style="margin-right: 10px; display: flex; align-items: center"
                 >
-                  <el-avatar :size="50" :src="children.avatar" @error="true">
+                  <el-avatar
+                    :size="50"
+                    :src="
+                      children.avatar !== null
+                        ? 'https://shuaigang.top' + children.avatar
+                        : ''
+                    "
+                    @error="true"
+                  >
                     <img
                       src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
                     />
@@ -337,16 +359,16 @@
 import { post } from "@/http/axios";
 import myMessage from "@/utils/common";
 import { Base64 } from "js-base64";
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import { useRoute } from "vue-router";
+import { defineComponent, onMounted, reactive, toRefs, watch } from "vue";
 export default defineComponent({
   name: "",
   components: {},
   props: {
     blog: { type: Object, default: {} },
   },
-  setup(props) {
-    const blog = props.blog;
-    // 页面数据
+  setup() {
+    const route = useRoute();
     const state = reactive({
       commentTotal: 0,
       commentData: null,
@@ -402,22 +424,23 @@ export default defineComponent({
         userId: null,
         content: null,
         parentId: null,
-        articleId: blog.id,
+        articleId: route.query.id,
       },
       // 评论回复
       form: {
         userId: null,
         content: null,
         parentId: null,
-        articleId: blog.id,
+        articleId: route.query.id,
       },
       // 点赞
       updateData: {
         id: null,
         clickNum: 0,
       },
+      pageNum: 1,
+      pageSize: 10,
     });
-    // 方法体
     const methods = {
       // 新增评论
       insertComment() {
@@ -427,6 +450,7 @@ export default defineComponent({
       // 展开
       open(index) {
         state.commentData[index].openAndClose = true;
+        request.getCommentList(1, index);
       },
       // 关闭
       close(index) {
@@ -477,7 +501,6 @@ export default defineComponent({
         children.replyUser = false;
       },
     };
-    // 页面默认请求
     onMounted(() => {
       if (sessionStorage.getItem("shuaigangOVO")) {
         state.user.id = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
@@ -490,25 +513,28 @@ export default defineComponent({
       }
       state.user.avatar = sessionStorage.getItem("avatar");
       state.user.userName = sessionStorage.getItem("username");
-      request.getCommentList();
+      request.getCommentList(0, null);
     });
-    // 请求
     const request = {
-      getCommentList() {
+      getCommentList(level, index) {
         // 请求体数据
         const data = {
-          pageNum: 1,
-          pageSize: 10,
-          level: 0,
+          pageNum: state.pageNum,
+          pageSize: state.pageSize,
+          level,
           nowUserId: state.user.id,
-          articleId: blog.id,
+          articleId: route.query.id,
         };
         // post请求
         post("/articleComment/getList", data).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
-            state.commentTotal = data.total;
-            state.commentData = data.list;
+            if (!index) {
+              state.commentTotal = data.total;
+              state.commentData = data.list;
+            } else {
+              state.commentData[index].children = data.list;
+            }
           }
         });
       },
