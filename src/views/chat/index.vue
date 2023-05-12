@@ -26,7 +26,60 @@
               v-for="(item, index) in chatList"
               :key="index"
             >
-              <div class="chat_time">{{ item.sendTime }}</div>
+              <!-- 两条消息间隔超过三分钟显示时间 -->
+              <div
+                class="chat_time"
+                v-if="
+                  (index > 0 &&
+                    Math.floor(
+                      (new Date(item.sendTime) -
+                        new Date(chatList[index - 1].sendTime)) /
+                        1000 /
+                        60
+                    ) >= 3) ||
+                  index == 0
+                "
+              >
+                {{
+                  0 == Math.floor((nowDate - new Date(item.sendTime)) / 60000)
+                    ? "刚刚"
+                    : Math.floor((nowDate - new Date(item.sendTime)) / 60000) <
+                      60
+                    ? Math.floor((nowDate - new Date(item.sendTime)) / 60000) +
+                      "分钟前"
+                    : Math.floor(
+                        (nowDate - new Date(item.sendTime)) / 3600000
+                      ) < 24
+                    ? Math.floor(
+                        (nowDate - new Date(item.sendTime)) / 3600000
+                      ) + "小时前"
+                    : Math.floor(
+                        (nowDate - new Date(item.sendTime)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      24
+                    ? "昨天" + item.sendTime.split(" ")[1].slice(0, 5)
+                    : Math.floor(
+                        (nowDate - new Date(item.sendTime)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      48
+                    ? "1天前"
+                    : Math.floor(
+                        (nowDate - new Date(item.sendTime)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      72
+                    ? "2天前"
+                    : Math.floor(
+                        (nowDate - new Date(item.sendTime)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      96
+                    ? "3天前"
+                    : item.sendTime.split(" ")[0]
+                }}
+              </div>
               <div class="chat_other_user" v-if="item.userId !== userId">
                 <div>
                   <el-image
@@ -129,6 +182,8 @@ export default defineComponent({
       pageSize: 10,
       loading: true,
       messageHistory: false,
+      nowDate: new Date(),
+      timer: null,
     });
     // 方法体
     const methods = {
@@ -318,10 +373,16 @@ export default defineComponent({
       } else {
         request.getChatList(state.roomId);
       }
+      state.timer = setInterval(()=>{
+        state.nowDate = new Date();
+      }, 1000)
     });
     onUnmounted(() => {
       if (state.client) {
         state.client.disconnect();
+      }
+      if (state.timer) {
+        clearInterval(state.timer);
       }
     });
     // 请求

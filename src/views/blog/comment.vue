@@ -532,6 +532,22 @@ export default defineComponent({
       },
       // 点赞
       click(id, index) {
+        if (!state.user.id) {
+          ElMessageBox.confirm("是否前往登录?", "Warning", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              sessionStorage.setItem(
+                "router",
+                route.path + "?id=" + route.query.id
+              );
+              router.push("/login");
+            })
+            .catch(() => {});
+          return;
+        }
         if (state.commentData[index].clickState) {
           request.update(id, false);
           state.commentData[index].clickState = false;
@@ -554,7 +570,6 @@ export default defineComponent({
       // 二级回复
       replyUser(children, commentData) {
         if (state.openIndex.level !== null) {
-          console.log(state.openIndex);
           switch (state.openIndex.level) {
             case 0:
               methods.cancelReply(state.openIndex.index);
@@ -571,6 +586,22 @@ export default defineComponent({
       },
       // 二级点赞
       childrenClick(children) {
+        if (!state.user.id) {
+          ElMessageBox.confirm("是否前往登录?", "Warning", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              sessionStorage.setItem(
+                "router",
+                route.path + "?id=" + route.query.id
+              );
+              router.push("/login");
+            })
+            .catch(() => {});
+          return;
+        }
         if (children.clickState) {
           request.update(children.id, false);
           children.clickState = false;
@@ -599,7 +630,6 @@ export default defineComponent({
       },
     };
     onMounted(() => {
-      console.log(props.blog);
       if (sessionStorage.getItem("shuaigangOVO")) {
         state.user.id = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
       }
@@ -681,7 +711,6 @@ export default defineComponent({
           return;
         }
         post("/articleComment/insert", data).then((res: any) => {
-          console.log(res);
           let { code, message } = res;
           if (code == 200) {
             myMessage(message, "", 0, null, null);
@@ -696,6 +725,22 @@ export default defineComponent({
         });
       },
       delete(id) {
+        if (!state.user.id) {
+          ElMessageBox.confirm("是否前往登录?", "Warning", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              sessionStorage.setItem(
+                "router",
+                route.path + "?id=" + route.query.id
+              );
+              router.push("/login");
+            })
+            .catch(() => {});
+          return;
+        }
         post("/articleComment/delete", { id }).then((res: any) => {
           let { code, message } = res;
           if (code == 200) {
@@ -707,7 +752,6 @@ export default defineComponent({
         });
       },
       update(id, status) {
-        console.log(id);
         post("/articleComment/kudos", {
           serviceId: id,
           nowUserId: state.user.id,
