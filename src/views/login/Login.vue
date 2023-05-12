@@ -1086,7 +1086,7 @@ export default defineComponent({
         post("/authentication/form", paramData).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
-            getUserDetails(data.userId);
+            request.getUserDetails(data.userId);
             // 缓存到store中
             // 缓存到浏览器中 Local Storage 中
             sessionStorage.setItem("token", data.Authorization);

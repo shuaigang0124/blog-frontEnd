@@ -12,15 +12,17 @@
       <el-card shadow="always" class="my_el_card">
         <template #header>
           <div class="blog_top">
-            <el-avatar
-              :size="40"
-              :src="'https://shuaigang.top' + blog.avatar"
-              @error="true"
-            >
-              <img
-                src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-              />
-            </el-avatar>
+            <div>
+              <el-avatar
+                :size="40"
+                :src="'https://shuaigang.top' + blog.avatar"
+                @error="true"
+              >
+                <img
+                  src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+                />
+              </el-avatar>
+            </div>
             <div class="blog_userName">
               <div>{{ blog.userName }}</div>
             </div>
@@ -100,7 +102,7 @@
           </div>
         </div>
         <!-- 以下为评论 -->
-        <Comment :v-bind:blog="blog" />
+        <Comment :blog="blog" />
       </el-card>
     </div>
   </div>
@@ -110,7 +112,13 @@ import { post } from "@/http/axios";
 import { useRoute } from "vue-router";
 import myMessage from "@/utils/common";
 import Comment from "@/views/blog/comment.vue";
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import {
+  defineComponent,
+  onBeforeMount,
+  onMounted,
+  reactive,
+  toRefs,
+} from "vue";
 export default defineComponent({
   components: {
     Comment,
@@ -182,6 +190,8 @@ export default defineComponent({
         post("/article/getById", { id: route.query.id }).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
+            data.content = data.content.replace(/\\n/g, "\n");
+            // data.content = data.content.replace(/\"/g,'"');
             state.blog = data;
           }
         });
@@ -200,8 +210,8 @@ export default defineComponent({
 }
 .blog_body {
   background-color: #f2f6fc;
-  min-height: 20vh;
-  min-width: 370px;
+  /* min-height: 20vh; */
+  /* min-width: 370px; */
   padding: 10vh 22vw;
 }
 .my_el_card {
@@ -211,6 +221,7 @@ export default defineComponent({
   height: 100%;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 .blog_img {
   border-radius: 1%;
@@ -229,14 +240,16 @@ export default defineComponent({
 }
 .blog_info_content {
   margin-left: 0.4vw;
+  font-size: 1vw;
 }
 .blog_icon {
-  width: 1.2vw;
-  height: 1.2vw;
+  width: 15px;
+  height: 15px;
 }
 
 .blog_tag {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   margin-top: 20px;
 }
@@ -257,67 +270,65 @@ export default defineComponent({
 .html_content {
   padding: 3vh 4vw;
 }
-.html_content blockquote {
+:deep(.html_content blockquote) {
   position: relative;
   color: #999;
   font-weight: 400;
   border-left: 1px solid #1abc9c;
   padding-left: 1em;
-  margin: 1em 3em 1em 2em;
+  margin: 1em 0 1em 1em;
+  overflow: auto;
 }
-.html_content h1 {
+:deep(.html_content h1) {
   font-size: 2em;
 }
-.html_content h2 {
+:deep(.html_content h2) {
   font-size: 1.8em;
 }
-.html_content h3 {
+:deep(.html_content h3) {
   font-size: 1.6em;
 }
-.html_content h4 {
+:deep(.html_content h4) {
   font-size: 1.4em;
 }
-.html_content h5 {
+:deep(.html_content h5) {
   font-size: 1.2em;
 }
-.html_content h6 {
+:deep(.html_content h6) {
   font-size: 1em;
 }
-.html_content h1,
-.html_content h2,
-.html_content h3,
-.html_content h4,
-.html_content h5,
-.html_content h6 {
+:deep(.html_content h1, .html_content h2, .html_content h3, .html_content
+    h4, .html_content h5, .html_content h6) {
   font-family: PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei,
     Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
   font-weight: 100;
   color: #000;
   line-height: 1.35;
 }
-.html_content p {
+:deep(.html_content p) {
   font-size: 16px;
   font-weight: 300;
   line-height: 1.8;
-  text-align: justify;
+  /* text-align: justify; */
+  overflow: auto;
 }
-.html_content a {
+:deep(.html_content a) {
   color: #1abc9c;
 }
-.html_content b,
-.html_content strong {
+:deep(.html_content b, .html_content strong) {
   font-weight: 700;
   color: #000;
 }
-.html_content ul {
+:deep(.html_content ul) {
   padding-left: 1.3em;
   list-style: disc;
 }
-.html_content pre {
+:deep(.html_content pre) {
   background: #f8f8f8;
   border: 1px solid #ddd;
   padding: 1em 1.5em;
   display: block;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
 

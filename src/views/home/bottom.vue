@@ -7,7 +7,7 @@
             <div class="top_info">
               <div class="top_left">博客</div>
               <div class="top_right">
-                共 <span class="top_num">{{ totalNum }} </span> 篇
+                共 <span class="top_num">{{ page.total }} </span> 篇
               </div>
             </div>
             <div class="article_info">
@@ -17,15 +17,17 @@
                   <div class="article_describe">{{ item.description }}</div>
                   <div class="article_user_info">
                     <div class="article_avatar">
-                      <el-avatar
-                        :size="35"
-                        :src="'https://shuaigang.top' + item.avatar"
-                        @error="true"
-                      >
-                        <img
-                          src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-                        />
-                      </el-avatar>
+                      <div>
+                        <el-avatar
+                          :size="35"
+                          :src="'https://shuaigang.top' + item.avatar"
+                          @error="true"
+                        >
+                          <img
+                            src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+                          />
+                        </el-avatar>
+                      </div>
                       <div class="article_user_name">{{ item.userName }}</div>
                       <div class="article_time">
                         <img
@@ -64,6 +66,22 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div class="page_info">
+              <el-config-provider :locale="locale">
+                <el-pagination
+                  v-model:current-page="page.pageNum"
+                  v-model:page-size="page.pageSize"
+                  :page-sizes="page.sizes"
+                  :small="false"
+                  :disabled="false"
+                  :background="false"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="page.total"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                />
+              </el-config-provider>
             </div>
           </div>
           <div class="HomeBottom_body_info_right">
@@ -144,20 +162,24 @@ import {
 import "../../js/particles.min.js";
 import router from "@/router";
 import myMessage from "@/utils/common";
+import { ElConfigProvider } from 'element-plus'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 export default defineComponent({
   name: "",
   components: {},
   props: {},
   setup() {
+    let locale = zhCn;
     // 页面数据
     const state = reactive({
       winState: false,
       parWidth: 0,
       parHeight: 0,
-      totalNum: 99,
       page: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 5,
+        total: 0,
+        sizes: [5, 10, 15, 20],
       },
       articleList: [],
       tagList: [
@@ -308,13 +330,21 @@ export default defineComponent({
       openBeian() {
         window.open("https://beian.miit.gov.cn");
       },
+      handleSizeChange(size) {
+        state.page.pageSize = size;
+        request.getArticleList();
+      },
+      handleCurrentChange(num) {
+        state.page.pageNum = num;
+        request.getArticleList();
+      }
     };
     // 页面默认请求
     onMounted(() => {
       state.winState = true;
       methods.watchWin();
-      request.getArticleList();
       methods.setParentHeight();
+      request.getArticleList();
     });
     onUnmounted(() => {
       state.winState = false;
@@ -353,8 +383,9 @@ export default defineComponent({
         post("/article/getList", state.page).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
+            state.page.total = data.total;
             state.articleList = data.list;
-            state.totalNum = data.total;
+            methods.setParentHeight();
           }
           // for (let i = 0; i < data.resultList.length; i) {
           //   var date = new Date(data.resultList[i].gmtCreate);
@@ -365,7 +396,7 @@ export default defineComponent({
         });
       },
     };
-    return { ...methods, ...toRefs(state) };
+    return { ...methods, ...toRefs(state), locale };
   },
 });
 </script>
@@ -508,7 +539,7 @@ export default defineComponent({
   z-index: 999;
   border-radius: 5px;
   background-color: #ffffff;
-  height: 100%;
+  /* height: 100%; */
 }
 .HomeBottom_body_info_right {
   z-index: 999;
@@ -626,6 +657,11 @@ export default defineComponent({
   color: #1685a9;
 }
 
+.page_info {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1vw 3vh 0;
+}
 /**
 * flex右  简介
 */

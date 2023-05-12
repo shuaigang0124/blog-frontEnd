@@ -32,7 +32,7 @@
     <div v-if="commentTotal">
       <h4 align="left">评论列表（{{ commentTotal }}条）</h4>
       <div v-for="(commentData, index) in commentData" :key="commentData">
-        <div class="align_center" style="margin-top: 10px">
+        <div class="align_center" style="margin-top: 5px">
           <!-- 一级头像 -->
           <div style="margin-right: 10px; display: flex; align-items: center">
             <el-avatar
@@ -78,11 +78,10 @@
                   @cancel="cancelEvent"
                 >
                   <template #reference>
-                    <el-button
-                      type="text"
-                      style="margin-left: 10px"
-                      icon="el-icon-delete"
-                    ></el-button>
+                    <i
+                      style="margin-left: 10px; color: #f56c6c"
+                      class="el-icon-delete"
+                    />
                   </template>
                 </el-popconfirm>
               </div>
@@ -166,7 +165,7 @@
               :key="children"
               style="padding: 2px"
             >
-              <div class="align_center" style="margin-top: 10px">
+              <div class="align_center" style="margin-top: 5px">
                 <!-- 二级头像 -->
                 <div
                   style="margin-right: 10px; display: flex; align-items: center"
@@ -187,7 +186,7 @@
                 </div>
                 <!-- 二级内容 -->
                 <div style="width: 100%">
-                  <div v-if="children.userNameByReply === null">
+                  <div v-if="!children.userNameByReply">
                     <div v-if="blog.userId !== children.userId">
                       <b style="font-size: 14px">{{ children.userName }}</b>
                     </div>
@@ -277,18 +276,17 @@
                         @cancel="cancelEvent"
                       >
                         <template #reference>
-                          <el-button
-                            type="text"
-                            style="margin-left: 10px"
-                            icon="el-icon-delete"
-                          ></el-button>
+                          <i
+                            style="margin-left: 10px; color: #f56c6c"
+                            class="el-icon-delete"
+                          />
                         </template>
                       </el-popconfirm>
                     </div>
                     <div class="align_center">
                       <div
                         style="margin-right: 8px"
-                        @click="replyUser(children)"
+                        @click="replyUser(children, commentData)"
                       >
                         回复
                       </div>
@@ -317,6 +315,7 @@
                   </div>
                 </div>
               </div>
+              <!-- 二级回复框 -->
               <div v-if="children.replyUser" style="margin-left: 60px">
                 <el-form :inline="true" :model="form" class="demo-form-inline">
                   <el-form-item
@@ -341,11 +340,35 @@
                 </el-form>
               </div>
             </div>
-            <el-button type="text" style="color: black" @click="close(index)"
+            <el-button
+              v-if="
+                !commentData.children ||
+                commentData.total > commentData.children.length
+              "
+              type="text"
+              style="color: black"
+              @click="addCommentChildrenList(index)"
+              :loading="loadingChildren"
+              >———加载更多回复<el-icon class="el-icon-arrow-right" />
+            </el-button>
+            <el-button
+              v-else
+              type="text"
+              style="color: black"
+              @click="close(index)"
               >———收起<el-icon class="el-icon-arrow-up" />
             </el-button>
           </div>
         </div>
+      </div>
+      <div
+        v-if="commentTotal > commentData.length"
+        align="center"
+        style="margin-top: 10px"
+      >
+        <el-button type="text" :loading="loading" @click="loadingComment"
+          >加载更多评论</el-button
+        >
       </div>
     </div>
     <div v-else>
@@ -361,13 +384,15 @@ import myMessage from "@/utils/common";
 import { Base64 } from "js-base64";
 import { useRoute } from "vue-router";
 import { defineComponent, onMounted, reactive, toRefs, watch } from "vue";
+import { ElMessageBox } from "element-plus";
+import router from "@/router";
 export default defineComponent({
   name: "",
   components: {},
   props: {
     blog: { type: Object, default: {} },
   },
-  setup() {
+  setup(props) {
     const route = useRoute();
     const state = reactive({
       commentTotal: 0,
@@ -431,26 +456,52 @@ export default defineComponent({
         userId: null,
         content: null,
         parentId: null,
+        beCommentedUserId: null,
         articleId: route.query.id,
+        level: 1,
       },
       // 点赞
       updateData: {
         id: null,
         clickNum: 0,
       },
+      openIndex: {
+        level: null,
+        index: null,
+        children: {},
+      },
       pageNum: 1,
       pageSize: 10,
+      pageNumChildren: 1,
+      pageSizeChildren: 20,
+      loading: false,
+      loadingChildren: false,
     });
     const methods = {
       // 新增评论
       insertComment() {
         // console.log(state.insertData);
-        request.insertComment();
+        state.insertData.userId = state.user.id;
+        request.insertComment(state.insertData);
       },
       // 展开
       open(index) {
         state.commentData[index].openAndClose = true;
-        request.getCommentList(1, index);
+        request.getCommentChildrenList(
+          index,
+          state.commentData[index].id,
+          state.pageNum
+        );
+      },
+      addCommentChildrenList(index) {
+        state.loadingChildren = true;
+        request.getCommentChildrenList(
+          index,
+          state.commentData[index].id,
+          Math.ceil(
+            state.commentData[index].children.length / state.pageSizeChildren
+          ) + 1
+        );
       },
       // 关闭
       close(index) {
@@ -464,13 +515,32 @@ export default defineComponent({
       },
       // 回复
       reply(id, index) {
+        if (state.openIndex.level !== null) {
+          switch (state.openIndex.level) {
+            case 0:
+              methods.cancelReply(state.openIndex.index);
+            case 1:
+              methods.cancelReplyUser(state.openIndex.children);
+          }
+        }
+        state.openIndex.level = 0;
+        state.openIndex.index = index;
+
         state.commentData[index].reply = true;
         state.form.parentId = id;
+        state.form.userId = state.user.id;
       },
       // 点赞
       click(id, index) {
-        let clickNum = state.commentData[index].clickNum;
-        request.update(id, clickNum);
+        if (state.commentData[index].clickState) {
+          request.update(id, false);
+          state.commentData[index].clickState = false;
+          state.commentData[index].clickNum -= 1;
+        } else {
+          request.update(id, true);
+          state.commentData[index].clickState = true;
+          state.commentData[index].clickNum += 1;
+        }
       },
       // 取消回复
       cancelReply(index) {
@@ -478,18 +548,38 @@ export default defineComponent({
       },
       // 确定回复
       replyMessage(index) {
-        request.addReply();
+        request.insertComment(state.form);
         state.commentData[index].reply = false;
       },
       // 二级回复
-      replyUser(children) {
+      replyUser(children, commentData) {
+        if (state.openIndex.level !== null) {
+          console.log(state.openIndex);
+          switch (state.openIndex.level) {
+            case 0:
+              methods.cancelReply(state.openIndex.index);
+            case 1:
+              methods.cancelReplyUser(state.openIndex.children);
+          }
+        }
+        state.openIndex.level = 0;
+        state.openIndex.children = children;
         children.replyUser = true;
-        state.form.parentId = children.id;
+        state.form.parentId = commentData.id;
+        state.form.userId = state.user.id;
+        state.form.beCommentedUserId = children.userId;
       },
       // 二级点赞
       childrenClick(children) {
-        // children.clickNum = children.clickNum + 1;
-        request.update(children.id, children.clickNum);
+        if (children.clickState) {
+          request.update(children.id, false);
+          children.clickState = false;
+          children.clickNum -= 1;
+        } else {
+          request.update(children.id, true);
+          children.clickState = true;
+          children.clickNum += 1;
+        }
       },
       // 取消二级回复
       cancelReplyUser(children) {
@@ -497,11 +587,19 @@ export default defineComponent({
       },
       // 确定二级回复
       ReplyUserMessage(children) {
-        request.addReply();
+        request.insertComment(state.form);
         children.replyUser = false;
+      },
+      loadingComment() {
+        if (state.loading == false) {
+          state.loading = true;
+          state.pageNum += 1;
+          request.getCommentList();
+        }
       },
     };
     onMounted(() => {
+      console.log(props.blog);
       if (sessionStorage.getItem("shuaigangOVO")) {
         state.user.id = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
       }
@@ -513,15 +611,15 @@ export default defineComponent({
       }
       state.user.avatar = sessionStorage.getItem("avatar");
       state.user.userName = sessionStorage.getItem("username");
-      request.getCommentList(0, null);
+      request.getCommentList();
     });
     const request = {
-      getCommentList(level, index) {
+      getCommentList() {
         // 请求体数据
         const data = {
           pageNum: state.pageNum,
           pageSize: state.pageSize,
-          level,
+          level: 0,
           nowUserId: state.user.id,
           articleId: route.query.id,
         };
@@ -529,36 +627,99 @@ export default defineComponent({
         post("/articleComment/getList", data).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
-            if (!index) {
+            if (state.pageNum === 1) {
               state.commentTotal = data.total;
               state.commentData = data.list;
             } else {
-              state.commentData[index].children = data.list;
+              state.commentTotal = data.total;
+              for (let i = 0; i < data.list.length; i++) {
+                state.commentData.push(data.list[i]);
+              }
             }
           }
+          state.loading = false;
         });
       },
-      insertComment() {
-        state.insertData.userId = state.user.id;
-        console.log(state.insertData);
-        post("/articleComment/insert", state.insertData).then((res: any) => {
+      getCommentChildrenList(index, parentId, pageNum) {
+        // 请求体数据
+        const data = {
+          pageNum,
+          pageSize: state.pageSizeChildren,
+          level: 1,
+          nowUserId: state.user.id,
+          articleId: route.query.id,
+          parentId,
+        };
+        // post请求
+        post("/articleComment/getList", data).then((res: any) => {
+          let { code, data } = res;
+          if (code == 200) {
+            if (pageNum == 1) {
+              state.commentData[index].children = data.list;
+            } else {
+              state.commentData[index].children.push(...data.list);
+            }
+          }
+          state.loadingChildren = false;
+        });
+      },
+      insertComment(data) {
+        if (!data.userId) {
+          ElMessageBox.confirm("是否前往登录?", "Warning", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning",
+          })
+            .then(() => {
+              sessionStorage.setItem(
+                "router",
+                route.path + "?id=" + route.query.id
+              );
+              router.push("/login");
+            })
+            .catch(() => {});
+          return;
+        }
+        post("/articleComment/insert", data).then((res: any) => {
           console.log(res);
           let { code, message } = res;
           if (code == 200) {
             myMessage(message, "", 0, null, null);
-            state.insertData.content = "";
+            request.getCommentList();
+            state.insertData.content = null;
+          } else {
+            myMessage(message, "", 2, null, null);
           }
+          state.form.content = null;
+          state.form.parentId = null;
+          state.form.beCommentedUserId = null;
         });
       },
       delete(id) {
+        post("/articleComment/delete", { id }).then((res: any) => {
+          let { code, message } = res;
+          if (code == 200) {
+            myMessage(message, "", 0, null, null);
+            request.getCommentList();
+          } else {
+            myMessage(message, "", 2, null, null);
+          }
+        });
+      },
+      update(id, status) {
         console.log(id);
-      },
-      update(id, clickNum) {
-        console.log(id, clickNum);
-      },
-      addReply() {
-        state.form.userId = state.user.id;
-        console.log(state.form);
+        post("/articleComment/kudos", {
+          serviceId: id,
+          nowUserId: state.user.id,
+          status,
+        }).then((res: any) => {
+          let { code, message } = res;
+          if (code == 200) {
+            myMessage(message, "", 0, null, null);
+          } else {
+            myMessage(message, "", 2, null, null);
+          }
+        });
       },
       getUserDetails(userId) {
         post("/user/getUserDetails", { userId }).then((res: any) => {
