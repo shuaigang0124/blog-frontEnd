@@ -173,7 +173,7 @@ export default defineComponent({
 .my_backtop {
   /* box-shadow: 0 0 6px rgb(34, 36, 38, 0.15) inset; */
   position: fixed;
-  z-index: 9999;
+  z-index: 999;
   bottom: 15px;
   right: 15px;
   /* cursor: pointer; */

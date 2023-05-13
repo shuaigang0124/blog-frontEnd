@@ -20,43 +20,88 @@
       <div class="archives_body_left">
         <el-timeline class="archives_body_left_list">
           <el-timeline-item
-            v-for="item in leftData"
-            :key="item"
-            :color="item.id == indexNum ? 'blue' : 'white'"
-            @click="aaaa(item.id)"
+            v-for="(item, index) in leftData"
+            :key="index"
+            :color="index == indexNum ? 'blue' : 'white'"
+            @click="checkItem(index, item)"
           >
             <div
               class="archives_item_content"
-              :style="{ color: item.id == indexNum ? 'blue' : 'black' }"
+              :style="{ color: index == indexNum ? 'blue' : 'black' }"
             >
-              {{ item.content }}
+              {{ item.name }}
             </div>
           </el-timeline-item>
         </el-timeline>
       </div>
       <div class="archives_body_right">
         <div class="archives_body_right_list">
-          <el-timeline class="parent_list">
+          <el-timeline
+            class="parent_list"
+            v-if="rightData.length > 0"
+            v-infinite-scroll="loadMore"
+            infinite-scroll-distance="20"
+            :infinite-scroll-immediate="false"
+          >
             <el-timeline-item
               v-for="item in rightData"
               :key="item"
-              :timestamp="item.time"
+              :timestamp="item.gmtCreate"
               placement="top"
             >
-              <el-card @click="goToDetail(item)" class="my_card_hover">
-                <h4>{{ item.content }}</h4>
-                <el-tag
-                  style="margin-right: 0.5vw"
-                  v-for="tag in item.tags"
-                  :key="tag.name"
-                  :type="tag.type"
-                  effect="light"
-                >
-                  {{ tag.name }}
-                </el-tag>
-              </el-card>
+              <div class="index_my_card">
+                <el-card @click="goToDetail(item.id)" class="my_card_hover">
+                  <b>{{ item.title }}</b>
+                  <p>{{ item.description }}</p>
+                  <div class="tag_list">
+                    <div>
+                      <el-tag
+                        style="margin-right: 0.5vw"
+                        v-for="tag in item.tags"
+                        :key="tag.name"
+                        :type="
+                          tag.type === 0
+                            ? 'info'
+                            : tag.type === 1
+                            ? 'success'
+                            : tag.type === 2
+                            ? 'warning'
+                            : tag.type === 3
+                            ? 'danger'
+                            : ''
+                        "
+                        effect="light"
+                      >
+                        {{ tag.name }}
+                      </el-tag>
+                    </div>
+                    <el-tag :type="item.isOriginality === 0 ? 'danger' : ''">{{
+                      item.isOriginality === 0 ? "原创" : "转载"
+                    }}</el-tag>
+                  </div>
+                </el-card>
+                <div class="index_my_wrap">
+                  <div>
+                    <i class="el-icon-view" />
+                  </div>
+                  <div>&nbsp;{{ item.readNum }}</div>
+                </div>
+              </div>
             </el-timeline-item>
+            <div v-if="params.total <= rightData.length">
+              <div align="center" class="is_not_more">
+                ———————— 已经到底啦！————————
+              </div>
+            </div>
           </el-timeline>
+          <div v-else class="parent_list">
+            <div class="data_is_null">
+              <img src="../../assets/icon/noData.png" />
+            </div>
+            <div class="data_is_null">
+              <div>暂无数据！！！</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +110,9 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import myMessage from "@/utils/common"
+import myMessage from "@/utils/common";
+import { post } from "@/http/axios";
+import router from "@/router";
 export default defineComponent({
   name: "",
   components: {},
@@ -74,108 +121,13 @@ export default defineComponent({
     const state = reactive({
       leftData: [
         {
-          id: 1,
-          content: "学习笔记",
-        },
-        {
-          id: 2,
-          content: "BUG相关",
-        },
-        {
-          id: 3,
-          content: "技术新闻",
-        },
-        {
-          id: 4,
-          content: "面试",
-        },
-        {
-          id: 5,
-          content: "Vue",
-        },
-        {
-          id: 6,
-          content: "Java",
-        },
-        {
-          id: 7,
-          content: "软件分享",
-        },
-        {
-          id: 8,
-          content: "好物推荐",
-        },
-        {
-          id: 9,
-          content: "探索",
-        },
-        {
-          id: 10,
-          content: "关于她",
-        },
-        {
-          id: 11,
-          content: "其它",
+          id: 0,
+          name: "全部",
         },
       ],
-      rightData: [
-        {
-          time: "2022-09-19 16:05",
-          content: "nima",
-          tags: [
-            { type: "", name: "java" },
-            { type: "success", name: "vue" },
-            { type: "info", name: "服务器" },
-            { type: "danger", name: "数据库" },
-            { type: "warning", name: "kiss" },
-          ],
-        },
-        {
-          time: "2022-09-19 16:06",
-          content: "0000000",
-          tags: [
-            { type: "", name: "java" },
-            { type: "success", name: "vue" },
-          ],
-        },
-        {
-          time: "2022-09-19 16:07",
-          content: "呃呃呃呃",
-          tags: [
-            { type: "", name: "java" },
-            { type: "success", name: "vue" },
-            { type: "info", name: "服务器" },
-          ],
-        },
-        {
-          time: "2022-09-19 16:07",
-          content: "呃呃呃呃",
-          tags: [
-            { type: "", name: "java" },
-            { type: "success", name: "vue" },
-            { type: "info", name: "服务器" },
-          ],
-        },
-        {
-          time: "2022-09-19 16:07",
-          content: "呃呃呃呃",
-          tags: [
-            { type: "", name: "java" },
-            { type: "success", name: "vue" },
-            { type: "info", name: "服务器" },
-          ],
-        },
-        {
-          time: "2022-09-19 16:07",
-          content: "呃呃呃呃",
-          tags: [
-            { type: "", name: "java" },
-            { type: "success", name: "vue" },
-            { type: "info", name: "服务器" },
-          ],
-        },
-      ],
-      indexNum: 1,
+      rightData: [],
+      indexNum: 0,
+      params: { pageNum: 1, pageSize: 10, total: 0, id: null },
     });
     const methods = {
       upDown() {
@@ -189,16 +141,82 @@ export default defineComponent({
           }
         }, 14);
       },
-      aaaa(e) {
-        state.indexNum = e;
-        // 获取并更改右边数据
-        // state.rightData =
+      checkItem(index, item) {
+        if (state.indexNum !== index) {
+          state.indexNum = index;
+          state.params.id = item.id;
+          state.params.pageNum = 1;
+          state.params.total = 0;
+          // 获取并更改右边数据
+          if (index == 0) {
+            request.getArticleList();
+          } else {
+            request.getAtcByTagId();
+          }
+        }
       },
-      goToDetail(e) {
-        myMessage('暂未开放', null, 1, null, null);
+      goToDetail(id) {
+        router.push({
+          path: "/blog",
+          query: { id },
+        });
+      },
+      loadMore() {
+        if (state.params.total > state.rightData.length) {
+          state.params.pageNum += 1;
+          if (state.indexNum === 0) {
+            request.getArticleList();
+          } else {
+            request.getAtcByTagId();
+          }
+        }
       },
     };
-    onMounted(() => {});
+    onMounted(() => {
+      request.getList();
+    });
+    const request = {
+      getList() {
+        post("/tag/getList", {}).then((res: any) => {
+          let { code, data } = res;
+          if (code == 200) {
+            state.leftData.push(...data);
+            state.params.id = state.leftData[state.indexNum].id;
+            request.getArticleList();
+          }
+        });
+      },
+      getAtcByTagId() {
+        post("/article/getAtcByTagId", state.params).then((res: any) => {
+          let { code, message, data } = res;
+          if (code == 200) {
+            if (state.params.pageNum > 1) {
+              state.rightData.push(...data.list);
+            } else {
+              state.rightData = data.list;
+            }
+            state.params.total = data.total;
+          } else {
+            myMessage(message, "", 2, null, null);
+          }
+        });
+      },
+      getArticleList() {
+        post("/article/getList", state.params).then((res: any) => {
+          let { code, message, data } = res;
+          if (code == 200) {
+            if (state.params.pageNum > 1) {
+              state.rightData.push(...data.list);
+            } else {
+              state.rightData = data.list;
+            }
+            state.params.total = data.total;
+          } else {
+            myMessage(message, "", 2, null, null);
+          }
+        });
+      },
+    };
     return { ...methods, ...toRefs(state) };
   },
 });
@@ -216,6 +234,40 @@ export default defineComponent({
   /* border-top: 2px solid darkgray; */
   /* border-bottom: 4px solid darkgray; */
 }
+
+.index_my_card {
+  position: relative;
+}
+.index_my_wrap {
+  position: absolute;
+  color: rgba(0, 0, 0, 0);
+  top: 0;
+  right: 0;
+  display: flex;
+  align-content: center;
+  font-size: 15px;
+  padding-right: 20px;
+  padding-top: 10px;
+}
+.index_my_wrap:hover,
+.my_card_hover:hover + .index_my_wrap {
+  color: #b88230;
+}
+
+.tag_list {
+  display: flex;
+  justify-content: space-between;
+}
+.data_is_null {
+  margin-top: 4vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.is_not_more {
+  padding-bottom: 2vh;
+}
+
 .archives_body_left {
   padding-top: 4vh;
   width: 15vw;
@@ -224,7 +276,7 @@ export default defineComponent({
   border: 1px solid darkgray;
   border-radius: 5px;
   padding: 2vh;
-  height: 78vh;
+  height: 80vh;
   overflow: auto;
 }
 

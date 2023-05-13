@@ -2,9 +2,9 @@
   <div class="top">
     <div class="item" v-for="item in titleList" :key="item">
       <el-input
-        @keyup.enter="search"
+        @keyup.enter="searchMusic"
         v-model="inputCat"
-        placeholder="搜索"
+        placeholder="搜索音乐"
         v-if="item.title === '搜索' && searchInput"
         prefix-icon="el-icon-search"
       />
@@ -22,6 +22,25 @@
       </el-button>
     </div>
   </div>
+  <el-dialog
+    v-model="dialogVisible"
+    title="搜索"
+    width="55%"
+    center
+    :before-close="
+      () => {
+        dialogVisible = false;
+      }
+    "
+  >
+    <el-input
+      v-model="params.content"
+      @keyup.enter="searchBlog"
+      placeholder="请输入关键字查询相关文章"
+      prefix-icon="el-icon-search"
+    />
+    <div v-if="blogList.length"></div>
+  </el-dialog>
   <router-view />
 </template>
 
@@ -29,7 +48,7 @@
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 import router from "@/router";
 import myMessage from "@/utils/common";
-import { get } from "@/http/axios";
+import { get, post } from "@/http/axios";
 export default defineComponent({
   name: "",
   components: {},
@@ -38,6 +57,11 @@ export default defineComponent({
     // 页面数据
     const state = reactive({
       titleList: [
+        {
+          to: "/homeSearch",
+          icon: require("./../assets/icon/search.png"),
+          title: "搜索",
+        },
         {
           to: "/home",
           icon: require("./../assets/icon/home.png"),
@@ -77,6 +101,13 @@ export default defineComponent({
       isDisabled: false,
       searchInput: false,
       inputCat: "",
+      dialogVisible: false,
+      params: {
+        content: null,
+        startTime: null,
+        endTime: null,
+      },
+      blogList: [],
       notificationMessage1:
         "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
       notificationMessage2:
@@ -85,14 +116,17 @@ export default defineComponent({
     // 方法体
     const methods = {
       checkPage(e) {
-        if (e.to !== "" && e.to != "/search") {
+        if (e.to !== "" && e.to != "/search" && e.to != "/homeSearch") {
           // window.location.href=e.to
           state.searchInput = false;
+          state.dialogVisible = false;
           router.push(e.to);
-        } else {
+        } else if (e.to == "/search") {
           state.searchInput = true;
+        } else if (e.to == "/homeSearch") {
+          state.dialogVisible = true;
         }
-        if (e.title === "音乐盒" && state.titleList.length === 7) {
+        if (e.title === "音乐盒" && state.titleList.length === 8) {
           state.isDisabled = true;
           var data = [
             {
@@ -143,9 +177,14 @@ export default defineComponent({
             }
           }, 15);
         }
-        if (e.title === "首页" && state.titleList.length !== 7) {
+        if (e.title === "首页" && state.titleList.length !== 8) {
           state.isDisabled = true;
           var data = [
+            {
+              to: "/homeSearch",
+              icon: require("./../assets/icon/search.png"),
+              title: "搜索",
+            },
             {
               to: "/home",
               icon: require("./../assets/icon/home.png"),
@@ -213,7 +252,10 @@ export default defineComponent({
         );
         return flag;
       },
-      search() {
+      searchMusic() {
+        if (!state.inputCat) {
+          myMessage("请输入您想要搜索的歌曲", null, 1, null, null);
+        }
         // console.log(state.inputCat);
         get("https://www.tcefrep.site/music/search", {
           keywords: state.inputCat,
@@ -223,6 +265,19 @@ export default defineComponent({
           console.log(res);
           state.inputCat = "";
         });
+      },
+      searchBlog() {
+        if (!state.params.content) {
+          myMessage("请输入您想要查询的关键字", null, 1, null, null);
+          return;
+        }
+        // post("/qwer", state.params).then((res: any) => {
+        //   state.params.content = null;
+        //   let { code, data } = res;
+        //   if (code === 200) {
+        //     state.blogList = data.list;
+        //   }
+        // });
       },
     };
     // 页面默认请求
