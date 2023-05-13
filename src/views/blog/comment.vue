@@ -17,24 +17,24 @@
       </div>
       <el-input
         v-model="insertData.content"
-        style="border-radius: 10px; padding-left: 20px"
+        class="insert_content"
         placeholder="高低整两句吧！"
         clearable
         :rows="4"
         type="textarea"
       />
     </div>
-    <div align="right" style="margin-top: 15px">
+    <div align="right" class="insert_click">
       <el-button type="primary" round @click="insertComment"> 发表 </el-button>
     </div>
-    <el-divider style="margin-top: 20px; background-color: black"></el-divider>
+    <el-divider class="my_divider"></el-divider>
 
     <div v-if="commentTotal">
       <h4 align="left">评论列表（{{ commentTotal }}条）</h4>
       <div v-for="(commentData, index) in commentData" :key="commentData">
-        <div class="align_center" style="margin-top: 5px">
+        <div class="align_center margin_top_5">
           <!-- 一级头像 -->
-          <div style="margin-right: 10px; display: flex; align-items: center">
+          <div class="align_center margin_right_5">
             <el-avatar
               :size="50"
               :src="
@@ -50,25 +50,63 @@
             </el-avatar>
           </div>
           <!-- 一级评论内容 -->
-          <div style="width: 100%">
+          <div class="width_100">
             <div v-if="blog.userId !== commentData.userId">
-              <b style="font-size: 14px">{{ commentData.userName }}</b>
+              <b class="name_size">{{ commentData.userName }}</b>
             </div>
             <div v-else>
-              <b style="font-size: 14px">{{ commentData.userName }} </b>
-              <b style="font-size: 12px; margin-left: 10px; color: red"
-                >作者【</b
-              >
-              <b style="font-size: 12px; color: red" class="el-icon-medal-1"
-                >优质打工人】</b
-              >
+              <b class="name_size">{{ commentData.userName }} </b>
+              <b class="auth_info color_red margin_left_5"> [作者] </b>
             </div>
-            <div style="margin: 5px 0">
+            <div class="margin_top_5">
               <span>{{ commentData.content }}</span>
             </div>
-            <div class="time_reply_cilck">
+            <div class="time_reply_cilck margin_top_5">
               <div>
-                <span>{{ commentData.gmtCreate }}</span>
+                <span>{{
+                  0 ==
+                  Math.floor(
+                    (nowDate - new Date(commentData.gmtCreate)) / 60000
+                  )
+                    ? "刚刚"
+                    : Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 60000
+                      ) < 60
+                    ? Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 60000
+                      ) + "分钟前"
+                    : Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 3600000
+                      ) < 24
+                    ? Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 3600000
+                      ) + "小时前"
+                    : Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      24
+                    ? "昨天" + commentData.gmtCreate.split(" ")[1].slice(0, 5)
+                    : Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      48
+                    ? "1天前"
+                    : Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      72
+                    ? "2天前"
+                    : Math.floor(
+                        (nowDate - new Date(commentData.gmtCreate)) / 3600000
+                      ) -
+                        nowDate.getHours() <
+                      96
+                    ? "3天前"
+                    : commentData.gmtCreate.split(" ")[0]
+                }}</span>
                 <el-popconfirm
                   v-if="commentData.userId === user.id"
                   title="你确定删除此评论吗？"
@@ -78,10 +116,7 @@
                   @cancel="cancelEvent"
                 >
                   <template #reference>
-                    <i
-                      style="margin-left: 10px; color: #f56c6c"
-                      class="el-icon-delete"
-                    />
+                    <i class="el-icon-delete margin_left_5 color_red" />
                   </template>
                 </el-popconfirm>
               </div>
@@ -89,7 +124,7 @@
               <div class="align_center">
                 <div
                   icon="el-icon-chat-line-square"
-                  style="margin-right: 8px"
+                  class="margin_right_5"
                   @click="reply(commentData.id, index)"
                 >
                   回复
@@ -127,7 +162,7 @@
           </div>
         </div>
         <!-- 一级回复框 -->
-        <div v-if="commentData.reply === true" style="margin-left: 60px">
+        <div v-if="commentData.reply === true" class="margin_left_60">
           <el-form :inline="true" :model="form" class="demo-form-inline">
             <el-form-item
               :label="'回复' + commentData.userName + '：'"
@@ -149,10 +184,10 @@
         <!-- 子评论 -->
         <div
           v-if="commentData.total !== 0 && commentData.total !== null"
-          style="margin-left: 60px"
+          class="margin_left_60"
         >
           <div v-if="!commentData.openAndClose">
-            <el-button type="text" style="color: black" @click="open(index)"
+            <el-button type="text" class="color_black" @click="open(index)"
               >—————展开{{ commentData.total }}条回复<el-icon
                 class="el-icon-arrow-right"
               />
@@ -163,13 +198,11 @@
             <div
               v-for="children in commentData.children"
               :key="children"
-              style="padding: 2px"
+              class="margin_top_5"
             >
-              <div class="align_center" style="margin-top: 5px">
+              <div class="align_center">
                 <!-- 二级头像 -->
-                <div
-                  style="margin-right: 10px; display: flex; align-items: center"
-                >
+                <div class="margin_right_5 align_center">
                   <el-avatar
                     :size="50"
                     :src="
@@ -185,88 +218,104 @@
                   </el-avatar>
                 </div>
                 <!-- 二级内容 -->
-                <div style="width: 100%">
+                <div class="width_100">
                   <div v-if="!children.userNameByReply">
                     <div v-if="blog.userId !== children.userId">
-                      <b style="font-size: 14px">{{ children.userName }}</b>
+                      <b class="name_size">{{ children.userName }}</b>
                     </div>
                     <div v-else>
-                      <b style="font-size: 14px">{{ children.userName }} </b>
-                      <b style="font-size: 12px; margin-left: 10px; color: red"
-                        >作者【</b
-                      >
-                      <b
-                        style="font-size: 12px; color: red"
-                        class="el-icon-medal-1"
-                        >优质打工人】</b
-                      >
+                      <b class="name_size">{{ children.userName }} </b>
+                      <b class="auth_info color_red margin_left_5"> [作者] </b>
                     </div>
                   </div>
                   <div v-else>
                     <div v-if="blog.userId !== children.userId">
-                      <b style="font-size: 14px">{{ children.userName }}</b>
-                      <b style="color: #87ceeb; margin-left: 10px">回复</b>
+                      <b class="name_size">{{ children.userName }}</b>
+                      <b class="reply_info margin_left_5 color_blue">回复</b>
                       <b v-if="blog.userId !== children.beCommentedUserId">
-                        <b style="font-size: 14px; margin-left: 10px">{{
+                        <b class="name_size_reply">{{
                           children.userNameByReply
                         }}</b>
                       </b>
                       <b v-else>
-                        <b style="font-size: 14px; margin-left: 10px"
+                        <b class="name_size_reply"
                           >{{ children.userNameByReply }}
                         </b>
-                        <b
-                          style="font-size: 12px; margin-left: 10px; color: red"
-                          >作者【</b
-                        >
-                        <b
-                          style="font-size: 12px; color: red"
-                          class="el-icon-medal-1"
-                          >优质打工人】</b
-                        >
+                        <b class="auth_info color_red margin_left_5">
+                          [作者]
+                        </b>
                       </b>
                     </div>
                     <div v-else>
-                      <b style="font-size: 14px; font-size: 14px"
-                        >{{ children.userName }}
-                      </b>
-                      <b style="font-size: 12px; margin-left: 10px; color: red"
-                        >作者【</b
-                      >
-                      <b
-                        style="font-size: 12px; color: red"
-                        class="el-icon-medal-1"
-                        >优质打工人】</b
-                      >
-                      <b style="color: #87ceeb; margin-left: 10px">回复</b>
+                      <b class="name_size">{{ children.userName }} </b>
+                      <b class="auth_info color_red margin_left_5"> [作者] </b>
+                      <b class="reply_info margin_left_5 color_blue">回复</b>
                       <b v-if="blog.userId !== children.beCommentedUserId">
-                        <b style="margin-left: 10px">{{
+                        <b class="margin_left_5">{{
                           children.userNameByReply
                         }}</b>
                       </b>
                       <b v-else>
-                        <b style="font-size: 14px; margin-left: 10px"
+                        <b class="name_size_reply"
                           >{{ children.userNameByReply }}
                         </b>
-                        <b
-                          style="font-size: 12px; margin-left: 10px; color: red"
-                          >作者【</b
-                        >
-                        <b
-                          style="font-size: 12px; color: red"
-                          class="el-icon-medal-1"
-                          >优质打工人】</b
-                        >
+                        <b class="auth_info color_red margin_left_5">
+                          [作者]
+                        </b>
                       </b>
                     </div>
                   </div>
 
-                  <div style="margin: 5px 0">
+                  <div class="margin_top_5">
                     <span>{{ children.content }}</span>
                   </div>
-                  <div class="time_reply_cilck">
+                  <div class="time_reply_cilck margin_top_5">
                     <div>
-                      <span>{{ children.gmtCreate }}</span>
+                      <span>{{
+                        0 ==
+                        Math.floor(
+                          (nowDate - new Date(children.gmtCreate)) / 60000
+                        )
+                          ? "刚刚"
+                          : Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 60000
+                            ) < 60
+                          ? Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 60000
+                            ) + "分钟前"
+                          : Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 3600000
+                            ) < 24
+                          ? Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 3600000
+                            ) + "小时前"
+                          : Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 3600000
+                            ) -
+                              nowDate.getHours() <
+                            24
+                          ? "昨天" +
+                            children.gmtCreate.split(" ")[1].slice(0, 5)
+                          : Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 3600000
+                            ) -
+                              nowDate.getHours() <
+                            48
+                          ? "1天前"
+                          : Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 3600000
+                            ) -
+                              nowDate.getHours() <
+                            72
+                          ? "2天前"
+                          : Math.floor(
+                              (nowDate - new Date(children.gmtCreate)) / 3600000
+                            ) -
+                              nowDate.getHours() <
+                            96
+                          ? "3天前"
+                          : children.gmtCreate.split(" ")[0]
+                      }}</span>
                       <el-popconfirm
                         v-if="children.userId === user.id"
                         title="你确定删除此评论吗？"
@@ -276,16 +325,13 @@
                         @cancel="cancelEvent"
                       >
                         <template #reference>
-                          <i
-                            style="margin-left: 10px; color: #f56c6c"
-                            class="el-icon-delete"
-                          />
+                          <i class="el-icon-delete margin_left_5 color_red" />
                         </template>
                       </el-popconfirm>
                     </div>
                     <div class="align_center">
                       <div
-                        style="margin-right: 8px"
+                        class="margin_right_5"
                         @click="replyUser(children, commentData)"
                       >
                         回复
@@ -316,7 +362,7 @@
                 </div>
               </div>
               <!-- 二级回复框 -->
-              <div v-if="children.replyUser" style="margin-left: 60px">
+              <div v-if="children.replyUser" class="margin_left_60">
                 <el-form :inline="true" :model="form" class="demo-form-inline">
                   <el-form-item
                     :label="'回复' + children.userName + '：'"
@@ -346,7 +392,7 @@
                 commentData.total > commentData.children.length
               "
               type="text"
-              style="color: black"
+              class="color_black"
               @click="addCommentChildrenList(index)"
               :loading="loadingChildren"
               >———加载更多回复<el-icon class="el-icon-arrow-right" />
@@ -354,7 +400,7 @@
             <el-button
               v-else
               type="text"
-              style="color: black"
+              class="color_black"
               @click="close(index)"
               >———收起<el-icon class="el-icon-arrow-up" />
             </el-button>
@@ -364,7 +410,7 @@
       <div
         v-if="commentTotal > commentData.length"
         align="center"
-        style="margin-top: 10px"
+        class="margin_top_5"
       >
         <el-button type="text" :loading="loading" @click="loadingComment"
           >加载更多评论</el-button
@@ -372,7 +418,7 @@
       </div>
     </div>
     <div v-else>
-      <div align="center" style="margin-top: 40px">
+      <div align="center" class="margin_top_40">
         暂无评论哦，快来评论一下吧！
       </div>
     </div>
@@ -392,7 +438,7 @@ export default defineComponent({
   props: {
     blog: { type: Object, default: {} },
   },
-  setup(props) {
+  setup() {
     const route = useRoute();
     const state = reactive({
       commentTotal: 0,
@@ -476,11 +522,12 @@ export default defineComponent({
       pageSizeChildren: 20,
       loading: false,
       loadingChildren: false,
+      nowDate: new Date(),
+      timer: null,
     });
     const methods = {
       // 新增评论
       insertComment() {
-        // console.log(state.insertData);
         state.insertData.userId = state.user.id;
         request.insertComment(state.insertData);
       },
@@ -577,7 +624,7 @@ export default defineComponent({
               methods.cancelReplyUser(state.openIndex.children);
           }
         }
-        state.openIndex.level = 0;
+        state.openIndex.level = 1;
         state.openIndex.children = children;
         children.replyUser = true;
         state.form.parentId = commentData.id;
@@ -642,6 +689,9 @@ export default defineComponent({
       state.user.avatar = sessionStorage.getItem("avatar");
       state.user.userName = sessionStorage.getItem("username");
       request.getCommentList();
+      state.timer = setInterval(() => {
+        state.nowDate = new Date();
+      }, 1000);
     });
     const request = {
       getCommentList() {
@@ -780,9 +830,27 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.align_center {
-  display: flex;
-  align-items: center;
+.insert_content {
+  border-radius: 10px;
+  padding-left: 20px;
+}
+.insert_click {
+  margin-top: 20px;
+}
+.my_divider {
+  margin-top: 20px;
+  background-color: black;
+}
+.name_size,
+.name_size_reply {
+  font-size: 14px;
+}
+.name_size_reply {
+  margin-left: 5px;
+}
+.auth_info,
+.reply_info {
+  font-size: 13px;
 }
 .time_reply_cilck {
   display: flex;
@@ -795,5 +863,40 @@ export default defineComponent({
   width: 14px;
   height: 14px;
   margin-right: 2px;
+}
+/**
+common
+ */
+.margin_top_5 {
+  margin-top: 5px;
+}
+.margin_top_40 {
+  margin-top: 40px;
+}
+.margin_right_5 {
+  margin-right: 5px;
+}
+.margin_left_5 {
+  margin-left: 5px;
+}
+.margin_left_60 {
+  margin-left: 55px;
+}
+.width_100 {
+  width: 100%;
+}
+
+.color_blue {
+  color: #409eff;
+}
+.color_red {
+  color: #f56c6c;
+}
+.color_black {
+  color: #303133;
+}
+.align_center {
+  display: flex;
+  align-items: center;
 }
 </style>

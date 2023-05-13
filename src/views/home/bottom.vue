@@ -401,61 +401,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.module_title {
-  text-decoration: none;
-  font-size: 1.2rem;
-  position: relative;
-  transition: 0.3s;
-}
-.module_title_line {
-  margin-top: 1vh;
-  width: 6.5vw;
-  border-bottom: 3px solid #80c8f8;
-}
-.guide_info {
-  margin-top: 2vh;
-  width: 100%;
-  height: 20vh;
-  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/20.webp);
-  background-repeat: no-repeat;
-  background-position: 50%;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #ffffff;
-  justify-content: center;
-}
-.guide_info_title {
-  font: 1rem Microsoft YaHei, Arial, Helvetica, sans-serif;
-}
-.guide_info_button {
-  margin-top: 1.5vh;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-.guide_info_button:hover {
-  color: black;
-  /* cursor: pointer; */
-  background-color: #fff;
-}
-
-.my_el_tags {
-  margin-right: 0.5vw;
-  margin-top: 1vh;
-  border-radius: 0.6rem;
-  /* font-weight: bold; */
-  font-size: 0.9rem;
-  color: #ffffff;
-}
-.my_el_tags:hover {
-  border-radius: 0;
-}
-.my_el_tags:hover .tag_text {
-  /* color: #ffffff; */
-  text-shadow: 1px 1px 1px black;
-}
-
 /* :deep(.particles-js-canvas-el) {
   width: 100vw !important;
   min-height: 100% !important;
@@ -532,7 +477,7 @@ export default defineComponent({
   background-color: transparent;
 }
 .HomeBottom_body_info {
-  padding: 5vh 11vw 12vh 13vw;
+  padding: 5vh 12vw 12vh 12vw;
   display: flex;
 }
 .HomeBottom_body_info_left {
@@ -540,27 +485,24 @@ export default defineComponent({
   border-radius: 5px;
   background-color: #ffffff;
   /* height: 100%; */
+  width: 100%;
 }
 .HomeBottom_body_info_right {
   z-index: 999;
   margin-left: 2vw;
-  width: 21vw;
+  width: 100%;
   height: 100%;
 }
-.module_one {
+.module_one,
+.module_two {
   padding: 2vh 1vw 2vh 1vw;
   border-radius: 5px;
   background-color: #ffffff;
 }
 .module_two {
-  padding: 2vh 1vw 2vh 1vw;
   margin-top: 2vh;
-  border-radius: 5px;
-  background-color: #ffffff;
 }
-.module_one:hover {
-  cursor: pointer;
-}
+.module_one,
 .module_two:hover {
   cursor: pointer;
 }
@@ -569,7 +511,7 @@ export default defineComponent({
 * flex左--头部
 */
 .top_info {
-  width: 51vw;
+  width: 50vw;
   display: flex;
   justify-content: space-between;
   padding: 2vh 1vw 2vh 1vw;
@@ -622,6 +564,7 @@ export default defineComponent({
   margin-top: 2vh;
   display: flex;
   justify-content: space-between;
+  /* flex-wrap: wrap; */
   align-items: center;
 }
 .article_avatar {
@@ -662,9 +605,68 @@ export default defineComponent({
   justify-content: flex-end;
   padding: 0 1vw 3vh 0;
 }
+:deep(.el-pagination) {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
 /**
 * flex右  简介
 */
+.module_title {
+  text-decoration: none;
+  font-size: 1.2rem;
+  position: relative;
+  transition: 0.3s;
+}
+.module_title_line {
+  margin-top: 1vh;
+  width: 6.5vw;
+  border-bottom: 3px solid #80c8f8;
+}
+.guide_info {
+  margin-top: 2vh;
+  width: 100%;
+  height: 20vh;
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/20.webp);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  justify-content: center;
+}
+.guide_info_title {
+  font: 1rem Microsoft YaHei, Arial, Helvetica, sans-serif;
+}
+.guide_info_button {
+  margin-top: 1.5vh;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.guide_info_button:hover {
+  color: black;
+  /* cursor: pointer; */
+  background-color: #fff;
+}
+
+.my_el_tags {
+  margin-right: 0.5vw;
+  margin-top: 1vh;
+  border-radius: 0.6rem;
+  /* font-weight: bold; */
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+.my_el_tags:hover {
+  border-radius: 0;
+}
+.my_el_tags:hover .tag_text {
+  /* color: #ffffff; */
+  text-shadow: 1px 1px 1px black;
+}
 
 /**
 * 底部

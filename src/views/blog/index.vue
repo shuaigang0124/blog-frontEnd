@@ -240,7 +240,7 @@ export default defineComponent({
 }
 .blog_info_content {
   margin-left: 0.4vw;
-  font-size: 1vw;
+  font-size: 14px;
 }
 .blog_icon {
   width: 15px;
