@@ -46,29 +46,20 @@
           </template>
         </el-image>
         <div class="blog_tag">
-          <el-tag
-            class="blog_tag_info"
-            :type="
-              item.type === 0
-                ? 'info'
-                : item.type === 1
-                ? 'success'
-                : item.type === 2
-                ? 'warning'
-                : item.type === 3
-                ? 'danger'
-                : ''
-            "
-            v-for="item in blog.tags"
-            :key="item"
-          >
-            {{ item.name }}
-          </el-tag>
-          <el-tag
-            class="blog_tag_info"
-            :type="blog.isOriginality === 0 ? 'danger' : ''"
-            >{{ blog.isOriginality === 0 ? "原创" : "转载" }}</el-tag
-          >
+          <div>
+            <el-tag
+              class="my_el_tags"
+              :color="item.color"
+              v-for="item in blog.tags"
+              :key="item"
+              @click="tagToList(item)"
+            >
+              <span class="tag_text">{{ item.name }}</span>
+            </el-tag>
+          </div>
+          <el-tag :type="blog.isOriginality === 0 ? 'danger' : ''">{{
+            blog.isOriginality === 0 ? "原创" : "转载"
+          }}</el-tag>
         </div>
         <h2 class="blog_title">{{ blog.title }}</h2>
         <div class="html_content" v-html="blog.content" />
@@ -112,13 +103,8 @@ import { post } from "@/http/axios";
 import { useRoute } from "vue-router";
 import myMessage from "@/utils/common";
 import Comment from "@/views/blog/comment.vue";
-import {
-  defineComponent,
-  onBeforeMount,
-  onMounted,
-  reactive,
-  toRefs,
-} from "vue";
+import router from "@/router";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   components: {
     Comment,
@@ -176,6 +162,12 @@ export default defineComponent({
     // 方法体
     const methods = {
       clickBlog() {},
+      tagToList(item) {
+        router.push({
+          path: "/archives",
+          query: { id: item.id },
+        });
+      },
     };
     onMounted(() => {
       if (!route.query.id) {
@@ -250,12 +242,24 @@ export default defineComponent({
 .blog_tag {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: 20px;
 }
-.blog_tag_info {
-  margin-left: 0.5vw;
+.my_el_tags {
+  margin-right: 0.5vw;
+  border-radius: 0.6rem;
 }
+.my_el_tags:hover {
+  border-radius: 0;
+}
+.tag_text {
+  color: #ffffff;
+}
+.my_el_tags:hover .tag_text {
+  color: #ffffff;
+  text-shadow: 1px 1px 1px black;
+}
+
 .blog_title {
   text-align: center;
   border: none;

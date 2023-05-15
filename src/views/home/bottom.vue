@@ -91,10 +91,10 @@
               <el-tag
                 class="my_el_tags"
                 v-for="tag in tagList"
-                :key="tag.name"
+                :key="tag"
                 :color="tag.color"
                 effect="light"
-                @click="tagToList"
+                @click="tagToList(tag)"
               >
                 <span class="tag_text"> {{ tag.name }}</span>
               </el-tag>
@@ -182,22 +182,7 @@ export default defineComponent({
         sizes: [5, 10, 15, 20],
       },
       articleList: [],
-      tagList: [
-        { color: "#036564", name: "java" },
-        { color: "#EB6841", name: "vue" },
-        { color: "#3FB8AF", name: "服务器" },
-        { color: "#FE4365", name: "数据库" },
-        { color: "#FC9D9A", name: "学习笔记" },
-        { color: "#EDC951", name: "面试" },
-        { color: "#C8C8A9", name: "生活" },
-        { color: "#83AF9B", name: "数据库" },
-        { color: "#8A9B0F", name: "Spring" },
-        { color: "#EB6841", name: "Redis" },
-        { color: "#3FB8AF", name: "RabbitMQ" },
-        { color: "#FE4365", name: "MyBtis" },
-        { color: "#FC9D9A", name: "ElasticSearch" },
-        { color: "#EDC951", name: "BUG" },
-      ],
+      tagList: [],
       linkData: [
         {
           name: "游戏一",
@@ -229,8 +214,11 @@ export default defineComponent({
           query: { id },
         });
       },
-      tagToList() {
-        myMessage("暂未开放", null, 1, null, null);
+      tagToList(tag) {
+        router.push({
+          path: '/archives',
+          query: { id: tag.id },
+        });
       },
       readGuide() {
         myMessage("暂未开放", null, 1, null, null);
@@ -344,6 +332,7 @@ export default defineComponent({
       state.winState = true;
       methods.watchWin();
       methods.setParentHeight();
+      request.getTagList();
       request.getArticleList();
     });
     onUnmounted(() => {
@@ -378,6 +367,14 @@ export default defineComponent({
     });
     // 请求
     const request = {
+      getTagList() {
+        post("/tag/getList", {}).then((res, any) => {
+          let { code, data } = res;
+          if (code == 200) {
+            state.tagList = data;
+          }
+        });
+      },
       getArticleList() {
         // post请求
         post("/article/getList", state.page).then((res, any) => {
@@ -664,7 +661,7 @@ export default defineComponent({
   border-radius: 0;
 }
 .my_el_tags:hover .tag_text {
-  /* color: #ffffff; */
+  color: #ffffff;
   text-shadow: 1px 1px 1px black;
 }
 

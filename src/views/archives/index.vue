@@ -20,14 +20,14 @@
       <div class="archives_body_left">
         <el-timeline class="archives_body_left_list">
           <el-timeline-item
-            v-for="(item, index) in leftData"
-            :key="index"
-            :color="index == indexNum ? 'blue' : 'white'"
-            @click="checkItem(index, item)"
+            v-for="item in leftData"
+            :key="item"
+            :color="item.id == indexNum ? 'blue' : 'white'"
+            @click="checkItem(item)"
           >
             <div
               class="archives_item_content"
-              :style="{ color: index == indexNum ? 'blue' : 'black' }"
+              :style="{ color: item.id == indexNum ? 'blue' : 'black' }"
             >
               {{ item.name }}
             </div>
@@ -56,23 +56,13 @@
                   <div class="tag_list">
                     <div>
                       <el-tag
-                        style="margin-right: 0.5vw"
+                        class="my_el_tags"
                         v-for="tag in item.tags"
                         :key="tag.name"
-                        :type="
-                          tag.type === 0
-                            ? 'info'
-                            : tag.type === 1
-                            ? 'success'
-                            : tag.type === 2
-                            ? 'warning'
-                            : tag.type === 3
-                            ? 'danger'
-                            : ''
-                        "
+                        :color="tag.color"
                         effect="light"
                       >
-                        {{ tag.name }}
+                        <span class="tag_text">{{ tag.name }}</span>
                       </el-tag>
                     </div>
                     <el-tag :type="item.isOriginality === 0 ? 'danger' : ''">{{
@@ -113,11 +103,13 @@ import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import myMessage from "@/utils/common";
 import { post } from "@/http/axios";
 import router from "@/router";
+import { useRoute } from "vue-router";
 export default defineComponent({
   name: "",
   components: {},
   props: {},
   setup() {
+    const route = useRoute();
     const state = reactive({
       leftData: [
         {
@@ -141,14 +133,14 @@ export default defineComponent({
           }
         }, 14);
       },
-      checkItem(index, item) {
-        if (state.indexNum !== index) {
-          state.indexNum = index;
+      checkItem(item) {
+        if (state.indexNum !== item.id) {
+          state.indexNum = item.id;
           state.params.id = item.id;
           state.params.pageNum = 1;
           state.params.total = 0;
           // 获取并更改右边数据
-          if (index == 0) {
+          if (item.id == 0) {
             request.getArticleList();
           } else {
             request.getAtcByTagId();
@@ -181,8 +173,14 @@ export default defineComponent({
           let { code, data } = res;
           if (code == 200) {
             state.leftData.push(...data);
-            state.params.id = state.leftData[state.indexNum].id;
-            request.getArticleList();
+            if (route.query.id) {
+              state.indexNum = Number(route.query.id);
+              state.params.id = state.leftData[state.indexNum].id;
+              request.getAtcByTagId();
+            } else {
+              state.params.id = state.leftData[state.indexNum].id;
+              request.getArticleList();
+            }
           }
         });
       },
@@ -235,6 +233,13 @@ export default defineComponent({
   /* border-bottom: 4px solid darkgray; */
 }
 
+.my_el_tags {
+  margin-right: 0.5vw;
+  border-radius: 0.6rem;
+}
+.tag_text {
+  color: #ffffff;
+}
 .index_my_card {
   position: relative;
 }
