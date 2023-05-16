@@ -40,7 +40,8 @@
             </div>
           </div>
         </template>
-        <el-image class="blog_img" :src="blog.img">
+        <h2 class="blog_title">{{ blog.title }}</h2>
+        <el-image class="blog_img" :src="'https://shuaigang.top' + blog.img">
           <template #error>
             <img class="blog_img" src="../../assets/background/hmbb/2.jpg" />
           </template>
@@ -61,7 +62,7 @@
             blog.isOriginality === 0 ? "原创" : "转载"
           }}</el-tag>
         </div>
-        <h2 class="blog_title">{{ blog.title }}</h2>
+        <h2 class="blog_title">{{ blog.description }}</h2>
         <div class="html_content" v-html="blog.content" />
         <div class="add_click_num">
           <el-button plain round type="danger" @click="clickBlog"

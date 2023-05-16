@@ -2,11 +2,13 @@
   <div class="top">
     <div class="item" v-for="item in titleList" :key="item">
       <el-input
+        ref="inputRef"
         @keyup.enter="searchMusic"
         v-model="inputCat"
         placeholder="搜索音乐"
         v-if="item.title === '搜索' && searchInput"
         prefix-icon="el-icon-search"
+        clearable
       />
       <el-button
         v-else
@@ -34,12 +36,42 @@
     "
   >
     <el-input
+      ref="inputRef"
       v-model="params.content"
       @keyup.enter="searchBlog"
       placeholder="请输入关键字查询相关文章"
       prefix-icon="el-icon-search"
+      clearable
     />
-    <div v-if="blogList.length"></div>
+    <div v-if="blogList.length">
+      <h3 class="search_blog_total">找到{{ params.total }}篇文章</h3>
+      <div v-for="item in blogList" :key="item">
+        <div class="search_blog_item" @click="goToBlog(item.id)">
+          <div class="search_blog_description">{{ item.description }}</div>
+          <div class="search_blog_gmtCreate">
+            {{
+              new Date(item.gmtCreate).getFullYear() +
+              "年" +
+              (new Date(item.gmtCreate).getMonth() + 1) +
+              "月" +
+              new Date(item.gmtCreate).getDate() +
+              "日"
+            }}
+          </div>
+        </div>
+      </div>
+      <el-pagination
+        align="right"
+        background
+        small
+        :hide-on-single-page="true"
+        layout="prev, pager, next"
+        v-model:current-page="params.pageNum"
+        v-model:page-size="params.pageSize"
+        :total="params.total"
+        @current-change="changePageNum"
+      />
+    </div>
   </el-dialog>
   <router-view />
 </template>
@@ -49,12 +81,14 @@ import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 import router from "@/router";
 import myMessage from "@/utils/common";
 import { get, post } from "@/http/axios";
+import { nextTick, ref } from "vue";
 export default defineComponent({
   name: "",
   components: {},
   props: {},
   setup() {
     // 页面数据
+    const inputRef = ref<HTMLElement | null>(null);
     const state = reactive({
       titleList: [
         {
@@ -103,6 +137,9 @@ export default defineComponent({
       inputCat: "",
       dialogVisible: false,
       params: {
+        pageNum: 1,
+        pageSize: 10,
+        total: 0,
         content: null,
         startTime: null,
         endTime: null,
@@ -123,8 +160,14 @@ export default defineComponent({
           router.push(e.to);
         } else if (e.to == "/search") {
           state.searchInput = true;
+          nextTick(() => {
+            inputRef.value[0] && inputRef.value[0].focus();
+          });
         } else if (e.to == "/homeSearch") {
           state.dialogVisible = true;
+          nextTick(() => {
+            inputRef.value && inputRef.value.focus();
+          });
         }
         if (e.title === "音乐盒" && state.titleList.length === 8) {
           state.isDisabled = true;
@@ -263,7 +306,7 @@ export default defineComponent({
           limit: 10,
         }).then((res) => {
           console.log(res);
-          state.inputCat = "";
+          // state.inputCat = "";
         });
       },
       searchBlog() {
@@ -271,13 +314,18 @@ export default defineComponent({
           myMessage("请输入您想要查询的关键字", null, 1, null, null);
           return;
         }
-        // post("/qwer", state.params).then((res: any) => {
-        //   state.params.content = null;
-        //   let { code, data } = res;
-        //   if (code === 200) {
-        //     state.blogList = data.list;
-        //   }
-        // });
+        request.getArticleList();
+      },
+      changePageNum(num) {
+        state.params.pageNum = num;
+        request.getArticleList();
+      },
+      goToBlog(id) {
+        state.dialogVisible = false;
+        router.push({
+          path: "/blog",
+          query: { id },
+        });
       },
     };
     // 页面默认请求
@@ -322,13 +370,42 @@ export default defineComponent({
       // }
     });
     // 请求
-    const request = {};
-    return { ...methods, ...toRefs(state) };
+    const request = {
+      getArticleList() {
+        post("/article/getList", state.params).then((res: any) => {
+          console.log(res);
+          let { code, data } = res;
+          if (code === 200) {
+            state.blogList = data.list;
+            state.params.total = data.total;
+          }
+        });
+      },
+    };
+    return { ...methods, ...toRefs(state), inputRef };
   },
 });
 </script>
 
 <style>
+.search_blog_item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+.search_blog_item:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.search_blog_description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search_blog_gmtCreate {
+  white-space: nowrap;
+}
+
 .el-notification .el-icon-success {
   color: #67c23a !important;
 }
