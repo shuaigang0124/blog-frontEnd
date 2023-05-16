@@ -285,25 +285,29 @@ export default defineComponent({
   overflow: auto;
 }
 :deep(.html_content h1) {
-  font-size: 2em;
-}
-:deep(.html_content h2) {
   font-size: 1.8em;
 }
-:deep(.html_content h3) {
+:deep(.html_content h2) {
   font-size: 1.6em;
 }
-:deep(.html_content h4) {
+:deep(.html_content h3) {
   font-size: 1.4em;
 }
-:deep(.html_content h5) {
+:deep(.html_content h4) {
   font-size: 1.2em;
 }
-:deep(.html_content h6) {
+:deep(.html_content h5) {
   font-size: 1em;
 }
-:deep(.html_content h1, .html_content h2, .html_content h3, .html_content
-    h4, .html_content h5, .html_content h6) {
+:deep(.html_content h6) {
+  font-size: 0.8em;
+}
+:deep(.html_content h1),
+:deep(.html_content h2),
+:deep(.html_content h3),
+:deep(.html_content h4),
+:deep(.html_content h5),
+:deep(.html_content h6) {
   font-family: PingFang SC, Verdana, Helvetica Neue, Microsoft Yahei,
     Hiragino Sans GB, Microsoft Sans Serif, WenQuanYi Micro Hei, sans-serif;
   font-weight: 100;
