@@ -175,10 +175,10 @@ export default defineComponent({
             state.leftData.push(...data);
             if (route.query.id) {
               state.indexNum = Number(route.query.id);
-              state.params.id = state.leftData[state.indexNum].id;
+              state.params.id = state.indexNum;
               request.getAtcByTagId();
             } else {
-              state.params.id = state.leftData[state.indexNum].id;
+              state.params.id = state.indexNum;
               request.getArticleList();
             }
           }
