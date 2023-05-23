@@ -73,6 +73,7 @@
       />
     </div>
   </el-dialog>
+  <a-player />
   <router-view />
 </template>
 
@@ -82,9 +83,10 @@ import router from "@/router";
 import myMessage from "@/utils/common";
 import { get, post } from "@/http/axios";
 import { nextTick, ref } from "vue";
+import aPlayer from "@/views/music/aPlayer.vue";
 export default defineComponent({
   name: "",
-  components: {},
+  components: { aPlayer },
   props: {},
   setup() {
     // 页面数据
