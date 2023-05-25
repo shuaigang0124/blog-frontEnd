@@ -380,7 +380,7 @@
   </form>
 </template>
 <script lang="js">
-import { post } from "@/http/axios";
+import { login, getUserDetails } from "@/api/user";
 import { h } from "vue";
 import myMessage from "@/utils/common";
 import router from "@/router";
@@ -1083,7 +1083,7 @@ export default defineComponent({
             password,
           },
         };
-        post("/authentication/form", paramData).then((res, any) => {
+        login(paramData).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
             request.getUserDetails(data.userId);
@@ -1106,7 +1106,7 @@ export default defineComponent({
         });
       },
       getUserDetails(userId) {
-        post("/user/getUserDetails", { userId }).then((res, any) => {
+        getUserDetails({ userId }).then((res, any) => {
           let { code, data } = res;
           if (code == 200) {
             sessionStorage.setItem("avatar", data.avatar);

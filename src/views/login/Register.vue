@@ -113,7 +113,8 @@
 </template>
 
 <script lang="ts">
-import {post} from "@/http/axios";
+import { post } from "@/http/axios";
+import { insertUser } from "@/api/user";
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 import router from "@/router";
 import myMessage from "@/utils/common";
@@ -260,7 +261,7 @@ export default defineComponent({
     const request = {
       insert() {
         const param = state.user;
-        post("/gsg/user/insertUser", param).then((res: any) => {
+        insertUser(param).then((res: any) => {
           let { code, message, data } = res;
           if (code === 200) {
             myMessage(message, null, 0, null, null);

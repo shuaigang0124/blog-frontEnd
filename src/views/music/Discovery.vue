@@ -57,7 +57,13 @@
 </template>
 
 <script lang="ts">
-import { get } from "@/http/axios";
+import {
+  getLrc,
+  getBanners,
+  getPalylist,
+  getNewSongList,
+  getMvList,
+} from "@/api/music";
 import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -70,43 +76,13 @@ export default defineComponent({
       newSongList: [],
       mvList: [],
     });
-    const methods = {
-      getBanners() {
-        get("https://www.tcefrep.site/music/banner", null).then((res: any) => {
-          // console.log(res)
-          localStorage.setItem("banners", JSON.stringify(res.banners));
-          state.banners = res.banners;
-        });
-      },
-      getPalylist() {
-        get("https://www.tcefrep.site/music/personalized?limit=10", null).then(
-          (res: any) => {
-            // console.log(res)
-            localStorage.setItem("palylist", JSON.stringify(res.result));
-            state.palylist = res.result;
-          }
-        );
-      },
-      getNewSongList() {
-        get("https://www.tcefrep.site/music/personalized/newsong", null).then(
-          (res: any) => {
-            // console.log(res)
-            localStorage.setItem("newSongList", JSON.stringify(res.result));
-            state.newSongList = res.result;
-          }
-        );
-      },
-      getMvList() {
-        get("https://www.tcefrep.site/music/personalized/mv", null).then(
-          (res: any) => {
-            // console.log(res)
-            localStorage.setItem("mvList", JSON.stringify(res.result));
-            state.mvList = res.result;
-          }
-        );
-      },
-    };
+    const methods = {};
     onMounted(() => {
+      getLrc({ id: 2043195674 }).then((res: any) => {
+        if (res.code === 200) {
+          console.log(res.lrc.lyric);
+        }
+      });
       let banners = localStorage.getItem("banners");
       let palylist = localStorage.getItem("palylist");
       let newSongList = localStorage.getItem("newSongList");
@@ -123,10 +99,22 @@ export default defineComponent({
       if (mvList) {
         state.mvList = JSON.parse(mvList);
       }
-      methods.getBanners();
-      methods.getPalylist();
-      methods.getNewSongList();
-      methods.getMvList();
+      getBanners(null).then((res: any) => {
+        localStorage.setItem("banners", JSON.stringify(res.banners));
+        state.banners = res.banners;
+      });
+      getPalylist({ limit: 10 }).then((res: any) => {
+        localStorage.setItem("palylist", JSON.stringify(res.result));
+        state.palylist = res.result;
+      });
+      getNewSongList(null).then((res: any) => {
+        localStorage.setItem("newSongList", JSON.stringify(res.result));
+        state.newSongList = res.result;
+      });
+      getMvList(null).then((res: any) => {
+        localStorage.setItem("mvList", JSON.stringify(res.result));
+        state.mvList = res.result;
+      });
     });
     return { ...methods, ...toRefs(state) };
   },

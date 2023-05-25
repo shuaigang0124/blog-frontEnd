@@ -21,7 +21,6 @@
   </div>
 </template>
 <script lang="ts">
-import {post} from "@/http/axios";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -35,18 +34,7 @@ export default defineComponent({
     // 页面默认请求
     onMounted(() => {});
     // 请求
-    const request = {
-      getList() {
-        // 请求体数据
-        const data = {
-          data: {},
-        };
-        // post请求
-        post("/user/getAllUser", data).then((res: any) => {
-          let { message, data } = res;
-        });
-      },
-    };
+    const request = {};
     return { ...methods, ...toRefs(state) };
   },
 });

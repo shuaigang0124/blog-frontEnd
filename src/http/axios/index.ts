@@ -34,7 +34,7 @@ instance.interceptors.response.use(
                 case codes.TOKEN_IS_EXPIRED:
                     let userId = sessionStorage.getItem("shuaigangOVO");
                     if (userId) {
-                        post("/gsg/authentication/generateToken", { userId }).then((res: any) => {
+                        post("/authentication/generateToken", { userId }).then((res: any) => {
                             if (res.code === codes.SUCCESS && res.data.Authorization) {
                                 sessionStorage.setItem("shuaigangOVO", res.data.Authorization)
                             }

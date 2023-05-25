@@ -83,7 +83,7 @@
   </div>
 </template>
 <script lang="ts">
-import { get } from "@/http/axios";
+import { getTopSong } from "@/api/music";
 import {
   defineComponent,
   onBeforeMount,
@@ -141,11 +141,9 @@ export default defineComponent({
           type: state.type,
         };
         // post请求
-        get("https://www.tcefrep.site/music/top/song", params).then(
-          (res: any) => {
-            state.tableData = res.data;
-          }
-        );
+        getTopSong(params).then((res: any) => {
+          state.tableData = res.data;
+        });
       },
     };
     return { ...methods, ...toRefs(state) };

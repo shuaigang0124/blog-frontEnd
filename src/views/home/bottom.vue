@@ -148,7 +148,8 @@
   </div>
 </template>
 <script lang="js">
-import { post } from "@/http/axios";
+import { getArticleList } from "@/api/article";
+import { getTagList } from "@/api/tag";
 import {
   defineComponent,
   watch,
@@ -162,8 +163,8 @@ import {
 import "../../js/particles.min.js";
 import router from "@/router";
 import myMessage from "@/utils/common";
-import { ElConfigProvider } from 'element-plus'
-import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import { ElConfigProvider } from "element-plus";
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 export default defineComponent({
   name: "",
   components: {},
@@ -210,13 +211,13 @@ export default defineComponent({
     const methods = {
       readArticle(id) {
         router.push({
-          path: '/blog',
+          path: "/blog",
           query: { id },
         });
       },
       tagToList(tag) {
         router.push({
-          path: '/archives',
+          path: "/archives",
           query: { id: tag.id },
         });
       },
@@ -227,7 +228,10 @@ export default defineComponent({
         particlesJS("particles-js", {
           particles: {
             //粒子的数量以及密度;enable为false默认为50
-            number: { value: 250, density: { enable: false, value_area: 3200 } },
+            number: {
+              value: 250,
+              density: { enable: false, value_area: 3200 },
+            },
             color: { value: "#ffffff" },
             shape: {
               type: "circle",
@@ -325,7 +329,7 @@ export default defineComponent({
       handleCurrentChange(num) {
         state.page.pageNum = num;
         request.getArticleList();
-      }
+      },
     };
     // 页面默认请求
     onMounted(() => {
@@ -349,14 +353,8 @@ export default defineComponent({
     // 监听state值的变化
     watch(state, (newValue, oldValue) => {
       var hb = document.getElementById("HomeBottom");
-      hb.setAttribute(
-        "style",
-        "width: " + newValue.parWidth + "px;"
-      );
-      hb.setAttribute(
-        "style",
-        "height: " + newValue.parHeight + "px;"
-      );
+      hb.setAttribute("style", "width: " + newValue.parWidth + "px;");
+      hb.setAttribute("style", "height: " + newValue.parHeight + "px;");
       // 粒子背景
       if (pJSDom && pJSDom.length > 0) {
         pJSDom.forEach((pJSDomItem) => {
@@ -368,7 +366,7 @@ export default defineComponent({
     // 请求
     const request = {
       getTagList() {
-        post("/tag/getList", {}).then((res, any) => {
+        getTagList({}).then((res, any) => {
           let { code, data } = res;
           if (code == 200) {
             state.tagList = data;
@@ -377,7 +375,7 @@ export default defineComponent({
       },
       getArticleList() {
         // post请求
-        post("/article/getList", state.page).then((res, any) => {
+        getArticleList(state.page).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
             state.page.total = data.total;

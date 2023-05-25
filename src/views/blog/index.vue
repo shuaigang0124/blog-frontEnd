@@ -100,7 +100,7 @@
   </div>
 </template>
 <script lang="ts">
-import { post } from "@/http/axios";
+import { getArticleByTagId } from "@/api/article";
 import { useRoute } from "vue-router";
 import myMessage from "@/utils/common";
 import Comment from "@/views/blog/comment.vue";
@@ -180,7 +180,7 @@ export default defineComponent({
     // 请求
     const request = {
       getBlog() {
-        post("/article/getById", { id: route.query.id }).then((res: any) => {
+        getArticleByTagId({ id: route.query.id }).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
             data.content = data.content.replace(/\\n/g, "\n");

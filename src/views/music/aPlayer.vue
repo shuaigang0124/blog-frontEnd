@@ -11,9 +11,11 @@ import {
   nextTick,
   onBeforeUnmount,
   onMounted,
+  reactive,
   ref,
+  toRefs,
 } from "vue";
-import axios from "axios";
+import { get } from "@/http/axios";
 
 export default defineComponent({
   props: {
@@ -95,7 +97,7 @@ export default defineComponent({
     // 列表最大高度
     listMaxHeight: {
       type: String as PropType<string>,
-      default: "100px",
+      default: "263px",
     },
     // 存储播放器设置的 localStorage key
     storageName: {
@@ -103,9 +105,12 @@ export default defineComponent({
       default: "aplayer-setting",
     },
   },
-  setup(props) {
+  setup(props: any) {
     const playerRef = ref();
     let instance: APlayer;
+    const state = reactive({
+      audioList: [],
+    });
 
     // APlayer歌曲信息
     class Audio {
@@ -134,52 +139,69 @@ export default defineComponent({
         this.lrc = lrc;
       }
     }
-
-    // 初始化
-    onMounted(() => {
-      nextTick(() => {
-        axios
-          .get(
-            `https://api.i-meto.com/meting/api?server=${
-              props.songServer
-            }&type=${props.songType}&id=${props.songId}&r=${Math.random()}`
-          )
-          .then((res) => {
-            let audioList = res.data.map(
-              (value) =>
+    const methods = {
+      changeInstance() {
+        instance = new APlayer({
+          container: playerRef.value,
+          fixed: props.fixed,
+          mini: props.mini,
+          autoplay: props.autoplay,
+          theme: props.theme,
+          loop: props.loop,
+          order: props.order,
+          preload: props.preload,
+          volume: props.volume,
+          mutex: props.mutex,
+          lrcType: props.lrcType,
+          listFolded: props.listFolded,
+          listMaxHeight: props.listMaxHeight,
+          storageName: props.storageName,
+          audio: state.audioList,
+        });
+      },
+      watchLocalStorage() {
+        // 监听localStorage.setItem
+        window.addEventListener("setItemEvent", (e: any) => {
+          if (e.key === "audioList") {
+            state.audioList = JSON.parse(e.newValue).map(
+              (value: any) =>
                 new Audio(
+                  // 歌手
                   value.author,
+                  // 歌名
                   value.title,
+                  // 播放地址
                   value.url,
+                  // 图片地址
                   value.pic,
+                  // 歌词地址
                   value.lrc
                 )
             );
-            instance = new APlayer({
-              container: playerRef.value,
-              fixed: props.fixed,
-              mini: props.mini,
-              autoplay: props.autoplay,
-              theme: props.theme,
-              loop: props.loop,
-              order: props.order,
-              preload: props.preload,
-              volume: props.volume,
-              mutex: props.mutex,
-              lrcType: props.lrcType,
-              listFolded: props.listFolded,
-              listMaxHeight: props.listMaxHeight,
-              storageName: props.storageName,
-              audio: audioList,
-            });
-          });
+            methods.changeInstance();
+          }
+        });
+      },
+    };
+
+    // 初始化
+    onMounted(() => {
+      methods.watchLocalStorage();
+      nextTick(() => {
+        get(
+          `https://api.i-meto.com/meting/api?server=${props.songServer}&type=${
+            props.songType
+          }&id=${props.songId}&r=${Math.random()}`
+        ).then((res: any) => {
+          localStorage.setItem("audioList", JSON.stringify(res));
+        });
       });
     });
     // 销毁
     onBeforeUnmount(() => {
       instance.destroy();
     });
-    return { Audio, instance, playerRef };
+    return { Audio, ...toRefs(state), instance, playerRef, ...methods };
   },
 });
 </script>

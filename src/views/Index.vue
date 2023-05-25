@@ -81,7 +81,8 @@
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
 import router from "@/router";
 import myMessage from "@/utils/common";
-import { get, post } from "@/http/axios";
+import { getArticleList } from "@/api/article";
+import { search } from "@/api/music";
 import { nextTick, ref } from "vue";
 import aPlayer from "@/views/music/aPlayer.vue";
 export default defineComponent({
@@ -302,7 +303,7 @@ export default defineComponent({
           myMessage("请输入您想要搜索的歌曲", null, 1, null, null);
         }
         // console.log(state.inputCat);
-        get("https://www.tcefrep.site/music/search", {
+        search({
           keywords: state.inputCat,
           type: 1,
           limit: 10,
@@ -374,7 +375,7 @@ export default defineComponent({
     // 请求
     const request = {
       getArticleList() {
-        post("/article/getList", state.params).then((res: any) => {
+        getArticleList(state.params).then((res: any) => {
           console.log(res);
           let { code, data } = res;
           if (code === 200) {

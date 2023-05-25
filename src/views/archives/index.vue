@@ -101,7 +101,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import myMessage from "@/utils/common";
-import { post } from "@/http/axios";
+import { getArticleList, getArticleByTagId } from "@/api/article";
+import { getTagList } from "@/api/tag";
 import router from "@/router";
 import { useRoute } from "vue-router";
 export default defineComponent({
@@ -169,7 +170,7 @@ export default defineComponent({
     });
     const request = {
       getList() {
-        post("/tag/getList", {}).then((res: any) => {
+        getTagList({}).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
             state.leftData.push(...data);
@@ -185,7 +186,7 @@ export default defineComponent({
         });
       },
       getAtcByTagId() {
-        post("/article/getAtcByTagId", state.params).then((res: any) => {
+        getArticleByTagId(state.params).then((res: any) => {
           let { code, message, data } = res;
           if (code == 200) {
             if (state.params.pageNum > 1) {
@@ -200,7 +201,7 @@ export default defineComponent({
         });
       },
       getArticleList() {
-        post("/article/getList", state.params).then((res: any) => {
+        getArticleList(state.params).then((res: any) => {
           let { code, message, data } = res;
           if (code == 200) {
             if (state.params.pageNum > 1) {

@@ -66,7 +66,7 @@ import {
 } from "vue";
 import vueDanmaku from "vue3-danmaku";
 import { ElMessageBox } from "element-plus";
-import {post} from "@/http/axios";
+import { insertMsg, getMsg } from "@/api/message";
 import router from "@/router";
 import { Base64 } from "js-base64";
 export default defineComponent({
@@ -108,7 +108,7 @@ export default defineComponent({
               color: state.contentColor,
               content: state.content,
               userId: state.userId,
-              userName: "【当前发送】"
+              userName: "【当前发送】",
             };
           } else {
             ElMessageBox.confirm("是否前往登录?", "Warning", {
@@ -151,13 +151,13 @@ export default defineComponent({
     const request = {
       getMsgList() {
         // post请求
-        post("/msg/getMsg", null).then((res: any) => {
+        getMsg(null).then((res: any) => {
           let { message, data } = res;
           state.danmus = data;
         });
       },
       insertMsg(param) {
-        post("/msg/insertMsg", param).then((res: any) => {
+        insertMsg(param).then((res: any) => {
           let { code } = res;
           if (code === 200) {
             // 发送弹幕（插入到当前播放位置，实时显示）

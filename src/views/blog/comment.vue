@@ -425,7 +425,13 @@
   </div>
 </template>
 <script lang="ts">
-import { post } from "@/http/axios";
+import {
+  getArticleCommentList,
+  insertArticleComment,
+  deleteArticleComment,
+  kudosArticleComment,
+} from "@/api/articleComment";
+import { getUserDetails } from "@/api/user";
 import myMessage from "@/utils/common";
 import { Base64 } from "js-base64";
 import { useRoute } from "vue-router";
@@ -704,7 +710,7 @@ export default defineComponent({
           articleId: route.query.id,
         };
         // post请求
-        post("/articleComment/getList", data).then((res: any) => {
+        getArticleCommentList(data).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
             if (state.pageNum === 1) {
@@ -731,7 +737,7 @@ export default defineComponent({
           parentId,
         };
         // post请求
-        post("/articleComment/getList", data).then((res: any) => {
+        getArticleCommentList(data).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
             if (pageNum == 1) {
@@ -760,7 +766,7 @@ export default defineComponent({
             .catch(() => {});
           return;
         }
-        post("/articleComment/insert", data).then((res: any) => {
+        insertArticleComment(data).then((res: any) => {
           let { code, message } = res;
           if (code == 200) {
             myMessage(message, "", 0, null, null);
@@ -791,7 +797,7 @@ export default defineComponent({
             .catch(() => {});
           return;
         }
-        post("/articleComment/delete", { id }).then((res: any) => {
+        deleteArticleComment({ id }).then((res: any) => {
           let { code, message } = res;
           if (code == 200) {
             myMessage(message, "", 0, null, null);
@@ -802,7 +808,7 @@ export default defineComponent({
         });
       },
       update(id, status) {
-        post("/articleComment/kudos", {
+        kudosArticleComment({
           serviceId: id,
           nowUserId: state.user.id,
           status,
@@ -816,7 +822,7 @@ export default defineComponent({
         });
       },
       getUserDetails(userId) {
-        post("/user/getUserDetails", { userId }).then((res: any) => {
+        getUserDetails({ userId }).then((res: any) => {
           let { code, data } = res;
           if (code == 200) {
             sessionStorage.setItem("avatar", data.avatar);

@@ -67,7 +67,7 @@
   </div>
 </template>
 <script lang="ts">
-import { get } from "@/http/axios";
+import { getMvAllList } from "@/api/music";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -122,14 +122,12 @@ export default defineComponent({
           limit: 8,
           offset: (state.page - 1) * 8,
         };
-        get("https://www.tcefrep.site/music/mv/all", params).then(
-          (res: any) => {
-            state.mvlist = res.data;
-            if (res.count) {
-              state.total = res.count;
-            }
+        getMvAllList(params).then((res: any) => {
+          state.mvlist = res.data;
+          if (res.count) {
+            state.total = res.count;
           }
-        );
+        });
       },
     };
     return { ...methods, ...toRefs(state) };

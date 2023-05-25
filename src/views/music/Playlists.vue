@@ -57,7 +57,7 @@
   </div>
 </template>
 <script lang="ts">
-import { get } from "@/http/axios";
+import { getHighquality, getTopPlayList } from "@/api/music";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -108,10 +108,7 @@ export default defineComponent({
           limit: 1,
           cat: state.menuList[0],
         };
-        get(
-          "https://www.tcefrep.site/music/top/playlist/highquality",
-          params
-        ).then((res: any) => {
+        getHighquality(params).then((res: any) => {
           state.highquality = res.playlists[0];
           let card = document.getElementById("highquality_card");
           card.style.setProperty(
@@ -126,12 +123,10 @@ export default defineComponent({
           offset: (state.page - 1) * 10,
           cat: state.cat,
         };
-        get("https://www.tcefrep.site/music/top/playlist", params).then(
-          (res: any) => {
-            state.menuPlaylists = res.playlists;
-            state.total = res.total;
-          }
-        );
+        getTopPlayList(params).then((res: any) => {
+          state.menuPlaylists = res.playlists;
+          state.total = res.total;
+        });
       },
     };
     return { ...methods, ...toRefs(state) };

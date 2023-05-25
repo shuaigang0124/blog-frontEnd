@@ -156,7 +156,8 @@
 </template>
 
 <script lang="js">
-import {post} from "@/http/axios";
+import { sendMsg, getChatList } from "@/api/chat";
+import { getUserDetails } from "@/api/user";
 import myMessage from "@/utils/common";
 import { ElMessageBox } from "element-plus";
 import { Base64 } from "js-base64";
@@ -373,9 +374,9 @@ export default defineComponent({
       } else {
         request.getChatList(state.roomId);
       }
-      state.timer = setInterval(()=>{
+      state.timer = setInterval(() => {
         state.nowDate = new Date();
-      }, 1000)
+      }, 1000);
     });
     onUnmounted(() => {
       if (state.client) {
@@ -392,7 +393,7 @@ export default defineComponent({
         const data = {
           userId: id,
         };
-        post("/user/getUserDetails", data).then((res, any) => {
+        getUserDetails(data).then((res, any) => {
           let { code, data } = res;
           if (code === 200) {
             state.userName = data.userName;
@@ -403,7 +404,7 @@ export default defineComponent({
         });
       },
       send(msg) {
-        post("/chat/sendMsg", msg).then((res, any) => {
+        sendMsg(msg).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
             // 更新lastMsg
@@ -420,7 +421,7 @@ export default defineComponent({
           pageNum: state.pageNum,
           pageSize: state.pageSize,
         };
-        post("/chat/getChatList", data).then((res, any) => {
+        getChatList(data).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
             data.sort((a, b) => a.sendTime.localeCompare(b.sendTime));

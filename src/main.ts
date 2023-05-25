@@ -6,6 +6,7 @@ import 'element-plus/lib/theme-chalk/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import ElementPlus from 'element-plus'
 import lazyPlugin from 'vue3-lazy'
+import { dispatchEventStroage } from '@/utils/watchLocalStorage'
 const app = createApp(App)
 app.use(store)
     .use(router)
@@ -19,6 +20,7 @@ app.use(store)
 app.use(ElementPlus, {
     locale: zhCn,
 })
+    .use(dispatchEventStroage)
 
 
 
