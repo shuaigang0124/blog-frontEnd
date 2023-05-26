@@ -20,8 +20,8 @@
       </div>
       <div class="discovery_title">最新音乐</div>
       <div class="new_song_list">
-        <div v-for="item in newSongList" :key="item">
-          <div class="new_song_item">
+        <div v-for="item in newSongList" :key="item" class="new_song_for">
+          <div class="new_song_item" @click="playNewSong(item)">
             <el-image :src="item.picUrl" class="new_song_image" />
             <div class="new_song_info">
               <div class="new_song_name">{{ item.song.name }}</div>
@@ -58,13 +58,13 @@
 
 <script lang="ts">
 import {
-  getLrc,
   getBanners,
   getPalylist,
   getNewSongList,
   getMvList,
+  addOnePlayList,
 } from "@/api/music";
-import { defineComponent, onMounted, reactive, ref, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
   components: {},
@@ -76,13 +76,17 @@ export default defineComponent({
       newSongList: [],
       mvList: [],
     });
-    const methods = {};
+    const methods = {
+      playNewSong(e) {
+        addOnePlayList({
+          id: e.id,
+          author: e.song.artists[0].name,
+          title: e.song.name,
+          pic: e.picUrl,
+        });
+      },
+    };
     onMounted(() => {
-      getLrc({ id: 2043195674 }).then((res: any) => {
-        if (res.code === 200) {
-          console.log(res.lrc.lyric);
-        }
-      });
       let banners = localStorage.getItem("banners");
       let palylist = localStorage.getItem("palylist");
       let newSongList = localStorage.getItem("newSongList");
@@ -183,10 +187,15 @@ export default defineComponent({
   display: flex;
   flex-wrap: wrap;
 }
+.new_song_for {
+  padding-top: 3vh;
+}
 .new_song_item {
   width: 36vw;
-  padding-top: 3vh;
   display: flex;
+}
+.new_song_item:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .new_song_image {
   width: 6vw;
@@ -196,11 +205,12 @@ export default defineComponent({
 }
 .new_song_info {
   width: 20vw;
+  height: 4vw;
   margin: 0.5vw 1vw;
 }
 .new_song_name {
   font-size: 1.1vw;
-  height: 4vw;
+  height: 100%;
   color: #fff;
   overflow: hidden;
   white-space: nowrap;

@@ -84,7 +84,7 @@ import myMessage from "@/utils/common";
 import { getArticleList } from "@/api/article";
 import { search } from "@/api/music";
 import { nextTick, ref } from "vue";
-import aPlayer from "@/views/music/aPlayer.vue";
+import aPlayer from "@/components/music/aPlayer.vue";
 export default defineComponent({
   name: "",
   components: { aPlayer },

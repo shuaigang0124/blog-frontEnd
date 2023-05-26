@@ -28,6 +28,7 @@
           ref="singleTableRef"
           :data="tableData"
           highlight-current-row
+          @row-click="addOnePlayList"
         >
           <el-table-column type="index" width="50" />
           <el-table-column property="album.picUrl" width="80">
@@ -83,7 +84,7 @@
   </div>
 </template>
 <script lang="ts">
-import { getTopSong } from "@/api/music";
+import { getTopSong, addOnePlayList } from "@/api/music";
 import {
   defineComponent,
   onBeforeMount,
@@ -125,9 +126,17 @@ export default defineComponent({
         }
         request.getNewsongList();
       },
+      addOnePlayList(row) {
+        addOnePlayList({
+          id: row.id,
+          author: row.album.artists[0].name,
+          title: row.name,
+          pic: row.album.picUrl,
+        });
+      },
     };
     onBeforeMount(() => {
-      state.tableHeight = document.body.clientHeight * 0.8;
+      state.tableHeight = document.body.clientHeight * 0.78;
     });
     // 页面默认请求
     onMounted(() => {
@@ -156,7 +165,7 @@ export default defineComponent({
   background-color: gray;
 }
 .newsong_body {
-  padding: 6vh 14vw 4vh 14vw;
+  padding: 6vh 14vw 6vh 14vw;
 }
 .newsong_menu {
   width: 72vw;
