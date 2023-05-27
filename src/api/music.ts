@@ -37,16 +37,22 @@ export function getAudioList(param) {
 export async function addOnePlayList(param) {
     let lrc = "";
     let url = null;
-    await getSongUrl({ id: param.id }).then((res: any) => {
+    let data = { id: param.id }
+    await getSongUrl(data).then((res: any) => {
         if (res.code === 200) {
             url = res.data[0].url;
         }
     });
-    await getLrc({ id: param.id }).then((res: any) => {
+    await getLrc(data).then((res: any) => {
         if (res.code === 200) {
             lrc = res.lrc.lyric;
         }
     });
+    if (!param.pic) {
+        await getSongDetail({ ids: param.id }).then((res: any) => {
+            param.pic = res.songs[0].al.picUrl;
+        })
+    }
     if (url) {
         let music = new Audio(
             param.author,

@@ -1,0 +1,376 @@
+<template>
+  <div class="search_result">
+    <div class="body_style">
+      <div class="body_img"></div>
+    </div>
+    <div class="result_body">
+      <div class="result_top">
+        <div class="result_keywords">
+          <h1>{{ keywords }}</h1>
+        </div>
+        <div class="result_total">找到 {{ total }} 个结果</div>
+      </div>
+      <div class="result_menu">
+        <el-menu
+          :default-active="type"
+          mode="horizontal"
+          text-color="#303133"
+          active-text-color="#c3473a"
+          active-background-color="rgba(0,0,0,0)"
+          background-color="rgba(0,0,0,0)"
+          @select="handleSelect"
+        >
+          <el-menu-item
+            v-for="item in resultMenuList"
+            :key="item"
+            :index="item.type"
+            >{{ item.name }}</el-menu-item
+          >
+        </el-menu>
+        <el-divider />
+        <div class="result_table" v-if="type === resultMenuList[0].type">
+          <el-table
+            ref="singleTableRef"
+            :data="resultTableData"
+            highlight-current-row
+            @row-dblclick="addOnePlayList"
+          >
+            <el-table-column type="index" width="50" />
+            <el-table-column property="name" label="音乐" width="280" />
+            <el-table-column
+              property="artists[0].name"
+              label="歌手"
+              width="150"
+            />
+            <el-table-column property="album.name" label="专辑" />
+            <el-table-column label="时长" width="70">
+              <template #default="scope">
+                <div style="display: flex; align-items: center">
+                  <span>{{
+                    (parseInt(parseInt(scope.row.duration / 1000)) / 60 > 10
+                      ? parseInt(scope.row.duration / 1000) / 60
+                      : "0" +
+                        parseInt(parseInt(scope.row.duration / 1000) / 60)) +
+                    ":" +
+                    (parseInt(scope.row.duration / 1000) -
+                      parseInt(parseInt(scope.row.duration / 1000) / 60) * 60 >
+                    10
+                      ? parseInt(scope.row.duration / 1000) -
+                        parseInt(parseInt(scope.row.duration / 1000) / 60) * 60
+                      : "0" +
+                        (parseInt(scope.row.duration / 1000) -
+                          parseInt(parseInt(scope.row.duration / 1000) / 60) *
+                            60))
+                  }}</span>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="result_playlists" v-if="type === resultMenuList[1].type">
+          <div v-for="item in resultPlaylists" :key="item">
+            <div class="result_palylist_item">
+              <el-image class="result_palylist_image" :src="item.coverImgUrl" />
+              <div class="result_palylist_name">{{ item.name }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="result_mvs" v-if="type === resultMenuList[2].type">
+          <div v-for="item in resultMvs" :key="item">
+            <div class="result_mvs_item">
+              <!-- playCount -->
+              <div class="result_mvs_image_playCount">
+                <el-image class="result_mvs_image" :src="item.cover" />
+                <div class="result_mvs_wrap">
+                  <div>
+                    <i class="el-icon-video-play" />
+                  </div>
+                  <div class="result_mvs_playCount">
+                    {{
+                      item.playCount / 10000 > 10
+                        ? parseInt(item.playCount / 10000) + "万"
+                        : item.playCount
+                    }}
+                  </div>
+                </div>
+                <div class="result_mvs_wrap2">
+                  <div class="result_mvs_time">
+                    {{
+                      (parseInt(parseInt(item.duration / 1000)) / 60 > 10
+                        ? parseInt(item.duration / 1000) / 60
+                        : "0" + parseInt(parseInt(item.duration / 1000) / 60)) +
+                      ":" +
+                      (parseInt(item.duration / 1000) -
+                        parseInt(parseInt(item.duration / 1000) / 60) * 60 >
+                      10
+                        ? parseInt(item.duration / 1000) -
+                          parseInt(parseInt(item.duration / 1000) / 60) * 60
+                        : "0" +
+                          (parseInt(item.duration / 1000) -
+                            parseInt(parseInt(item.duration / 1000) / 60) * 60))
+                    }}
+                  </div>
+                </div>
+              </div>
+              <div class="result_mvs_name">{{ item.name }}</div>
+              <div class="result_mvs_auth">{{ item.artistName }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="search_result_page" v-if="keywords !== ''">
+          <el-pagination
+            @current-change="currentChange"
+            background
+            layout="prev, pager, next"
+            :total="total"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script lang="ts">
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import { search, addOnePlayList } from "@/api/music";
+import myMessage from "@/utils/common";
+export default defineComponent({
+  name: "",
+  components: {},
+  props: {},
+  setup() {
+    const state = reactive({
+      resultMenuList: [
+        {
+          type: "1",
+          name: "歌曲",
+        },
+        {
+          type: "1000",
+          name: "歌单",
+        },
+        {
+          type: "1004",
+          name: "MV",
+        },
+      ],
+      type: "1",
+      total: 0,
+      offset: 0,
+      limit: 10,
+      keywords: "",
+      resultTableData: [],
+      resultPlaylists: [],
+      resultMvs: [],
+    });
+    const methods = {
+      handleSelect(e) {
+        state.type = e;
+        if (e === state.resultMenuList[2].type) {
+          state.limit = 8;
+        } else {
+          state.limit = 10;
+        }
+        request.searchMusic();
+      },
+      currentChange(num) {
+        state.offset = (num - 1) * state.limit;
+        request.searchMusic();
+      },
+      addOnePlayList(row) {
+        addOnePlayList({
+          id: row.id,
+          author: row.artists[0].name,
+          title: row.name,
+        });
+      },
+      watchLocalStorage() {
+        window.addEventListener("setItemEvent2", (e: any) => {
+          if (e.key === "keywords") {
+            state.keywords = e.newValue;
+            request.searchMusic();
+          }
+        });
+      },
+    };
+    onMounted(() => {
+      methods.watchLocalStorage();
+      let kw = localStorage.getItem("keywords");
+      if (kw === undefined || kw === null || kw === "") {
+        myMessage("请输入关键字搜索", null, 1, null, null);
+        return;
+      }
+      state.keywords = kw;
+      request.searchMusic();
+    });
+    const request = {
+      searchMusic() {
+        search({
+          keywords: state.keywords,
+          type: state.type,
+          limit: state.limit,
+          offset: state.offset,
+        }).then((res: any) => {
+          if (res.code === 200) {
+            switch (state.type) {
+              case state.resultMenuList[0].type:
+                state.resultTableData = res.result.songs;
+                state.total = res.result.songCount;
+                return;
+              case state.resultMenuList[1].type:
+                state.resultPlaylists = res.result.playlists;
+                state.total = res.result.playlistCount;
+                return;
+              case state.resultMenuList[2].type:
+                state.resultMvs = res.result.mvs;
+                state.total = res.result.mvCount;
+                return;
+            }
+          }
+        });
+      },
+    };
+    return { ...methods, ...toRefs(state) };
+  },
+});
+</script>
+<style scoped>
+.body_img {
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
+  background-color: gray;
+}
+.result_body {
+  padding: 8vh 14vw 0 14vw;
+}
+.result_top {
+  display: flex;
+  align-items: baseline;
+}
+.result_keywords {
+  color: #ffffff;
+}
+.result_total {
+  height: 100%;
+  color: lightpink;
+  margin-left: 10px;
+}
+:deep(.el-menu-item) {
+  font-size: 18px;
+  padding: 2vh 0;
+  margin-right: 3vw;
+  height: 100%;
+  line-height: 100%;
+}
+:deep(.el-menu.el-menu--horizontal) {
+  border-bottom: none;
+}
+:deep(.el-menu .el-menu-item:hover) {
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 100%
+  ) !important;
+}
+:deep(.el-divider--horizontal) {
+  margin: -2px 0 0 0;
+  z-index: -1;
+  height: 2px;
+}
+.result_table {
+  margin-top: 2vh;
+}
+.result_playlists {
+  width: 72vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.result_palylist_item {
+  padding: 3vh 0.7vw 0 0.7vw;
+}
+.result_palylist_image {
+  border-radius: 0.5vw;
+  width: 13vw;
+  height: 13vw;
+}
+.result_palylist_name {
+  color: #fff;
+  width: 13vw;
+  font-size: 0.9vw;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.result_mvs {
+  width: 72vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+.result_mvs_item {
+  padding: 3vh 0.5vw 0 0.5vw;
+}
+.result_mvs_image {
+  border-radius: 0.5vw;
+  width: 17vw;
+  min-height: 9.55vw;
+}
+.result_mvs_name {
+  color: #fff;
+  width: 17vw;
+  font-size: 0.9vw;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.result_mvs_auth {
+  color: deeppink;
+  width: 17vw;
+  font-size: 0.9vw;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.result_mvs_image_playCount {
+  position: relative;
+}
+.result_mvs_wrap {
+  position: absolute;
+  color: #fff;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-content: center;
+  font-size: 15px;
+  padding-right: 5px;
+  padding-top: 2px;
+}
+.result_mvs_wrap2 {
+  position: absolute;
+  color: #fff;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-content: center;
+  font-size: 15px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+}
+.result_mvs_playCount,
+.result_mvs_time {
+  color: #fff;
+}
+.result_mvs_playCount {
+  margin-left: 5px;
+}
+
+.search_result_page {
+  padding: 3vh 0 10vh 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

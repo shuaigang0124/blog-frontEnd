@@ -28,7 +28,7 @@
           ref="singleTableRef"
           :data="tableData"
           highlight-current-row
-          @row-click="addOnePlayList"
+          @row-dblclick="addOnePlayList"
         >
           <el-table-column type="index" width="50" />
           <el-table-column property="album.picUrl" width="80">

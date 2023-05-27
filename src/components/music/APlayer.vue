@@ -5,7 +5,7 @@
 <script lang="ts">
 import APlayer from "aplayer";
 import "../../css/APlayer.min.css";
-import { onBeforeMount, PropType } from "@vue/runtime-core";
+import { PropType } from "@vue/runtime-core";
 import {
   defineComponent,
   nextTick,
@@ -171,6 +171,7 @@ export default defineComponent({
               )
             );
             ap.list.switch(ap.list.audios.length - 1);
+            ap.play();
           }
           // 替换当前播放列表
           if (e.key === "audioList") {
@@ -193,8 +194,8 @@ export default defineComponent({
               )
             );
             ap.list.switch(0);
+            ap.play();
           }
-          ap.play();
         });
       },
       async setMyMusicList() {
@@ -303,14 +304,6 @@ export default defineComponent({
             pic: "https://p1.music.126.net/wSMfGvFzOAYRU_yVIfquAA==/2946691248081599.jpg",
             lrc: "[00:00.000] 作词 : 郭顶\n[00:01.000] 作曲 : 郭顶\n[00:02.000] 编曲 : 郭顶\n[00:03.000] 监制 : 郭顶\n[00:19.200]着迷于你眼睛\n[00:21.510]\n[00:22.910]银河有迹可循\n[00:25.040]\n[00:26.160]穿过时间的缝隙\n[00:28.980]\n[00:29.740]它依然真实地\n[00:32.750]\n[00:33.460]吸引我轨迹\n[00:36.230]\n[00:40.440]这瞬眼的光景\n[00:42.950]\n[00:43.970]最亲密的距离\n[00:46.550]\n[00:47.470]沿着你皮肤纹理\n[00:51.380]走过曲折手臂\n[00:54.040]\n[00:54.960]做个梦给你\n[00:57.230]\n[00:58.580]做个梦给你\n[01:01.249]\n[01:03.668]等到看你银色满际\n[01:06.260]\n[01:07.069]等到分不清季节更替\n[01:11.590]\n[01:12.938]才敢说沉溺\n[01:16.078]\n[01:19.980]还要多远才能进入你的心\n[01:26.200]\n[01:27.170]还要多久才能和你接近\n[01:33.310]\n[01:34.328]咫尺远近却\n[01:36.780]无法靠近的那个人\n[01:42.000]也等着和你相遇\n[01:47.610]\n[01:49.030]环游的行星\n[01:51.750]\n[01:52.269]怎么可以\n[01:55.170]\n[01:56.129]拥有你\n[01:57.989]\n[02:13.728]这瞬眼的光景\n[02:16.269]\n[02:17.119]最亲密的距离\n[02:19.679]\n[02:20.628]沿着你皮肤纹理\n[02:24.310]走过曲折手臂\n[02:27.359]\n[02:28.060]做个梦给你\n[02:30.478]\n[02:31.579]做个梦给你\n[02:34.619]\n[02:36.589]等到看你银色满际\n[02:40.288]等到分不清季节更替\n[02:44.660]\n[02:45.869]才敢说沉溺\n[02:53.138]还要多远才能进入你的心\n[02:59.399]\n[03:00.329]还要多久才能和你接近\n[03:06.478]\n[03:07.429]咫尺远近却\n[03:09.560]无法靠近的那个人\n[03:15.128]也等着和你相遇\n[03:20.638]\n[03:21.829]环游的行星\n[03:24.739]\n[03:25.388]怎么可以\n[03:29.079]拥有你\n[03:35.530]\n[04:05.218]还要多远才能进入你的心\n[04:10.869]\n[04:11.929]还要多久才能和你接近\n[04:18.028]\n[04:19.050]咫尺远近却无法靠近的那个人\n[04:26.687]要怎么探寻\n[04:30.319]要多么幸运\n[04:33.538]才敢让你发觉你并不孤寂\n[04:39.778]\n[04:40.509]当我还可以再跟你飞行\n[04:46.579]\n[04:47.690]环游是无趣\n[04:50.569]\n[04:51.339]至少可以\n[04:54.639]\n[04:55.240]陪着你\n",
           },
-          // {
-          //   id: 411214279,
-          //   author: "许嵩",
-          //   title: "雅俗共赏",
-          //   url: "http://m802.music.126.net/20230526212139/8c3b58f8ad33814d0313055e148fb944/jd-musicrep-ts/1450/629b/6a74/2f94daf7898eb1dff8ec22223d48f118.mp3",
-          //   pic: "https://p1.music.126.net/Wcs2dbukFx3TUWkRuxVCpw==/3431575794705764.jpg",
-          //   lrc: "[00:00.000] 作词 : 许嵩\n[00:00.100] 作曲 : 许嵩\n[00:00.200] 编曲 : 郑楠\n[00:00.300]\n[00:15.150]是否每一部戏都看得完整场\n[00:22.050]是否每一天过得都有多难忘\n[00:29.000]表情迟钝可能因为比较爱想\n[00:35.950]不擅长眉目表达\n[00:41.710]总在盼望 总在失望\n[00:45.160]日子还不都这样\n[00:48.660]俗的无畏 雅的轻狂\n[00:52.160]还不都是一副臭皮囊\n[00:58.960]他们说快写一首情歌雅俗共赏\n[01:03.408]落笔传神还要容易传唱\n[01:06.810]上得厅堂也下得厨房\n[01:09.908]就像我一直在找的姑娘\n[01:13.768]快写一首情歌雅俗共赏\n[01:17.268]打完字谜还要接着打榜\n[01:20.720]如果胡同弄堂全都播放\n[01:23.920]气韵里居然添了些孤芳自赏\n[01:46.000]是否每一场美梦醒来都很爽\n[01:52.360]是否每一次成熟都徒增了业障\n[01:59.209]比痛和痒更多的\n[02:02.459]是不痛不痒\n[02:06.408]所以我爱进剧场\n[02:12.158]总在盼望 总在失望\n[02:15.658]日子还不都这样\n[02:18.959]俗的无畏 雅的轻狂\n[02:22.508]还不都是一副臭皮囊\n[02:28.718]他们说快写一首情歌雅俗共赏\n[02:33.818]落笔传神还要容易传唱\n[02:37.318]上得厅堂也下得厨房\n[02:40.369]就像我一直在找的姑娘\n[02:44.270]快写一首情歌雅俗共赏\n[02:47.718]打完字谜还要接着打榜\n[02:51.179]如果胡同弄堂全都播放\n[02:54.330]气韵里居然添了些孤芳自赏\n[03:02.080]谁的故事有营养\n[03:05.179]大俗或大雅的都在理直气壮\n[03:09.080]洒狗血或白雪的现场\n[03:12.929]都邀我观赏\n[03:14.528]还真是大方\n[03:19.128]快写一首情歌雅俗共赏\n[03:22.489]落笔传神还要容易传唱\n[03:25.938]上得厅堂也下得厨房\n[03:29.389]就像我一直在找的姑娘\n[03:32.990]有没有一种生活雅俗共赏\n[03:36.389]情节起伏跌宕让人向往\n[03:39.889]满纸荒唐中窥见满脸沧桑\n[03:43.188]触到神经就要懂得鼓掌\n[03:46.538]别说一不在乎二没期望\n[03:49.998]太超脱 中枪中奖感觉会一样\n",
-          // },
           {
             id: 536483221,
             author: "邹念慈",
@@ -327,14 +320,6 @@ export default defineComponent({
             pic: "https://p1.music.126.net/UuhOIZRvk55cqjVeZB3Omw==/18813743464544638.jpg",
             lrc: "[00:00.00] 作词 : 刘雨知\n[00:00.20] 作曲 : 刘雨知\n[00:00.40]混音：EThan\n[00:00.70]编曲 溪风\n[00:01.00]吉他：尉迟春晓\n[00:01.20]\n[00:01.72]我又想你了 我不敢闭上双眼\n[00:10.34]全世界都是你的笑脸\n[00:17.27]我又想你了 穿梭在我们都熟悉的画面\n[00:25.44]一遍一遍 又是一遍\n[00:29.40]在这没有你的世界\n[00:47.58]时钟滴答滴答的提醒我逝去的年华\n[00:55.16]多想是一个孩子又怕 你怪我 太傻\n[01:02.43]眼泪 并不挣扎 爱你爱到不会讲话\n[01:10.40]多想再勇敢一次 做个真正的傻瓜\n[01:17.51]全世界 都知道 你对我有多重要\n[01:25.70]最后只剩下自己 只剩下回忆\n[01:32.68]我又想你了 我不敢闭上双眼\n[01:40.91]全世界都是你的笑脸\n[01:47.48]我又想你了 穿梭在我们都熟悉的画面\n[01:55.54]一遍一遍 又是一遍\n[01:59.56]在这没有你的世界\n[02:16.82]听一首 我们都喜欢的歌\n[02:25.60]前奏刚响起 早已挂满泪滴\n[02:33.23]尝一口 我们都喜欢的味道\n[02:40.58]还没入口 那滋味已变苦\n[02:48.51]这是最后的画面 这是最后的味觉\n[02:55.27]最后只剩下孤单 只剩下想念\n[03:02.54]我又想你了 我不敢闭上双眼\n[03:10.32]全世界都是你的笑脸\n[03:17.80]我又想你了 穿梭在我们都熟悉的画面\n[03:26.00]一遍一遍 又是一遍\n[03:29.71]在这没有你的世界\n[03:40.02]这世界\n[03:47.94]我又想你了 我不敢闭上双眼\n[03:55.65]全世界都是你的笑脸\n[04:02.41]我又想你了 穿梭在我们都熟悉的画面\n[04:10.52]一遍一遍 又是一遍\n[04:14.43]在这没有你的世界\n",
           },
-          // {
-          //   id: 1807799505,
-          //   author: "告五人",
-          //   title: "唯一",
-          //   url: "http://m702.music.126.net/20230526203719/623cd0124f7533761c761882beed0183/jd-musicrep-ts/1753/71cb/8710/ab72487e9fb7ad8b510883ede7e562b0.mp3",
-          //   pic: "https://p1.music.126.net/5URIeP6GjMFg_hKhGloNTA==/109951165585701063.jpg",
-          //   lrc: "[00:00.000] 作词 : 潘云安\n[00:01.000] 作曲 : 潘云安\n[00:02.000] 编曲 : 告五人\n[00:03.000] 制作人 : 陈君豪/韩立康/黄文萱 Ziya Huang\n[00:29.299]你真的懂唯一 的定义 并不简单如呼吸\n[00:42.732]你真的希望你能厘清 若没交心怎么说明\n[00:54.732]我真的爱你\n[01:01.731]句句不轻易\n[01:08.634]眼神中飘移\n[01:14.566]总是在关键时刻清楚洞悉\n[01:22.314]你的不坚定\n[01:28.299]配合我颠沛流离\n[01:35.900]死去中清醒\n[01:41.932]明白你背着我聪明\n[02:08.650]你真的懂唯一的定义 不只是如影随形\n[02:22.151]你真的希望你能厘清 闭上眼睛 用心看清\n[02:33.949]我真的爱你\n[02:41.014]没人能比拟\n[02:47.916]眼神没肯定\n[02:53.782]总是在关键时刻清楚洞悉\n[03:01.498]你的不坚定\n[03:07.400]配合我颠沛流离\n[03:15.165]死去中清醒\n[03:21.098]明白你背着我聪明\n[03:28.866]爱本质无异 是因为人多得拥挤\n[03:42.431]你不想证明 证明我是你唯一 证明我是你唯一\n",
-          // },
           {
             id: 29750751,
             author: "陈达伟",
@@ -367,14 +352,6 @@ export default defineComponent({
             pic: "https://p2.music.126.net/eP3MlGux63ndRJJOjk98Rw==/109951166585796989.jpg",
             lrc: "[00:00.000] 作词 : 海龟先生\n[00:01.000] 作曲 : 海龟先生\n[00:27.200]我早就肯定我的身体\n[00:29.869]被罪恶领入死亡里\n[00:33.149]可从来没有想过\n[00:34.689]现在还能这样\n[00:36.509]散发出芬芳气息\n[00:40.339]这根本还是一个浑浊的夜\n[00:43.649]一直还有期待\n[00:46.899]可这样一个\n[00:48.349]骄傲自大的肢体\n[00:49.899]怎么才能找到你\n[00:53.399]其实你一直就在这里\n[00:57.309]从来就没离开过我\n[01:00.119]放下了自己\n[01:02.509]我才可以去认识你\n[01:06.529]现在我知道你在这里\n[01:11.600]等着我再勇敢一点\n[01:13.419]放下了自己\n[01:15.890]我这就去 去拥抱你\n[01:18.990]她叫做玛卡瑞纳\n[01:22.179]我叫她玛卡瑞纳\n[01:25.679]这就是玛卡瑞纳\n[01:29.590]她叫做玛卡瑞纳\n[01:32.699]\n[01:34.988]我早就肯定我的身体\n[01:38.499]被罪恶领入死亡里\n[01:41.519]可从来没有想过\n[01:43.900]现在还能这样\n[01:44.869]散发出芬芳气息\n[01:48.660]这根本还是一个浑浊的夜\n[01:52.990]一直还有期待\n[01:55.890]可这样一个\n[01:56.809]骄傲自大的肢体\n[01:58.399]怎么才能找到你\n[02:01.599]其实你一直就在这里\n[02:05.669]从来就没离开过我\n[02:08.549]放下了自己\n[02:10.899]我才可以去认识你\n[02:14.910]现在我知道你在这里\n[02:19.190]等着我再勇敢一点\n[02:22.100]放下了自己\n[02:24.120]我这就去 去拥抱你\n[02:27.790]她叫做玛卡瑞纳\n[02:33.980]我叫她玛卡瑞纳\n[02:40.480]这就是玛卡瑞纳\n[02:44.350]她叫做玛卡瑞纳\n[02:47.370]我叫她玛卡瑞纳\n[02:51.100]这就是玛卡瑞纳\n[03:08.369]其实你一直就在这里\n[03:12.510]从来就没离开过我\n[03:15.899]放下了自己\n[03:17.700]我才可以去认识你\n[03:21.700]现在我知道你在这里\n[03:25.859]等着我再勇敢一点\n[03:28.690]放下了自己\n[03:30.890]我这就去去拥抱你\n[03:33.899]她叫做玛卡瑞纳\n[03:37.600]我叫她玛卡瑞纳\n[03:40.529]这就是玛卡瑞纳\n[03:43.850]她叫做玛卡瑞纳\n[03:45.390]\n[03:46.820]她叫做玛卡瑞纳\n[03:50.170]她叫做玛卡瑞纳\n[03:54.160]我叫她玛卡瑞纳\n[03:56.820]这就是玛卡瑞纳\n[04:00.530]\n",
           },
-          // {
-          //   id: 156717,
-          //   author: "伍佰 & China Blue",
-          //   title: "被动(Live)",
-          //   url: "http://m802.music.126.net/20230526204810/0523b093c7166b5c8b220c1a01677c0d/jd-musicrep-ts/80ba/833b/a008/6d79b74e9b79a83af3152a0c4607a29a.mp3",
-          //   pic: "https://p1.music.126.net/obqsKxAiHB4d2UC5hB2Y_A==/109951163346522299.jpg",
-          //   lrc: "[00:00.00] 作词 : 潘丽玉\n[00:01.00] 作曲 : 伍佰\n[00:02.00] 编曲 : 伍佰 & China Blue\n[00:03.00] 制作人 : 伍佰 & China Blue\n[00:09.61]\n[00:37.83]我可以很久 不和你联络\n[00:41.55]任日子一天天这么过\n[00:44.89]让自己忙碌 可以当作借口\n[00:48.64]逃避想念你的种种软弱\n[00:51.69]\n[00:51.98]我可以学会 对你很冷漠\n[00:58.90]为何学不会 将爱没收\n[00:59.04]面对你是对我 最大的折磨\n[01:02.73]这些年始终没有 对你说\n[01:07.45]\n[01:10.05]爱你越久 我越被动\n[01:13.06]只因你的爱 居无定所\n[01:17.01]是你让我的心 慢慢退缩\n[01:20.19]退到你看不见的角落\n[01:23.22]\n[01:23.89]爱你越久 我越被动\n[01:27.26]只因我的爱 不再为你挥霍\n[01:31.02]是我让我的心 失去自由\n[01:34.45]却再也没有勇气放纵\n[01:40.63]Guitar Solo....\n[02:12.45]我可以很久 不和你联络\n[02:16.20]任日子一天天这么过\n[02:19.52]让自己忙碌 可以当作借口\n[02:23.15]逃避想念你的种种软弱\n[02:26.29]\n[02:26.62]我可以学会 对你很冷漠\n[02:30.11]为何学不会 将爱没收\n[02:33.46]面对你是对我 最大的折磨\n[02:37.04]这些年始终没有 对你说\n[02:42.02]\n[02:44.27]爱你越久 我越被动\n[02:47.51]只因你的爱 居无定所\n[02:51.19]是你让我的心 慢慢退缩\n[02:54.14]退到你看不见的角落\n[02:57.29]\n[02:58.11]爱你越久 我越被动\n[03:01.20]只因我的爱 不再为你挥霍\n[03:04.99]是我让我的心 失去自由\n[03:08.26]却再也没有勇气放纵\n[03:13.62]\n[03:15.36]爱你越久 我越被动\n[03:18.41]只因你的爱 居无定所\n[03:22.15]是你让我的心 慢慢退缩\n[03:25.33]退到你看不见的角落\n[03:28.78]\n[03:29.15]爱你越久 我越被动\n[03:32.22]只因我的爱 不再为你挥霍\n[03:35.96]是我让我的心 失去自由\n[03:39.26]却再也没有勇气放纵\n[03:45.21]没有勇气放纵\n",
-          // },
           {
             id: 1895661317,
             author: "柳爽",
@@ -439,6 +416,86 @@ export default defineComponent({
             pic: "https://p1.music.126.net/rEXR0jCHBpm9guzfBAZPLA==/109951166656460231.jpg",
             lrc: "[00:00.00] 作词 : Chen Shao Qi\n[00:01.00] 作曲 : 劉宏基\n[00:11.68]\n[00:17.00]Dear Leslie\n[00:23.72]我想知道你好吗\n[00:29.19]心仍然牵挂 情难自控\n[00:35.95]那绝代和永远芳华\n[00:39.80]\n[00:42.31]念著当年情\n[00:49.86]每首歌再细心倾听\n[00:55.57]多年来苦拼 沉默是天性\n[01:01.67]你就是永恆明星\n[01:06.23]\n[01:08.32]从画面寻回 时光的印记\n[01:14.64]回忆总停留下午三点记起\n[01:21.24]蜻蜓仍高飞 爱慕没放弃\n[01:27.75]多么想你 你在何地\n[01:32.53]\n[01:35.30]当风吹起某年某一刻不忍远离\n[01:40.93]期待转移时空宝荣耀辉又重遇故地\n[01:48.23]想起因你笑容与歌曾感动过\n[01:53.81]然后我 何用再得到更多\n[02:00.23]\n[02:01.15]当光影中再重播出经典的传奇\n[02:06.77]期待霸王重生悲情虞姬还会在献技\n[02:14.08]想起跟你某年某天曾经合照\n[02:19.76]年月有了你平凡却重要\n[02:24.95]\n[02:42.60]不改的沉迷\n[02:49.75]你的一切多么宝贵\n[02:55.50]当年如花俏 迷住十二少\n[03:02.09]看日落 曾照遍巴黎\n[03:06.30]\n[03:08.49]别后的流年\n[03:15.71]世间早有太多改变\n[03:21.47]冲绳无恋战 怀念流星语\n[03:27.93]你亦是永恆如昨天\n[03:32.74]\n[03:34.43]从画面寻回 时光的印记\n[03:40.85]回忆总停留下午三点记起\n[03:47.38]蜻蜓仍高飞 爱慕没放弃\n[03:53.86]多么想你 你在何地\n[03:59.33]\n[04:00.80]当风吹起某年某一刻不忍远离\n[04:06.40]期待转移时空宝荣耀辉又重遇故地\n[04:13.71]想起因你笑容与歌曾感动过\n[04:19.41]然后我 何用再得到更多\n[04:25.98]\n[04:26.65]当光影中再重播出经典的传奇\n[04:32.38]期待霸王重生悲情虞姬还会在献技\n[04:39.66]想起跟你某年某天曾经合照\n[04:45.37]年月有了你平凡却重要\n[04:51.92]没有脚的鸟 平静已睡了\n[05:01.92]\n[05:15.71]\n",
           },
+          {
+            id: 29775439,
+            author: "Nirvana",
+            title: "Seasons In The Sun",
+            url: "https://shuaigang.top/gsg/music/SeasonsInTheSun.mp3",
+            pic: "https://p2.music.126.net/U6hJgqXuFLEGkgJEMcoagg==/109951168229718877.jpg",
+            lrc: "[00:02.110]Go Krist\n[00:13.750]Goodbye my friend its hard to die\n[00:18.750]when all the birds are singing in the sky\n[00:24.400]And all the flowers are everywhere\n[00:29.790]Pretty girls are everywhere\n[00:34.290]Think of me and I'll be there\n[00:43.690]Goodbye, Papa, please pray for me.\n[00:50.090]I was the black sheep of the family.\n[00:55.190]And I don't know the . all these words.\n[01:00.810]I have boggy turds.\n[01:06.100]With my B.B. gun I would kill birds.\n[01:11.260]We had joy. We had fun.\n[01:15.860]We had seasons in the sun,\n[01:18.610]but the hills that we climb\n[01:21.340]were just seasons out of time.\n[01:27.560]All our lives, we had fun.\n[01:30.420]We had seasons in the sun,\n[01:32.930]but the hill that we reached\n[01:35.300]were just starfish on the beach\n[01:44.110]Goodbye Michelle my little one\n[01:51.960]I was the apple of the shiny sun.\n[01:57.560]And la la la la hill we reach.\n[02:02.560]All my tears are salty.\n[02:07.870]I think now I was taught to weep.\n[02:14.840]We had joy. We had fun.\n[02:17.860]We had seasons in the sun,\n[02:20.380]but the hills that we climb\n[02:23.040]were just seasons out of time.\n[02:29.570]We had joy. We had fun.\n[02:32.290]We had seasons in the sun,\n[02:34.980]but the hill on the beach\n[02:37.780]were just starfish on the beach\n[02:44.120]We had joy. We had fun.\n[02:46.680]We had seasons in the sun,\n[02:49.250]but the hills that we climb\n[02:51.820]were just seasons out of time.\n[02:58.520]I've had joy. We had fun.\n[03:01.210]We had seasons in the sun,\n[03:03.810]but the stars that we reached\n[03:06.320]were just starfish on the beach\n",
+          },
+          {
+            id: 21253903,
+            author: "Maroon 5",
+            title: "Goodnight Goodnight",
+            url: "https://shuaigang.top/gsg/music/GoodnightGoodnight.mp3",
+            pic: "https://p2.music.126.net/Lfrhyy1Lo4RdMobJW6RY2Q==/109951166055616070.jpg",
+            lrc: "[00:00.00] 作词 : Adam Levine\n[00:01.00] 作曲 : Adam Levine\n[00:10.89]You left me hanging from a thread\n[00:13.34]We once were from together\n[00:15.69]I lick my wounds but I can\n[00:17.90]Never see them getting better\n[00:20.30]Something's gotta change\n[00:22.85]Things cannot stay the same\n[00:25.75]Her hair was pressed against her face\n[00:28.51]Her eyes were ran with anger\n[00:30.86]Enraged by things unsaid\n[00:32.97]And empty beds and bad behaviour\n[00:35.51]Something's gotta change\n[00:38.12]It must be rearranged oh\n[00:42.92]I'm sorry I did not mean\n[00:48.02]To hurt my little girl\n[00:52.93]It's beyond me I cannot carry\n[00:58.23]The weight of a heavy world\n[01:02.38]So goodnight goodnight goodnight goodnight\n[01:08.09]Goodnight goodnight goodnight goodnight\n[01:13.34]Goodnight hope that things work out all right yeah\n[01:23.04]Whoa oh\n[01:29.09]The room was silent as we\n[01:31.14]All tried so hard to remember\n[01:34.04]The way it feels to be alive\n[01:36.74]The day that he first met her\n[01:38.79]Something's gotta change\n[01:41.19]Things cannot stay the same\n[01:44.29]You make me think of someone wonderful\n[01:47.25]But I can't place her\n[01:49.25]I wake up every morning\n[01:51.35]Wishing one more time to face her\n[01:53.90]Something's gotta change\n[01:56.45]It must be rearranged oh\n[02:01.50]I'm sorry I did not mean\n[02:06.20]To hurt my little girl\n[02:11.30]It's beyond me I cannot carry\n[02:16.55]The weight of a heavy world\n[02:20.85]So goodnight goodnight goodnight goodnight\n[02:26.10]Goodnight goodnight goodnight goodnight\n[02:31.21]Goodnight hope that things work out all right\n[02:37.86]So much to love\n[02:39.26]So much to learn\n[02:41.46]But I won't be there to teach you oh\n[02:47.67]I know I can be close\n[02:51.62]But I try my best to reach you\n[02:55.57]I'm so sorry I did not mean\n[03:01.87]To hurt my little girl\n[03:06.22]It's beyond me I cannot carry\n[03:12.07]The weight of a heavy world\n[03:15.82]So goodnight goodnight goodnight goodnight\n[03:21.77]Goodnight goodnight goodnight goodnight\n[03:27.08]Goodnight goodnight goodnight goodnight\n[03:31.73]Goodnight hope that things work out all right yeah\n[03:42.13]Whoa oh…Yeah…\n",
+          },
+          {
+            id: 1981587929,
+            author: "黑裙子",
+            title: "Min (미는 남자)",
+            url: "https://shuaigang.top/gsg/music/Min.mp3",
+            pic: "https://p2.music.126.net/UCpvmCqV-dn1YO10rMWPgA==/109951167879559042.jpg",
+            lrc: "[00:00.000] 作词 : 黑裙子\n[00:01.000] 作曲 : 黑裙子\n[00:30.022]민 너는 나의 미는 남자\n[00:36.747]이맘때 난 항상 전화를 해\n[00:44.391]민 니가 연락이 안되면 나는\n[00:52.189]무작정 너의 집을 찾아가\n[00:59.413]민 너의 어두운 창문에\n[01:06.778]늘 하던대로 노크를 해\n[01:14.342]민 너의 발소리가 들려 그럼\n[01:22.449]내 마음도 부풀어 오르지\n[01:44.350]너 없이는 내 하루가 길고\n[01:48.544]너 없이는 나는 재미없고\n[01:52.525]빈손으로도 널 볼 순 있지만\n[01:57.037]그런적은 없었지\n[01:59.654]민 너의 방안엔 오늘도\n[02:06.833]온갖 쓰레기가 모여있어\n[02:14.477]민 내가 어쩌면 그중에 제일\n[02:21.895]크고 오래된 것 같아\n[02:29.566]민 나는 한번도 안 밀려\n[02:36.705]여유가 있어서가 아니야\n[02:44.521]민 우리 약속이 먼저야\n[02:51.835]알잖아 나는 내일 또 올꺼야\n[02:59.924]Min, min, min, my man\n[03:03.391]Min my man, you are my main man\n[03:07.472]Min, min, you are my main man\n[03:14.456]Min, min, min, my man\n[03:18.378]Min my man, you are my main man\n[03:22.398]Min, min, you are my main man\n[03:29.692](굵게 말은 더치는 시계방향으로)\n[03:37.111](굵게 말은 더치는 시계방향으로)\n[03:44.510](굵게 말은 더치는 시계방향으로)\n[03:52.286](굵게 말은 더치는 시계방향으로)\n",
+          },
+          {
+            id: 28999945,
+            author: "The Midnight",
+            title: "Los Angeles",
+            url: "https://shuaigang.top/gsg/music/LosAngeles.mp3",
+            pic: "https://p2.music.126.net/LJgc0F-6JEJn_QgCJaE_WA==/109951167481008171.jpg",
+            lrc: "[00:00.00] 作词 : Tyler Lyle/Tim McEwan\n[00:01.00] 作曲 : Tyler Lyle/Tim McEwan\n[00:33.32]Fire on the beach\n[00:36.47]\n[00:37.68]Face to the sky\n[00:40.46]\n[00:41.14]The stars dance around like gods in the skies\n[00:48.60]\n[00:49.83]The gold silhouette\n[00:52.88]\n[00:53.60]You take off your clothes\n[00:57.37]\n[00:57.80]And my heart feels the weight of all I don't know\n[01:03.78]\n[01:06.37]Memories and mountain tops\n[01:09.47]\n[01:10.52]Drunk on Sunset Boulevard\n[01:13.51]\n[01:14.67]With the city of angels singing on\n[01:20.92]\n[01:22.89]Maybe this is just a dream\n[01:25.87]\n[01:26.57]And maybe we are still asleep\n[01:30.21]\n[01:30.40]But I, I will miss you when I'm gone\n[01:36.92]\n[01:40.17]Flickers of the canyon fire\n[01:44.86]Its hands raised like a gospel choir\n[01:48.23]\n[01:48.54]If we live forever, let us live forever tonight\n[01:52.84]\n[01:56.05]Helicopters against moonlight\n[02:00.00]\n[02:00.16]Our holy mother of the midnight\n[02:04.20]\n[02:04.39]And if we live forever, let us live forever tonight\n[02:11.31]\n[02:13.84]Tomorrow we'll go\n[02:17.07]\n[02:18.18]Back to our lives\n[02:21.43]\n[02:22.10]With sand in our skin and sun in our eyes\n[02:27.84]\n[02:30.47]But I know the truth\n[02:33.67]\n[02:34.06]I've seen the signs\n[02:37.71]\n[02:38.10]And I've seen the golden gods in disguise\n[02:44.34]\n[02:46.86]Memories and mountain tops\n[02:50.96]Drunk on Sunset Boulevard\n[02:54.89]\n[02:55.00]With the city of angels singing on\n[03:01.67]\n[03:03.46]Maybe this is just a dream\n[03:07.00]\n[03:07.43]And maybe we are still asleep\n[03:11.52]\n[03:11.76]But I, I will miss you when I'm gone\n[03:17.71]\n[03:20.89]Flickers of the canyon fire\n[03:24.24]\n[03:24.55]Its hands raised like a gospel choir\n[03:28.19]\n[03:28.38]If we live forever, let us live forever tonight\n[03:33.51]\n[03:37.27]Helicopters against moonlight\n[03:41.07]\n[03:41.44]Our holy mother of the midnight\n[03:46.67]And if we live forever, let us live forever tonight\n[03:50.95]\n[03:52.14]Flickers of the canyon fire\n[04:28.05]Its hands raised like a gospel choir\n[04:35.60]\n[04:36.08]If we live forever, let us live forever tonight\n[04:42.29]\n[04:43.91]Helicopters against moonlight\n[04:47.97]\n[04:48.60]Our holy mother of the midnight\n[04:51.94]\n[04:52.10]And if we live forever, let us live forever tonight\n[04:57.26]\n[05:01.04]Flickers of the canyon fire\n[05:04.32]\n[05:04.46]Its hands raised like a gospel choir\n[05:08.47]\n[05:08.72]If we live forever, let us live forever tonight\n[05:13.92]\n[05:17.67]Helicopters against moonlight\n[05:20.97]\n[05:21.13]Our holy mother of the midnight\n[05:25.26]\n[05:25.41]And if we live forever, let us live forever tonight\n[05:32.54]\n",
+          },
+          {
+            id: 1957783310,
+            author: "徐佳莹",
+            title: "在意这件事",
+            url: "https://shuaigang.top/gsg/music/zyzjs.mp3",
+            pic: "https://p2.music.126.net/LkwTIyU7Zo853W6LUfYpag==/109951167574776183.jpg",
+            lrc: "[00:00.00] 作词 : 葛大为\n[00:01.00] 作曲 : 徐佳莹/陈君豪\n[00:12.00]在对的时间\n[00:15.63]说错了话\n[00:19.17]你也习惯我了吧\n[00:25.91]\n[00:25.92]还没有到家\n[00:29.64]太多想象\n[00:33.15]不跳舞的星期天\n[00:38.36]\n[00:38.37]等咖啡 等失眠\n[00:42.72]等你想聊天\n[00:45.33]等好久 等不见\n[00:49.59]词穷的瞬间\n[00:52.04]\n[00:52.05]我等等等\n[00:54.06]等等等\n[00:56.61]这样在意着\n[01:01.59]我都变坏了\n[01:14.66]\n[01:14.67]在错的时间\n[01:18.36]怎么表达\n[01:21.78]才能扳回一城呢\n[01:28.49]\n[01:28.50]你会开心吗\n[01:32.28]你的名字\n[01:35.79]被我唱成一首歌\n[01:41.00]\n[01:41.01]等红灯 等悠闲\n[01:45.36]等他没时间\n[01:47.91]等例外 等有天\n[01:52.20]永恒的对眼\n[01:54.62]\n[01:54.63]我在意着\n[01:56.58]在意着\n[01:59.25]不小心变成\n[02:04.23]你讨厌的人\n[02:33.14]\n[02:33.15]等红灯 等悠闲\n[02:37.50]等他没时间\n[02:40.08]等例外 等有天\n[02:44.37]永恒的对眼\n[02:46.82]\n[02:46.83]我在意着\n[02:48.78]在意着\n[02:51.42]不小心变成\n[02:56.43]你讨厌的人\n[03:00.71]\n[03:00.72]我在意着\n[03:02.67]在意着\n[03:05.37]不小心变成\n[03:10.32]我讨厌的人\n[03:11.43] 制作人 Producer：徐佳莹 LaLa Hsu / 陈君豪 Howe@成绩好工作室\n[03:12.55] 编曲 Arrangement：张晁毓 Dato Chang / 陈君豪 Howe\n[03:13.67] \n[03:14.79] 钢琴&风琴&美乐特朗电子琴 Piano&Organ&Mellotron：张晁毓 Dato Chang\n[03:15.91] 木吉他 Acoustic Guitar：董运昌 Yun-Chang Dong / 陈君豪 Howe\n[03:17.02] 贝斯 Bass：陈君豪 Howe\n[03:18.14] \n[03:19.26] 录音师 Recording Engineer：叶育轩 YuHsuan Yeh  / 沈冠霖 SHENB\n[03:20.38] 录音室 Recording Studio : BB Road Studio\n[03:21.50] 混音师 Mixing Engineer：陈君豪 Howe\n[03:22.61] 混音录音室 Mixing Studio：Nowhere Studio\n[03:23.73] 制作助理 Production Assistant：沈冠霖 SHENB / 林颉 Jie Lin\n",
+          },
+          {
+            id: 1452439191,
+            author: "李荣浩",
+            title: "在一起嘛好不好",
+            url: "https://shuaigang.top/gsg/music/zyqmhbh.mp3",
+            pic: "https://p1.music.126.net/JzsER44sOReoM6mR8XKnsw==/109951165182029540.jpg",
+            lrc: "[00:00.000] 作词 : 李荣浩\n[00:00.398] 作曲 : 李荣浩\n[00:00.796] 编曲 : 李荣浩\n[00:01.194] 制作人 : 李荣浩\n[00:01.595]\n[00:24.572]翻聊天记录等信息等着你回  困也不睡\n[00:36.844]昨天说我讨厌今天准时赴约  还嘟着嘴\n[00:47.673]该死的世界  是不是了解\n[00:55.009]被巷子里的灯照着的你好美\n[00:59.871]我牵你手就走  你生气却没有 松开手\n[04:04.592][01:12.475]我们在一起嘛好不好\n[04:10.786][01:18.721]我们在一起嘛好不好\n[04:18.862][01:26.574]昨天我说最喜欢的女孩子的性格\n[04:26.454][01:34.200]是你的\n[04:29.168][01:36.964]我们在一起嘛好不好\n[04:35.384][01:43.174]我们在一起嘛好不好\n[04:43.454][01:51.185]也许我话不会说也是一种深刻\n[02:01.523]在一起嘛好不好\n[02:27.798]以后的晚餐不再坐你对面  只坐你身边\n[02:39.860]最甜的爆米花放在最上面  你拿着方便\n[02:50.708]不懂怎么哄你  是因为我可以\n[02:58.051]一开始就不会让你感到生气\n[03:02.946]绝不会让你  受半点的委屈  我可以\n[03:15.551]我们在一起嘛好不好\n[03:21.595]我们在一起嘛好不好\n[03:29.753]昨天我说最喜欢的女孩子的性格\n[03:37.213]是你的\n[03:39.845]我们在一起嘛好不好\n[03:46.138]我们在一起嘛好不好\n[03:54.330]也许我话不会说也是一种深刻\n[04:53.927]在一起嘛好不好\n[04:55.709]\n[04:58.356]\n[04:58.396] 吉他 : 李荣浩\n[04:58.436] 贝斯 : 李荣浩\n[04:58.476] 和声编写 : 李荣浩\n[04:58.516] 和音 : 李荣浩\n[04:58.556] 录音师 : 李荣浩\n[04:58.596] 混音师 : 李荣浩\n[04:58.636] 音乐制作助理 : 青格乐\n[04:58.676] 录音工作室 : 北京一样音乐录音室\n[04:58.716] 混音室 : 北京一样音乐录音室\n[04:58.756] 母带制作 : 李荣浩\n[04:58.796] 母带工程师 : 周天澈\n[04:58.836] 母带后期处理录音室 : Studio21A\n",
+          },
+          {
+            id: 29122797,
+            author: "莫西子诗",
+            title: "妈妈的歌谣",
+            url: "https://shuaigang.top/gsg/music/mmdgy.mp3",
+            pic: "https://p2.music.126.net/GpLT2444p7gnCSxGRSMmPw==/6632254138997594.jpg",
+            lrc: "[00:09.731](黄昏的时候 )\n[00:15.530](ip ip)\n[00:18.325](看着天空回想故乡)\n[00:26.893](妈妈已做好今晚 最丰盛的晚餐 )\n[00:30.524](山河有回旋的时候)\n[00:34.965](妈妈的思念)\n[00:38.648](和那流水一样多)\n[00:43.585](hxi ip)\n[00:46.093](为何在山岗等待孩子)\n[00:52.519](hxi 回来  回来  回来)\n[00:59.703](ip hxox)\n[01:08.428]\n[01:46.488](天黑了)\n[01:50.145](思念如那山间的鸟儿)\n[01:54.351](从那山间飞来)\n[01:58.269](和那流水一样多)\n[02:03.024]\n[02:05.322](为何带着这么多的忧伤)\n[02:11.435](hxi  回来  回来  回来)\n[02:18.723](hxi  hxox)\n[02:23.660]\n[02:30.295](流水哦  你一路匆匆)\n[02:35.677](要去哪里)\n[02:43.069](为何带着这么多的忧伤)\n[02:47.667](妈妈)\n[02:52.238](我愿是你脚下的每一寸土)\n[02:56.000](让你轻轻)\n[03:01.773](踩在我背上)\n[03:09.584]",
+          },
+          // {
+          //   id: 1,
+          //   author: "",
+          //   title: "",
+          //   url: "",
+          //   pic: "",
+          //   lrc: "",
+          // },
+          // {
+          //   id: 1,
+          //   author: "",
+          //   title: "",
+          //   url: "",
+          //   pic: "",
+          //   lrc: "",
+          // },
+          // {
+          //   id: 1,
+          //   author: "",
+          //   title: "",
+          //   url: "",
+          //   pic: "",
+          //   lrc: "",
+          // }
         ];
         // for (let i = 0; i < state.myMusicList.length; i++) {
         //   let m = state.myMusicList[i];

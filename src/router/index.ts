@@ -64,9 +64,24 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/music/newsong.vue')
       },
       {
+        path: '/mvs',
+        name: 'mvs',
+        component: () => import('../views/music/mvs.vue')
+      }, 
+      {
+        path: '/result',
+        name: 'result',
+        component: () => import('../views/music/item/result.vue')
+      },  
+      {
+        path: '/playlist',
+        name: 'playlist',
+        component: () => import('../views/music/item/playlist.vue')
+      },  
+      {
         path: '/mv',
         name: 'mv',
-        component: () => import('../views/music/mv.vue')
+        component: () => import('../views/music/item/mv.vue')
       },
     ]
   },

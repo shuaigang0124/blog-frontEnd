@@ -196,7 +196,7 @@ export default defineComponent({
               title: "最新音乐",
             },
             {
-              to: "/mv",
+              to: "/mvs",
               icon: require("./../assets/icon/MV.png"),
               title: "最新MV",
             },
@@ -302,15 +302,17 @@ export default defineComponent({
         if (!state.inputCat) {
           myMessage("请输入您想要搜索的歌曲", null, 1, null, null);
         }
-        // console.log(state.inputCat);
-        search({
-          keywords: state.inputCat,
-          type: 1,
-          limit: 10,
-        }).then((res) => {
-          console.log(res);
-          // state.inputCat = "";
-        });
+        localStorage.setItem("keywords", state.inputCat);
+        if (router.currentRoute.value.path !== "/result") {
+          router.push("/result");
+        }
+        // search({
+        //   keywords: state.inputCat,
+        //   type: 1,
+        //   limit: 10,
+        // }).then((res) => {
+        //   console.log(res);
+        // });
       },
       searchBlog() {
         if (!state.params.content) {
