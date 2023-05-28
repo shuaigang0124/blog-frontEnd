@@ -8,3 +8,7 @@ export function getArticleList(param) {
 export function getArticleByTagId(param) {
     return post("/article/getAtcByTagId", param);
 }
+// 通过id获取文章
+export function getArticleById(param) {
+    return post("/article/getById", param);
+}
