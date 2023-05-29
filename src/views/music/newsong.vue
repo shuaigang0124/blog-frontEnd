@@ -31,7 +31,7 @@
           @row-dblclick="addOnePlayList"
         >
           <el-table-column type="index" width="50" />
-          <el-table-column property="album.picUrl" width="80">
+          <el-table-column property="album.picUrl" width="100">
             <template #default="scope">
               <!-- scroll-container=".el-table__body-wrapper"解决图片在table里的懒加载问题 -->
               <el-image
@@ -49,24 +49,24 @@
               </el-image>
             </template>
           </el-table-column>
-          <el-table-column property="name" label="音乐" width="280" />
+          <el-table-column property="name" label="音乐" />
           <el-table-column
             property="album.artists[0].name"
             label="歌手"
             width="150"
           />
           <el-table-column property="album.name" label="专辑" />
-          <el-table-column label="时长" width="70">
+          <el-table-column label="时长" width="100">
             <template #default="scope">
               <div style="display: flex; align-items: center">
                 <span>{{
-                  (parseInt(parseInt(scope.row.duration / 1000)) / 60 > 10
+                  (parseInt(parseInt(scope.row.duration / 1000)) / 60 >= 10
                     ? parseInt(scope.row.duration / 1000) / 60
                     : "0" +
                       parseInt(parseInt(scope.row.duration / 1000) / 60)) +
                   ":" +
                   (parseInt(scope.row.duration / 1000) -
-                    parseInt(parseInt(scope.row.duration / 1000) / 60) * 60 >
+                    parseInt(parseInt(scope.row.duration / 1000) / 60) * 60 >=
                   10
                     ? parseInt(scope.row.duration / 1000) -
                       parseInt(parseInt(scope.row.duration / 1000) / 60) * 60
@@ -78,13 +78,23 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column width="80">
+            <template #default="scope">
+              <el-button
+                @click="addOnePlayList(scope.row)"
+                type="text"
+                :disabled="addOnePlayListState"
+                ><img class="play_icon" src="./../../assets/icon/play.png"
+              /></el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { getTopSong, addOnePlayList } from "@/api/music";
+import { getTopSong, addPlayList } from "@/api/music";
 import {
   defineComponent,
   onBeforeMount,
@@ -103,6 +113,7 @@ export default defineComponent({
       type: 0,
       tableData: [],
       tableHeight: 500,
+      addOnePlayListState: false,
     });
     // 方法体
     const methods = {
@@ -126,13 +137,17 @@ export default defineComponent({
         }
         request.getNewsongList();
       },
-      addOnePlayList(row) {
-        addOnePlayList({
-          id: row.id,
-          author: row.album.artists[0].name,
-          title: row.name,
-          pic: row.album.picUrl,
-        });
+      async addOnePlayList(row) {
+        state.addOnePlayListState = true;
+        await addPlayList([
+          {
+            id: row.id,
+            author: row.album.artists[0].name,
+            title: row.name,
+            pic: row.album.picUrl,
+          },
+        ]);
+        state.addOnePlayListState = false;
       },
     };
     onBeforeMount(() => {
@@ -189,5 +204,9 @@ export default defineComponent({
   width: 70px;
   height: 70px;
   border-radius: 8%;
+}
+.play_icon {
+  width: 30px;
+  height: 30px;
 }
 </style>

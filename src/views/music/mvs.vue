@@ -57,6 +57,7 @@
         <div class="mv_list_page">
           <el-pagination
             @current-change="currentChange"
+            :hide-on-single-page="true"
             background
             layout="prev, pager, next"
             :total="total"

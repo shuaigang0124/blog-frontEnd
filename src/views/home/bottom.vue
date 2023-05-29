@@ -80,6 +80,7 @@
                   :total="page.total"
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
+                  :hide-on-single-page="true"
                 />
               </el-config-provider>
             </div>

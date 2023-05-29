@@ -33,35 +33,79 @@ export function getAudioList(param) {
     return get("https://api.i-meto.com/meting/api", param);
 }
 
-// 添加单曲到播放列表：id/author/title/pic
-export async function addOnePlayList(param) {
-    let lrc = "";
-    let url = null;
-    let data = { id: param.id }
-    await getSongUrl(data).then((res: any) => {
-        if (res.code === 200) {
-            url = res.data[0].url;
+// 添加歌曲到播放列表：id/author/title/pic
+export async function addPlayList(list) {
+    let audio = [];
+    for (let i = 0; i < list.length; i++) {
+        let param = list[i];
+        let lrc = "";
+        let url = null;
+        let data = { id: param.id }
+        await getSongUrl(data).then((res: any) => {
+            if (res.code === 200) {
+                url = res.data[0].url;
+            }
+        });
+        await getLrc(data).then((res: any) => {
+            if (res.code === 200) {
+                lrc = res.lrc.lyric;
+            }
+        });
+        if (!param.pic) {
+            await getSongDetail({ ids: param.id }).then((res: any) => {
+                param.pic = res.songs[0].al.picUrl;
+            })
         }
-    });
-    await getLrc(data).then((res: any) => {
-        if (res.code === 200) {
-            lrc = res.lrc.lyric;
+        if (url) {
+            audio.push(new Audio(
+                param.author,
+                param.title,
+                url,
+                param.pic,
+                lrc
+            ));
         }
-    });
-    if (!param.pic) {
-        await getSongDetail({ ids: param.id }).then((res: any) => {
-            param.pic = res.songs[0].al.picUrl;
-        })
     }
-    if (url) {
-        let music = new Audio(
-            param.author,
-            param.title,
-            url,
-            param.pic,
-            lrc
-        );
-        localStorage.setItem("audio", JSON.stringify(music));
+    if (audio.length > 0) {
+        localStorage.setItem("audio", JSON.stringify(audio));
+    }
+}
+// 替换当前播放列表：id/author/title/pic
+export async function exchangePlayList(list) {
+    let audioList = [];
+    for (let i = 0; i < list.length; i++) {
+        let param = list[i];
+        let lrc = "";
+        let url = null;
+        let data = { id: param.id }
+        await getSongUrl(data).then((res: any) => {
+            if (res.code === 200) {
+                url = res.data[0].url;
+            }
+        });
+        await getLrc(data).then((res: any) => {
+            if (res.code === 200) {
+                lrc = res.lrc.lyric;
+            }
+        });
+        if (!param.pic) {
+            await getSongDetail({ ids: param.id }).then((res: any) => {
+                param.pic = res.songs[0].al.picUrl;
+            })
+        }
+        if (url) {
+            audioList.push(new Audio(
+                param.author,
+                param.title,
+                url,
+                param.pic,
+                lrc
+            ));
+        }
+    }
+    if (audioList.length > 0) {
+        console.log(audioList);
+        localStorage.setItem("audioList", JSON.stringify(audioList));
     }
 }
 
@@ -107,6 +151,14 @@ export function getHighquality(param) {
 // 获取推荐歌单
 export function getTopPlayList(param) {
     return get(baseUrl + "/top/playlist", param);
+}
+// 获取歌单详情
+export function getPalylistDetail(param) {
+    return get(baseUrl + "/playlist/detail", param);
+}
+// 获取歌单评论
+export function getPalylistComments(param) {
+    return get(baseUrl + "/comment/playlist", param);
 }
 
 // 获取100首最新音乐

@@ -37,7 +37,11 @@
         </el-menu>
       </div>
       <div class="my_menu_palylist">
-        <div v-for="item in menuPlaylists" :key="item">
+        <div
+          v-for="item in menuPlaylists"
+          :key="item"
+          @click="goToPlaylistDetails(item)"
+        >
           <div class="my_menu_palylist_item">
             <!-- playCount -->
             <el-image class="my_menu_palylist_image" :src="item.coverImgUrl" />
@@ -47,6 +51,7 @@
         <div class="my_menu_palylist_page">
           <el-pagination
             @current-change="currentChange"
+            :hide-on-single-page="true"
             background
             layout="prev, pager, next"
             :total="total"
@@ -58,6 +63,7 @@
 </template>
 <script lang="ts">
 import { getHighquality, getTopPlayList } from "@/api/music";
+import router from "@/router";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -96,6 +102,14 @@ export default defineComponent({
       currentChange(num) {
         state.page = num;
         request.getPlaylists();
+      },
+      goToPlaylistDetails(r) {
+        router.push({
+          path: "playlist",
+          query: {
+            id: r.id,
+          },
+        });
       },
     };
     onMounted(() => {
@@ -222,6 +236,10 @@ export default defineComponent({
   border-radius: 0.5vw;
   width: 13vw;
   height: 13vw;
+}
+.my_menu_palylist_image:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(35, 173, 278, 1);
 }
 .my_menu_palylist_name {
   color: #fff;

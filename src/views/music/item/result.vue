@@ -30,30 +30,29 @@
         <el-divider />
         <div class="result_table" v-if="type === resultMenuList[0].type">
           <el-table
-            ref="singleTableRef"
             :data="resultTableData"
             highlight-current-row
             @row-dblclick="addOnePlayList"
           >
             <el-table-column type="index" width="50" />
-            <el-table-column property="name" label="音乐" width="280" />
+            <el-table-column property="name" label="音乐" />
             <el-table-column
               property="artists[0].name"
               label="歌手"
               width="150"
             />
             <el-table-column property="album.name" label="专辑" />
-            <el-table-column label="时长" width="70">
+            <el-table-column label="时长" width="100">
               <template #default="scope">
                 <div style="display: flex; align-items: center">
                   <span>{{
-                    (parseInt(parseInt(scope.row.duration / 1000)) / 60 > 10
+                    (parseInt(parseInt(scope.row.duration / 1000)) / 60 >= 10
                       ? parseInt(scope.row.duration / 1000) / 60
                       : "0" +
                         parseInt(parseInt(scope.row.duration / 1000) / 60)) +
                     ":" +
                     (parseInt(scope.row.duration / 1000) -
-                      parseInt(parseInt(scope.row.duration / 1000) / 60) * 60 >
+                      parseInt(parseInt(scope.row.duration / 1000) / 60) * 60 >=
                     10
                       ? parseInt(scope.row.duration / 1000) -
                         parseInt(parseInt(scope.row.duration / 1000) / 60) * 60
@@ -65,10 +64,24 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column width="80">
+              <template #default="scope">
+                <el-button
+                  @click="addOnePlayList(scope.row)"
+                  type="text"
+                  :disabled="addOnePlayListState"
+                  ><img class="play_icon" src="./../../../assets/icon/play.png"
+                /></el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="result_playlists" v-if="type === resultMenuList[1].type">
-          <div v-for="item in resultPlaylists" :key="item">
+          <div
+            v-for="item in resultPlaylists"
+            :key="item"
+            @click="goToPlaylistDetails(item)"
+          >
             <div class="result_palylist_item">
               <el-image class="result_palylist_image" :src="item.coverImgUrl" />
               <div class="result_palylist_name">{{ item.name }}</div>
@@ -119,6 +132,7 @@
         </div>
         <div class="search_result_page" v-if="keywords !== ''">
           <el-pagination
+            :hide-on-single-page="true"
             @current-change="currentChange"
             background
             layout="prev, pager, next"
@@ -131,8 +145,9 @@
 </template>
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import { search, addOnePlayList } from "@/api/music";
+import { search, addPlayList } from "@/api/music";
 import myMessage from "@/utils/common";
+import router from "@/router";
 export default defineComponent({
   name: "",
   components: {},
@@ -161,6 +176,7 @@ export default defineComponent({
       resultTableData: [],
       resultPlaylists: [],
       resultMvs: [],
+      addOnePlayListState: false,
     });
     const methods = {
       handleSelect(e) {
@@ -176,12 +192,16 @@ export default defineComponent({
         state.offset = (num - 1) * state.limit;
         request.searchMusic();
       },
-      addOnePlayList(row) {
-        addOnePlayList({
-          id: row.id,
-          author: row.artists[0].name,
-          title: row.name,
-        });
+      async addOnePlayList(row) {
+        state.addOnePlayListState = true;
+        await addPlayList([
+          {
+            id: row.id,
+            author: row.artists[0].name,
+            title: row.name,
+          },
+        ]);
+        state.addOnePlayListState = false;
       },
       watchLocalStorage() {
         window.addEventListener("setItemEvent2", (e: any) => {
@@ -189,6 +209,14 @@ export default defineComponent({
             state.keywords = e.newValue;
             request.searchMusic();
           }
+        });
+      },
+      goToPlaylistDetails(r) {
+        router.push({
+          path: "playlist",
+          query: {
+            id: r.id,
+          },
         });
       },
     };
@@ -292,6 +320,10 @@ export default defineComponent({
   width: 13vw;
   height: 13vw;
 }
+.result_palylist_image:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(35, 173, 278, 1);
+}
 .result_palylist_name {
   color: #fff;
   width: 13vw;
@@ -372,5 +404,9 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.play_icon {
+  width: 30px;
+  height: 30px;
 }
 </style>

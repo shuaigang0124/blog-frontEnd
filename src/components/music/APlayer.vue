@@ -142,42 +142,49 @@ export default defineComponent({
         window.addEventListener("setItemEvent", (e: any) => {
           // 添加单曲到歌单
           if (e.key === "audio") {
+            let oldIndex = ap.list.audios.length;
             let music = JSON.parse(e.newValue);
-            for (let i = ap.list.audios.length - 1; i >= 0; i--) {
-              if (
-                ap.list.audios[i].author === music.author &&
-                ap.list.audios[i].title === music.title
-              ) {
-                ap.list.audios[i].url = music.url;
-                ap.list.audios[i].pic = music.pic;
-                ap.list.audios[i].lrc = music.lrc;
-                ap.list.switch(i);
-                ap.play();
-                return;
+            for (let m = 0; m < music.length; m++) {
+              // 移除存在的歌曲
+              for (let i = ap.list.audios.length - 1; i >= 0; i--) {
+                if (
+                  ap.list.audios[i].author === music[m].author &&
+                  ap.list.audios[i].title === music[m].title
+                ) {
+                  ap.list.audios[i].url = music[m].url;
+                  ap.list.audios[i].pic = music[m].pic;
+                  ap.list.audios[i].lrc = music[m].lrc;
+                  ap.list.remove(i);
+                }
               }
+              // 添加歌曲
+              ap.list.add(
+                new Audio(
+                  // 歌手
+                  music[m].author,
+                  // 歌名
+                  music[m].title,
+                  // 播放地址
+                  music[m].url,
+                  // 图片地址
+                  music[m].pic,
+                  // 歌词地址
+                  music[m].lrc
+                )
+              );
             }
-            ap.list.add(
-              new Audio(
-                // 歌手
-                music.author,
-                // 歌名
-                music.title,
-                // 播放地址
-                music.url,
-                // 图片地址
-                music.pic,
-                // 歌词地址
-                music.lrc
-              )
+            ap.list.switch(
+              oldIndex < ap.list.audios.length
+                ? oldIndex
+                : ap.list.audios.length - 1
             );
-            ap.list.switch(ap.list.audios.length - 1);
             ap.play();
           }
           // 替换当前播放列表
           if (e.key === "audioList") {
             ap.list.clear();
             ap.list.add(
-              ...JSON.parse(e.newValue).map(
+              JSON.parse(e.newValue).map(
                 (music: any) =>
                   new Audio(
                     // 歌手

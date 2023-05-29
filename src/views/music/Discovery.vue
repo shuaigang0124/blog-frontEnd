@@ -11,7 +11,11 @@
       </el-carousel>
       <div class="discovery_title">推荐歌单</div>
       <div class="recommended_playlist">
-        <div v-for="item in palylist" :key="item">
+        <div
+          v-for="item in palylist"
+          :key="item"
+          @click="goToPlaylistDetails(item)"
+        >
           <div class="playlist_item">
             <el-image class="playlist_image" :src="item.picUrl" />
             <div class="playlist_name">{{ item.name }}</div>
@@ -21,13 +25,22 @@
       <div class="discovery_title">最新音乐</div>
       <div class="new_song_list">
         <div v-for="item in newSongList" :key="item" class="new_song_for">
-          <div class="new_song_item" @click="playNewSong(item)">
+          <div class="new_song_item">
             <el-image :src="item.picUrl" class="new_song_image" />
             <div class="new_song_info">
               <div class="new_song_name">{{ item.song.name }}</div>
               <div class="new_song_auth">
                 <div>{{ item.song.artists[0].name }}</div>
               </div>
+            </div>
+            <div class="new_song_wrap">
+              <el-button
+                type="text"
+                :disabled="playState"
+                @click="playNewSong(item)"
+              >
+                <img class="play_icon" src="./../../assets/icon/play.png" />
+              </el-button>
             </div>
           </div>
         </div>
@@ -62,8 +75,9 @@ import {
   getPalylist,
   getNewSongList,
   getMvList,
-  addOnePlayList,
+  addPlayList,
 } from "@/api/music";
+import router from "@/router";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -75,14 +89,27 @@ export default defineComponent({
       palylist: [],
       newSongList: [],
       mvList: [],
+      playState: false,
     });
     const methods = {
-      playNewSong(e) {
-        addOnePlayList({
-          id: e.id,
-          author: e.song.artists[0].name,
-          title: e.song.name,
-          pic: e.picUrl,
+      async playNewSong(e) {
+        state.playState = true;
+        await addPlayList([
+          {
+            id: e.id,
+            author: e.song.artists[0].name,
+            title: e.song.name,
+            pic: e.picUrl,
+          },
+        ]);
+        state.playState = false;
+      },
+      goToPlaylistDetails(r) {
+        router.push({
+          path: "playlist",
+          query: {
+            id: r.id,
+          },
         });
       },
     };
@@ -161,6 +188,10 @@ export default defineComponent({
 .playlist_item {
   padding: 3vh 0.7vw 0 0.7vw;
 }
+.playlist_image:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(35, 173, 278, 1);
+}
 .playlist_image {
   border-radius: 0.5vw;
   width: 13vw;
@@ -193,10 +224,30 @@ export default defineComponent({
 .new_song_item {
   width: 36vw;
   display: flex;
+  position: relative;
+}
+:deep(.el-button--text) {
+  padding: 0;
 }
 .new_song_item:hover {
   background-color: rgba(0, 0, 0, 0.5);
 }
+.new_song_wrap {
+  position: absolute;
+  color: rgba(0, 0, 0, 0);
+  top: 2vw;
+  left: 2vw;
+}
+.new_song_wrap:hover {
+  cursor: pointer;
+}
+.play_icon {
+  width: 2vw;
+  height: 2vw;
+  min-width: 13px;
+  min-height: 13px;
+}
+
 .new_song_image {
   width: 6vw;
   height: 6vw;
@@ -248,7 +299,8 @@ export default defineComponent({
   top: 0;
   right: 0;
   display: flex;
-  align-content: center;
+  justify-content: center;
+  align-items: center;
   font-size: 15px;
   padding-right: 5px;
   padding-top: 2px;
