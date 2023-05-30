@@ -58,6 +58,9 @@
                   </div>
                   <div class="mv_playCount">{{ item.playCount }}</div>
                 </div>
+                <div class="play_icon_cover" @click="goMv(item.id)">
+                  <img class="play_icon" src="./../../assets/icon/play.png" />
+                </div>
               </div>
               <div class="mv_name">{{ item.name }}</div>
               <div class="mv_auth">{{ item.artistName }}</div>
@@ -111,6 +114,9 @@ export default defineComponent({
             id: r.id,
           },
         });
+      },
+      goMv(id) {
+        router.push({ path: "/mv", query: { id } });
       },
     };
     onMounted(() => {
@@ -287,6 +293,7 @@ export default defineComponent({
   align-items: center;
 }
 .mv_image {
+  border-radius: 5px;
   width: 18vw;
   min-width: 100px;
 }
@@ -304,6 +311,24 @@ export default defineComponent({
   font-size: 15px;
   padding-right: 5px;
   padding-top: 2px;
+}
+.play_icon_cover {
+  display: none;
+  position: absolute;
+  top: 4vw;
+  left: 8vw;
+}
+.mv_item:hover .play_icon_cover {
+  display: flex;
+  align-items: center;
+}
+.mv_item:hover .mv_image {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(35, 173, 278, 1);
+}
+.play_icon {
+  width: 2vw;
+  height: 2vw;
 }
 .mv_playCount {
   margin-left: 5px;

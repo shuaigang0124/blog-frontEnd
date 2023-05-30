@@ -170,3 +170,19 @@ export function getTopSong(param) {
 export function getMvAllList(param) {
     return get(baseUrl + "/mv/all", param);
 }
+// 获取mv详情:mvid
+export function getMvDetail(param) {
+    return get(baseUrl + "/mv/detail", param);
+}
+// 获取mv-url:id
+export function getMvUrl(param) {
+    return get(baseUrl + "/mv/url", param);
+}
+// 获取mv相关推荐:mvid
+export function getMvs(param) {
+    return get(baseUrl + "/simi/mv", param);
+}
+// 获取mv评论:id、limit、offset
+export function getMvComment(param) {
+    return get(baseUrl + "/comment/mv", param);
+}

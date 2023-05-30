@@ -170,14 +170,12 @@
               <el-avatar :size="50" :src="item.user.avatarUrl" />
             </div>
             <div class="my_margin_left_10">
-              <div class="my_flex">
-                <div class="playlist_comment_nickname">
-                  {{ item.user.nickname }}：
-                </div>
-                <div class="playlist_comment_content">
-                  {{ item.content }}
-                </div>
-              </div>
+              <el-text class="playlist_comment_nickname">
+                {{ item.user.nickname }}：
+              </el-text>
+              <el-text class="playlist_comment_content">
+                {{ item.content }}
+              </el-text>
               <div class="playlist_comment_time">
                 {{
                   new Date(item.time).getFullYear() +
@@ -216,14 +214,12 @@
               <el-avatar :size="50" :src="item.user.avatarUrl" />
             </div>
             <div class="my_margin_left_10">
-              <div class="my_flex">
-                <div class="playlist_comment_nickname">
-                  {{ item.user.nickname }}：
-                </div>
-                <div class="playlist_comment_content">
-                  {{ item.content }}
-                </div>
-              </div>
+              <el-text class="playlist_comment_nickname">
+                {{ item.user.nickname }}：
+              </el-text>
+              <el-text class="playlist_comment_content">
+                {{ item.content }}
+              </el-text>
               <div class="playlist_comment_time">
                 {{
                   0 == Math.floor((nowDate - new Date(item.time)) / 60000)

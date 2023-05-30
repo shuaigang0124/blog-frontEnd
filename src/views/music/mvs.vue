@@ -49,6 +49,9 @@
                   }}
                 </div>
               </div>
+              <div class="play_icon_cover" @click="goMv(item.id)">
+                <img class="play_icon" src="./../../assets/icon/play.png" />
+              </div>
             </div>
             <div class="mv_list_name">{{ item.name }}</div>
             <div class="mv_list_auth">{{ item.artistName }}</div>
@@ -69,6 +72,7 @@
 </template>
 <script lang="ts">
 import { getMvAllList } from "@/api/music";
+import router from "@/router";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
   name: "",
@@ -107,6 +111,9 @@ export default defineComponent({
       currentChange(num) {
         state.page = num;
         request.getMvList();
+      },
+      goMv(id) {
+        router.push({ path: "/mv", query: { id } });
       },
     };
     // 页面默认请求
@@ -235,5 +242,23 @@ export default defineComponent({
 .mv_list_playCount {
   margin-left: 5px;
   color: #fff;
+}
+.play_icon_cover {
+  display: none;
+  position: absolute;
+  top: 4vw;
+  left: 7.5vw;
+}
+.mv_list_item:hover .play_icon_cover {
+  display: flex;
+  align-items: center;
+}
+.mv_list_item:hover .mv_list_image {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(35, 173, 278, 1);
+}
+.play_icon {
+  width: 2vw;
+  height: 2vw;
 }
 </style>
