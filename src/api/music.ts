@@ -1,4 +1,5 @@
 import { get } from "@/http/axios"
+import myMessage from "@/utils/common";
 let baseUrl = "/wyy"
 
 // APlayer歌曲信息
@@ -36,6 +37,7 @@ export function getAudioList(param) {
 // 添加歌曲到播放列表：id/author/title/pic
 export async function addPlayList(list) {
     let audio = [];
+    let urlIsHave = 0;
     for (let i = 0; i < list.length; i++) {
         let param = list[i];
         let lrc = "";
@@ -64,7 +66,12 @@ export async function addPlayList(list) {
                 param.pic,
                 lrc
             ));
+        } else {
+            urlIsHave += 1;
         }
+    }
+    if (urlIsHave > 0) {
+        myMessage(urlIsHave + "首歌曲资源未找到！请尝试搜索歌名查找其他资源。", null, 1, null, null);
     }
     if (audio.length > 0) {
         localStorage.setItem("audio", JSON.stringify(audio));
@@ -73,6 +80,7 @@ export async function addPlayList(list) {
 // 替换当前播放列表：id/author/title/pic
 export async function exchangePlayList(list) {
     let audioList = [];
+    let urlIsHave = 0;
     for (let i = 0; i < list.length; i++) {
         let param = list[i];
         let lrc = "";
@@ -101,10 +109,15 @@ export async function exchangePlayList(list) {
                 param.pic,
                 lrc
             ));
+        } else {
+            urlIsHave += 1;
         }
     }
+    if (urlIsHave > 0) {
+        myMessage(urlIsHave + "首歌曲资源未找到！请尝试搜索歌名查找其他资源。", null, 1, null, null);
+    }
     if (audioList.length > 0) {
-        console.log(audioList);
+        // console.log(audioList);
         localStorage.setItem("audioList", JSON.stringify(audioList));
     }
 }

@@ -378,7 +378,7 @@ export default defineComponent({
     const request = {
       getArticleList() {
         getArticleList(state.params).then((res: any) => {
-          console.log(res);
+          // console.log(res);
           let { code, data } = res;
           if (code === 200) {
             state.blogList = data.list;
