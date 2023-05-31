@@ -48,17 +48,17 @@ export async function addPlayList(list) {
                 url = res.data[0].url;
             }
         });
-        await getLrc(data).then((res: any) => {
-            if (res.code === 200) {
-                lrc = res.lrc.lyric;
-            }
-        });
         if (!param.pic) {
             await getSongDetail({ ids: param.id }).then((res: any) => {
                 param.pic = res.songs[0].al.picUrl;
             })
         }
         if (url) {
+            await getLrc(data).then((res: any) => {
+                if (res.code === 200) {
+                    lrc = res.lrc.lyric;
+                }
+            });
             audio.push(new Audio(
                 param.author,
                 param.title,
@@ -91,17 +91,17 @@ export async function exchangePlayList(list) {
                 url = res.data[0].url;
             }
         });
-        await getLrc(data).then((res: any) => {
-            if (res.code === 200) {
-                lrc = res.lrc.lyric;
-            }
-        });
         if (!param.pic) {
             await getSongDetail({ ids: param.id }).then((res: any) => {
                 param.pic = res.songs[0].al.picUrl;
             })
         }
         if (url) {
+            await getLrc(data).then((res: any) => {
+                if (res.code === 200) {
+                    lrc = res.lrc.lyric;
+                }
+            });
             audioList.push(new Audio(
                 param.author,
                 param.title,
