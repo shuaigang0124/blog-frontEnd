@@ -135,6 +135,89 @@ export default defineComponent({
           title: "关于",
         },
       ],
+      homeList: [
+        {
+          to: "/homeSearch",
+          icon: require("./../assets/icon/search.png"),
+          title: "搜索",
+        },
+        {
+          to: "/home",
+          icon: require("./../assets/icon/home.png"),
+          title: "首页",
+        },
+        {
+          to: "/archives",
+          icon: require("./../assets/icon/archive.png"),
+          title: "归档",
+        },
+        {
+          to: "/chat",
+          icon: require("./../assets/icon/chat.png"),
+          title: "聊天室",
+        },
+        {
+          to: "/message",
+          icon: require("./../assets/icon/message.png"),
+          title: "留言",
+        },
+        {
+          to: "/games",
+          icon: require("./../assets/icon/game.png"),
+          title: "游戏",
+        },
+        {
+          to: "/discovery",
+          icon: require("./../assets/icon/listen.png"),
+          title: "音乐盒",
+        },
+        {
+          to: "/about",
+          icon: require("./../assets/icon/candy.png"),
+          title: "关于",
+        },
+      ],
+      musicList: [
+        {
+          to: "/search",
+          icon: require("./../assets/icon/search.png"),
+          title: "搜索",
+        },
+        {
+          to: "/discovery",
+          icon: require("./../assets/icon/discovery.png"),
+          title: "发现音乐",
+        },
+        {
+          to: "/playlists",
+          icon: require("./../assets/icon/playlist.png"),
+          title: "推荐歌单",
+        },
+        {
+          to: "/newsong",
+          icon: require("./../assets/icon/new.png"),
+          title: "最新音乐",
+        },
+        {
+          to: "/mvs",
+          icon: require("./../assets/icon/MV.png"),
+          title: "最新MV",
+        },
+        {
+          to: "/home",
+          icon: require("./../assets/icon/home.png"),
+          title: "首页",
+        },
+      ],
+      musicPath: [
+        "/result",
+        "/discovery",
+        "/playlists",
+        "/playlist",
+        "/newsong",
+        "/mvs",
+        "/mv",
+      ],
       isDisabled: false,
       searchInput: false,
       inputCat: "",
@@ -173,117 +256,29 @@ export default defineComponent({
           });
         }
         if (e.title === "音乐盒" && state.titleList.length === 8) {
-          state.isDisabled = true;
-          var data = [
-            {
-              to: "/search",
-              icon: require("./../assets/icon/search.png"),
-              title: "搜索",
-            },
-            {
-              to: "/discovery",
-              icon: require("./../assets/icon/discovery.png"),
-              title: "发现音乐",
-            },
-            {
-              to: "/playlists",
-              icon: require("./../assets/icon/playlist.png"),
-              title: "推荐歌单",
-            },
-            {
-              to: "/newsong",
-              icon: require("./../assets/icon/new.png"),
-              title: "最新音乐",
-            },
-            {
-              to: "/mvs",
-              icon: require("./../assets/icon/MV.png"),
-              title: "最新MV",
-            },
-            {
-              to: "/home",
-              icon: require("./../assets/icon/home.png"),
-              title: "首页",
-            },
-          ];
-          sessionStorage.setItem("pageIndex", JSON.stringify(data));
-          const oldList = setInterval(() => {
-            state.titleList.shift();
-            if (state.titleList.length === 0) {
-              clearInterval(oldList);
-              var i = -1;
-              const newList = setInterval(() => {
-                i += 1;
-                state.titleList.push(data[i]);
-                if (state.titleList.length === data.length) {
-                  clearInterval(newList);
-                  state.isDisabled = false;
-                }
-              }, 15);
-            }
-          }, 15);
+          methods.pushTitle(state.musicList);
         }
         if (e.title === "首页" && state.titleList.length !== 8) {
-          state.isDisabled = true;
-          var data = [
-            {
-              to: "/homeSearch",
-              icon: require("./../assets/icon/search.png"),
-              title: "搜索",
-            },
-            {
-              to: "/home",
-              icon: require("./../assets/icon/home.png"),
-              title: "首页",
-            },
-            {
-              to: "/archives",
-              icon: require("./../assets/icon/archive.png"),
-              title: "归档",
-            },
-            {
-              to: "/chat",
-              icon: require("./../assets/icon/chat.png"),
-              title: "聊天室",
-            },
-            {
-              to: "/message",
-              icon: require("./../assets/icon/message.png"),
-              title: "留言",
-            },
-            {
-              to: "/games",
-              icon: require("./../assets/icon/game.png"),
-              title: "游戏",
-            },
-            {
-              to: "/discovery",
-              icon: require("./../assets/icon/listen.png"),
-              title: "音乐盒",
-            },
-            {
-              to: "/about",
-              icon: require("./../assets/icon/candy.png"),
-              title: "关于",
-            },
-          ];
-          sessionStorage.setItem("pageIndex", JSON.stringify(data));
-          const oldList = setInterval(() => {
-            state.titleList.shift();
-            if (state.titleList.length === 0) {
-              clearInterval(oldList);
-              var j = -1;
-              const newList = setInterval(() => {
-                j += 1;
-                state.titleList.push(data[j]);
-                if (state.titleList.length === data.length) {
-                  clearInterval(newList);
-                  state.isDisabled = false;
-                }
-              }, 15);
-            }
-          }, 15);
+          methods.pushTitle(state.homeList);
         }
+      },
+      pushTitle(data) {
+        state.isDisabled = true;
+        const oldList = setInterval(() => {
+          state.titleList.shift();
+          if (state.titleList.length === 0) {
+            clearInterval(oldList);
+            var i = -1;
+            const newList = setInterval(() => {
+              i += 1;
+              state.titleList.push(data[i]);
+              if (state.titleList.length === data.length) {
+                clearInterval(newList);
+                state.isDisabled = false;
+              }
+            }, 15);
+          }
+        }, 15);
       },
       // 通知提醒
       openNotification1() {
@@ -335,26 +330,14 @@ export default defineComponent({
     };
     // 页面默认请求
     onMounted(() => {
-      let pageIndex = sessionStorage.getItem("pageIndex");
-      if (pageIndex) {
-        state.isDisabled = true;
-        let data = JSON.parse(pageIndex);
-        const oldList = setInterval(() => {
-          state.titleList.shift();
-          if (state.titleList.length === 0) {
-            clearInterval(oldList);
-            var i = -1;
-            const newList = setInterval(() => {
-              i += 1;
-              state.titleList.push(data[i]);
-              if (state.titleList.length === data.length) {
-                clearInterval(newList);
-                state.isDisabled = false;
-              }
-            }, 15);
-          }
-        }, 15);
+      let nowPath = router.currentRoute.value.path;
+      for (let i = 0; i < state.musicPath.length; i++) {
+        if (nowPath == state.musicPath[i]) {
+          methods.pushTitle(state.musicList);
+          break;
+        }
       }
+
       // if (methods.isMobile()) {
       // window.location.href = "/500";
       // router.push("/500");

@@ -32,16 +32,17 @@ instance.interceptors.response.use(
             switch (code) {
                 // token失效
                 case codes.TOKEN_IS_EXPIRED:
-                    let userId = sessionStorage.getItem("shuaigangOVO");
-                    if (userId) {
-                        post("/authentication/generateToken", { userId }).then((res: any) => {
-                            if (res.code === codes.SUCCESS && res.data.Authorization) {
-                                sessionStorage.setItem("shuaigangOVO", res.data.Authorization)
-                            }
-                        })
-                    } else {
+                    // let userId = sessionStorage.getItem("shuaigangOVO");
+                    // if (userId) {
+                    //     post("/authentication/generateToken", { userId }).then((res: any) => {
+                    //         if (res.code === codes.SUCCESS && res.data.Authorization) {
+                    //             sessionStorage.setItem("shuaigangOVO", res.data.Authorization)
+                    //         }
+                    //     })
+                    // } else {
                         sessionStorage.clear();
-                    }
+                        location.reload();
+                    // }
                     break
                 // 未认证
                 case codes.UNAUTHORIZED:
