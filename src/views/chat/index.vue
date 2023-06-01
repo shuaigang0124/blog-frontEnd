@@ -363,6 +363,14 @@ export default defineComponent({
         }
         state.refreshTop = t;
       },
+      replaceStr(r) {
+        let br = "<br>";
+        if (r.startsWith(br) || r.endsWith(br)) {
+          r = r.replace(/(^<br>*)|(<br>*$)/g, "");
+          return methods.replaceStr(r);
+        }
+        return r;
+      },
     };
     // 页面默认请求
     onMounted(() => {
@@ -404,6 +412,10 @@ export default defineComponent({
         });
       },
       send(msg) {
+        let divBr = "<div><br></div>";
+        let br = "<br>";
+        msg.content = msg.content.replaceAll(divBr, br);
+        msg.content = methods.replaceStr(msg.content);
         sendMsg(msg).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {
