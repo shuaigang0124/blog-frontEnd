@@ -16,27 +16,6 @@
               &nbsp;{{ playlist.creator.nickname }} &nbsp;|&nbsp;
             </div>
             <div>
-              <!-- {{
-              new Date(playlist.createTime).getFullYear() +
-              "-" +
-              new Date(playlist.createTime).getMonth() +
-              "-" +
-              (new Date(playlist.createTime).getDate() < 10
-                ? "0" + new Date(playlist.createTime).getDate()
-                : new Date(playlist.createTime).getDate()) +
-              " " +
-              (new Date(playlist.createTime).getHours() < 10
-                ? "0" + new Date(playlist.createTime).getHours()
-                : new Date(playlist.createTime).getHours()) +
-              ":" +
-              (new Date(playlist.createTime).getMinutes() < 10
-                ? "0" + new Date(playlist.createTime).getMinutes()
-                : new Date(playlist.createTime).getMinutes()) +
-              ":" +
-              (new Date(playlist.createTime).getSeconds() < 10
-                ? "0" + new Date(playlist.createTime).getSeconds()
-                : new Date(playlist.createTime).getSeconds())
-            }} -->
               {{ new Date(playlist.createTime) }}
               &nbsp;创建
             </div>
@@ -170,17 +149,17 @@
               <el-avatar :size="50" :src="item.user.avatarUrl" />
             </div>
             <div class="my_margin_left_10">
-              <el-text class="playlist_comment_nickname">
+              <b class="playlist_comment_nickname">
                 {{ item.user.nickname }}：
-              </el-text>
-              <el-text class="playlist_comment_content">
+              </b>
+              <b class="playlist_comment_content">
                 {{ item.content }}
-              </el-text>
+              </b>
               <div class="playlist_comment_time">
                 {{
                   new Date(item.time).getFullYear() +
                   "-" +
-                  new Date(item.time).getMonth() +
+                  (new Date(item.time).getMonth() + 1) +
                   "-" +
                   (new Date(item.time).getDate() < 10
                     ? "0" + new Date(item.time).getDate()
@@ -214,12 +193,12 @@
               <el-avatar :size="50" :src="item.user.avatarUrl" />
             </div>
             <div class="my_margin_left_10">
-              <el-text class="playlist_comment_nickname">
+              <b class="playlist_comment_nickname">
                 {{ item.user.nickname }}：
-              </el-text>
-              <el-text class="playlist_comment_content">
+              </b>
+              <b class="playlist_comment_content">
                 {{ item.content }}
-              </el-text>
+              </b>
               <div class="playlist_comment_time">
                 {{
                   0 == Math.floor((nowDate - new Date(item.time)) / 60000)
@@ -259,7 +238,7 @@
                     ? "3天前"
                     : new Date(item.time).getFullYear() +
                       "-" +
-                      new Date(item.time).getMonth() +
+                      (new Date(item.time).getMonth() + 1) +
                       "-" +
                       (new Date(item.time).getDate() < 10
                         ? "0" + new Date(item.time).getDate()
@@ -565,13 +544,11 @@ export default defineComponent({
 }
 .playlist_comment_nickname {
   font-size: 14px;
-  font-weight: bold;
   color: deeppink;
   white-space: nowrap;
 }
 .playlist_comment_content {
   font-size: 14px;
-  font-weight: bold;
   color: #dd6d60;
 }
 .playlist_comment_time {

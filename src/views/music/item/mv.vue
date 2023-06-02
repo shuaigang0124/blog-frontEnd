@@ -17,7 +17,13 @@
               <div v-else>&nbsp;/&nbsp;{{ item.name }}</div>
             </div>
           </div>
-          <video class="video-wrap" controls :src="url" />
+          <video
+            ref="videoPlayer"
+            class="video-wrap"
+            controls
+            :src="url"
+            autoplay
+          />
           <div class="mv_comment_title">
             精彩评论
             <div class="mv_comment_total">({{ hotComments.length }})</div>
@@ -31,17 +37,18 @@
               <el-avatar :size="50" :src="item.user.avatarUrl" />
             </div>
             <div class="my_margin_left_10">
-              <el-text class="playlist_comment_nickname">
+              <b class="playlist_comment_nickname" :underline="false">
                 {{ item.user.nickname }}：
-              </el-text>
-              <el-text class="playlist_comment_content">
+              </b>
+              <b class="playlist_comment_content" :underline="false">
                 {{ item.content }}
-              </el-text>
+              </b>
+
               <div class="playlist_comment_time">
                 {{
                   new Date(item.time).getFullYear() +
                   "-" +
-                  new Date(item.time).getMonth() +
+                  (new Date(item.time).getMonth() + 1) +
                   "-" +
                   (new Date(item.time).getDate() < 10
                     ? "0" + new Date(item.time).getDate()
@@ -75,12 +82,12 @@
               <el-avatar :size="50" :src="item.user.avatarUrl" />
             </div>
             <div class="my_margin_left_10">
-              <el-text class="playlist_comment_nickname">
+              <b class="playlist_comment_nickname" :underline="false">
                 {{ item.user.nickname }}：
-              </el-text>
-              <el-text class="playlist_comment_content">
+              </b>
+              <b class="playlist_comment_content" :underline="false">
                 {{ item.content }}
-              </el-text>
+              </b>
               <div class="playlist_comment_time">
                 {{
                   0 == Math.floor((nowDate - new Date(item.time)) / 60000)
@@ -120,7 +127,7 @@
                     ? "3天前"
                     : new Date(item.time).getFullYear() +
                       "-" +
-                      new Date(item.time).getMonth() +
+                      (new Date(item.time).getMonth() + 1) +
                       "-" +
                       (new Date(item.time).getDate() < 10
                         ? "0" + new Date(item.time).getDate()
@@ -177,14 +184,23 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from "vue";
+import {
+  defineComponent,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  toRefs,
+} from "vue";
 import { getMvDetail, getMvUrl, getMvs, getMvComment } from "@/api/music";
 import router from "@/router";
+import { ElMessage, ElMessageBox } from "element-plus";
 export default defineComponent({
   components: {},
   props: {},
   setup() {
-    // 页面数据
+    const videoPlayer = ref();
     const state = reactive({
       id: router.currentRoute.value.query.id,
       url: "",
@@ -202,6 +218,8 @@ export default defineComponent({
       total: 0,
       nowDate: new Date(),
       timer: null,
+      alertState: true,
+      scrollY: 0,
     });
     // 方法体
     const methods = {
@@ -216,6 +234,49 @@ export default defineComponent({
     };
     // 页面默认请求
     onMounted(() => {
+      window.addEventListener("scroll", () => {
+        if (
+          "pictureInPictureEnabled" in document === false ||
+          "exitPictureInPicture" in document === false
+        ) {
+          console.log("当前浏览器不支持视频画中画。");
+        } else {
+          var dd: any = document;
+          if (
+            document.documentElement.scrollTop >
+              document.documentElement.offsetHeight * 0.12 +
+                document.documentElement.offsetWidth * 0.25 &&
+            !dd.pictureInPictureElement &&
+            state.alertState
+          ) {
+            state.alertState = false;
+            state.scrollY = document.documentElement.scrollTop;
+            ElMessageBox.alert("是否小窗播放？", "提示", {
+              confirmButtonText: "ok",
+              cancelButtonText: "cancel",
+            })
+              .then(() => {
+                videoPlayer.value.play();
+                videoPlayer.value.requestPictureInPicture();
+              })
+              .catch(() => {
+                console.log("用户取消小窗播放。");
+              })
+              .finally(() => {
+                document.documentElement.scrollTop = state.scrollY;
+              });
+          }
+          if (
+            document.documentElement.scrollTop <=
+            document.documentElement.offsetHeight * 0.12 + 50
+          ) {
+            state.alertState = true;
+            if (dd.pictureInPictureElement) {
+              dd.exitPictureInPicture();
+            }
+          }
+        }
+      });
       request.init();
       state.timer = setInterval(() => {
         state.nowDate = new Date();
@@ -266,7 +327,7 @@ export default defineComponent({
         });
       },
     };
-    return { ...methods, ...toRefs(state) };
+    return { ...methods, ...toRefs(state), videoPlayer };
   },
 });
 </script>
@@ -373,13 +434,11 @@ export default defineComponent({
 }
 .playlist_comment_nickname {
   font-size: 14px;
-  font-weight: bold;
   color: deeppink;
   white-space: nowrap;
 }
 .playlist_comment_content {
   font-size: 14px;
-  font-weight: bold;
   color: #dd6d60;
 }
 .playlist_comment_time {
