@@ -440,7 +440,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(./../../../assets/music/music.jpg);
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/music/music.webp);
 }
 .playlist_info {
   padding: 16vh 14vw 0 14vw;
