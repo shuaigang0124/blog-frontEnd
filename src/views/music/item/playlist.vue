@@ -85,8 +85,8 @@
         <el-menu
           :default-active="nowMenu"
           mode="horizontal"
-          text-color="#303133"
-          active-text-color="#c3473a"
+          text-color="#dd6d60"
+          active-text-color="deeppink"
           active-background-color="rgba(0,0,0,0)"
           background-color="rgba(0,0,0,0)"
           @select="handleSelect"
@@ -440,8 +440,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
-  background-color: gray;
+  background-image: url(./../../../assets/music/music.jpg);
 }
 .playlist_info {
   padding: 16vh 14vw 0 14vw;
@@ -567,13 +566,13 @@ export default defineComponent({
 .playlist_comment_nickname {
   font-size: 14px;
   font-weight: bold;
-  color: #dd6d60;
+  color: deeppink;
   white-space: nowrap;
 }
 .playlist_comment_content {
   font-size: 14px;
   font-weight: bold;
-  color: #303133;
+  color: #dd6d60;
 }
 .playlist_comment_time {
   margin-top: 4px;

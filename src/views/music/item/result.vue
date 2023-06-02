@@ -14,8 +14,8 @@
         <el-menu
           :default-active="type"
           mode="horizontal"
-          text-color="#303133"
-          active-text-color="#c3473a"
+          text-color="#dd6d60"
+          active-text-color="deeppink"
           active-background-color="rgba(0,0,0,0)"
           background-color="rgba(0,0,0,0)"
           @select="handleSelect"
@@ -272,8 +272,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
-  background-color: gray;
+  background-image: url(./../../../assets/music/music.jpg);
 }
 .result_body {
   padding: 8vh 14vw 0 14vw;

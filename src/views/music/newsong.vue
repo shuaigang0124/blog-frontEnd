@@ -176,8 +176,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
-  background-color: gray;
+  background-image: url(./../../assets/music/music.jpg);
 }
 .newsong_body {
   padding: 6vh 14vw 6vh 14vw;

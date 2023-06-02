@@ -416,6 +416,10 @@ export default defineComponent({
         let br = "<br>";
         msg.content = msg.content.replaceAll(divBr, br);
         msg.content = methods.replaceStr(msg.content);
+        if (msg.content === "" || msg.content === null) {
+          myMessage("发送消息不能为空", null, 1, null, null);
+          return;
+        }
         sendMsg(msg).then((res, any) => {
           let { code, message, data } = res;
           if (code === 200) {

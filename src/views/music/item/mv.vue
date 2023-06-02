@@ -272,8 +272,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/6.webp); */
-  background-color: gray;
+  background-image: url(./../../../assets/music/music.jpg);
 }
 .my_flex {
   display: flex;
@@ -309,6 +308,7 @@ export default defineComponent({
   font-size: 24px;
   line-height: 32px;
   font-weight: normal;
+  color: deeppink;
 }
 .mv_auth {
   float: left;
@@ -324,11 +324,13 @@ export default defineComponent({
   font-weight: normal;
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
+  color: deeppink;
 }
 .mv_time {
   color: #999;
 }
 .mv_desc {
+  color: #cfcfcf;
   text-indent: 30px;
   margin-bottom: 10px;
 }
@@ -337,7 +339,7 @@ export default defineComponent({
   font-size: 20px;
   line-height: 32px;
   font-weight: normal;
-  border-bottom: 1px solid #ccc;
+  color: deeppink;
   padding: 10px 0;
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
@@ -372,13 +374,13 @@ export default defineComponent({
 .playlist_comment_nickname {
   font-size: 14px;
   font-weight: bold;
-  color: #dd6d60;
+  color: deeppink;
   white-space: nowrap;
 }
 .playlist_comment_content {
   font-size: 14px;
   font-weight: bold;
-  color: #303133;
+  color: #dd6d60;
 }
 .playlist_comment_time {
   margin-top: 4px;
@@ -428,7 +430,7 @@ export default defineComponent({
 .mvs_name {
   text-align: center;
   font-size: 15px;
-  color: black;
+  color: deeppink;
 }
 .mvs_artistName {
   text-align: center;
