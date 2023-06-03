@@ -187,6 +187,8 @@
 import {
   defineComponent,
   nextTick,
+  onBeforeMount,
+  onBeforeUnmount,
   onMounted,
   onUnmounted,
   reactive,
@@ -232,51 +234,52 @@ export default defineComponent({
         request.init();
       },
     };
-    // 页面默认请求
-    onMounted(() => {
-      window.addEventListener("scroll", () => {
+    function scrollListener() {
+      if (
+        "pictureInPictureEnabled" in document === false ||
+        "exitPictureInPicture" in document === false
+      ) {
+        console.log("当前浏览器不支持视频画中画。");
+      } else {
+        var dd: any = document;
         if (
-          "pictureInPictureEnabled" in document === false ||
-          "exitPictureInPicture" in document === false
+          document.documentElement.scrollTop >
+            document.documentElement.offsetHeight * 0.12 +
+              document.documentElement.offsetWidth * 0.25 &&
+          !dd.pictureInPictureElement &&
+          state.alertState
         ) {
-          console.log("当前浏览器不支持视频画中画。");
-        } else {
-          var dd: any = document;
-          if (
-            document.documentElement.scrollTop >
-              document.documentElement.offsetHeight * 0.12 +
-                document.documentElement.offsetWidth * 0.25 &&
-            !dd.pictureInPictureElement &&
-            state.alertState
-          ) {
-            state.alertState = false;
-            state.scrollY = document.documentElement.scrollTop;
-            ElMessageBox.alert("是否小窗播放？", "提示", {
-              confirmButtonText: "ok",
-              cancelButtonText: "cancel",
+          state.alertState = false;
+          state.scrollY = document.documentElement.scrollTop;
+          ElMessageBox.alert("是否小窗播放？", "提示", {
+            confirmButtonText: "ok",
+            cancelButtonText: "cancel",
+          })
+            .then(() => {
+              videoPlayer.value.play();
+              videoPlayer.value.requestPictureInPicture();
             })
-              .then(() => {
-                videoPlayer.value.play();
-                videoPlayer.value.requestPictureInPicture();
-              })
-              .catch(() => {
-                console.log("用户取消小窗播放。");
-              })
-              .finally(() => {
-                document.documentElement.scrollTop = state.scrollY;
-              });
-          }
-          if (
-            document.documentElement.scrollTop <=
-            document.documentElement.offsetHeight * 0.12 + 50
-          ) {
-            state.alertState = true;
-            if (dd.pictureInPictureElement) {
-              dd.exitPictureInPicture();
-            }
+            .catch(() => {
+              console.log("小窗播放异常。");
+            })
+            .finally(() => {
+              document.documentElement.scrollTop = state.scrollY;
+            });
+        }
+        if (
+          document.documentElement.scrollTop <=
+          document.documentElement.offsetHeight * 0.12 + 50
+        ) {
+          state.alertState = true;
+          if (dd.pictureInPictureElement) {
+            dd.exitPictureInPicture();
           }
         }
-      });
+      }
+    }
+    // 页面默认请求
+    onMounted(() => {
+      window.addEventListener("scroll", scrollListener);
       request.init();
       state.timer = setInterval(() => {
         state.nowDate = new Date();
@@ -285,6 +288,21 @@ export default defineComponent({
     onUnmounted(() => {
       if (state.timer) {
         clearInterval(state.timer);
+      }
+      // 移除监听
+      window.removeEventListener("scroll", scrollListener);
+    });
+    onBeforeUnmount(() => {
+      // 关闭音乐
+      if (!videoPlayer.value.pause()) {
+        videoPlayer.value.pause();
+        videoPlayer.value.removeAttribute("src");
+        videoPlayer.value.load();
+      }
+      var dd: any = document;
+      // 销毁小窗
+      if (dd.pictureInPictureElement) {
+        dd.exitPictureInPicture();
       }
     });
     // 请求
@@ -327,7 +345,7 @@ export default defineComponent({
         });
       },
     };
-    return { ...methods, ...toRefs(state), videoPlayer };
+    return { ...methods, ...toRefs(state), videoPlayer, scrollListener };
   },
 });
 </script>

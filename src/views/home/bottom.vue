@@ -342,6 +342,8 @@ export default defineComponent({
     });
     onUnmounted(() => {
       state.winState = false;
+      // 移除监听
+      window.removeEventListener("resize", methods.setParentHeight());
     });
     onBeforeUnmount(() => {
       // 销毁 particlesJS
