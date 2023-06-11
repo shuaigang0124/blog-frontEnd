@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <HomeBottom />
+    <Bottom />
     <div class="my_backtop" @click="upTop()">
       <div class="my_backtop_msg">
         <img class="my_backtop_img" src="../../assets/icon/backTop.png" />
@@ -73,7 +73,7 @@
     <el-dialog
       v-model="dialogVisible"
       title="整合资料"
-      width="30%"
+      width="33%"
       :before-close="handleClose"
     >
       <span v-html="content"></span>
@@ -83,22 +83,19 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-// import HelloWorld from '@/components/HelloWorld.vue';
-import HomeBottom from "@/components/HomeBottom.vue";
-import { ElMessage, ElNotification } from "element-plus";
-import { useRouter } from "vue-router";
+import Bottom from "@/views/home/bottom.vue";
+import myMessage from "@/utils/common"
 
 export default defineComponent({
   name: "Home",
   components: {
-    // HelloWorld,
-    HomeBottom,
+    Bottom,
   },
   setup() {
     const state = reactive({
       dialogVisible: false,
       content:
-        "<b>博客的代码是开源的，位置在:</b><br><br>前端：https://github.com/shuaigang0124/blog-frontEnd<br>后端：https://github.com/shuaigang0124/blog-backEnd<br><br><b>此外，博主的第一版网站也在GitHub上面，有兴趣的小伙伴可以去看看：</b><br><br>web端地址：https://github.com/shuaigang0124/website-frontend<br><br>小程序地址：https://github.com/shuaigang0124/website-uniapp-vx<br><br>后台地址：https://github.com/shuaigang0124/website-backend<br><br><b>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！</b><br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
+        "<b>博客的代码是开源的，位置在:</b><br>前端：https://github.com/shuaigang0124/blog-frontEnd<br>后端：https://github.com/shuaigang0124/blog-backEnd<br><br><b>此外，博主的第一版网站也在GitHub上面，有兴趣的小伙伴可以去看看：</b><br>web端地址：https://github.com/shuaigang0124/website-frontend<br>小程序地址：https://github.com/shuaigang0124/website-uniapp-vx<br>后台地址：https://github.com/shuaigang0124/website-backend<br><br><b>如果觉得对您有帮助，可以请博主喝瓶雪碧，感激不尽！</b><br><br><img src='https://shuaigang.top/gsg/static-resource/formal/6/20211214/1639480627841-1295237287068419.webp' style='width: 150px;hight: 150px;'>",
     });
     const methods = {
       openGitHub() {
@@ -136,16 +133,11 @@ export default defineComponent({
             }
           }, 10);
         } else {
-          ElMessage.warning("已置于顶部");
+          myMessage('已置于顶部', null, 1, null, null);
         }
       },
     };
     onMounted(() => {
-      // useRouter().addRoute({
-      //   path: "/login",
-      //   name: "Login",
-      //   component: () => import("@/views/login/Login.vue"),
-      // });
     });
     return { ...methods, ...toRefs(state) };
   },
@@ -154,8 +146,8 @@ export default defineComponent({
 
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/1.jpg);
-  /* background-image: url(../../assets/backgroundImg/hmbb/1.jpg); */
+  background-image: url(../../assets/background/1.webp);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/1.webp); */
 }
 
 .info_text {
@@ -184,8 +176,7 @@ export default defineComponent({
   z-index: 999;
   bottom: 15px;
   right: 15px;
-  /* z-index: 999; */
-  cursor: pointer;
+  /* cursor: pointer; */
   border-radius: 0 0 5px 5px;
   background-color: #e0e1e2;
 }
@@ -214,7 +205,7 @@ export default defineComponent({
   bottom: 50px;
   right: 15px;
   z-index: 999;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: #2185d0;
   border-radius: 5px 5px 0 0;
 }

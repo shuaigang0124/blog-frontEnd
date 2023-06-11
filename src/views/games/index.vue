@@ -10,7 +10,11 @@
           <div class="games_list">
             <div class="games_info" v-for="games in gamesList" :key="games">
               <div class="games_item" @click="playGame(games.router)">
-                <el-image class="game_img" :src="games.img" />
+                <el-image class="game_img" :src="games.img">
+                  <template #error>
+                    <img class="game_img" src="../../assets/error.png" />
+                  </template>
+                </el-image>
                 <div class="game_msg">{{ games.msg }}</div>
               </div>
             </div>
@@ -31,24 +35,29 @@ export default defineComponent({
     const state = reactive({
       gamesList: [
         {
-          img: require("../../assets/games/stick.jpg"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/stick.webp",
           msg: "小飞棍来咯！",
           router: "/html/stick.html",
         },
         {
-          img: require("../../assets/games/plane.png"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/plane.webp",
           msg: "飞船保卫战",
           router: "/html/plane.html",
         },
         {
-          img: require("../../assets/games/brick.png"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/brick.webp",
           msg: "2D打砖块",
           router: "/html/brick.html",
         },
         {
-          img: require("../../assets/games/spaceship.jpg"),
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/spaceship.webp",
           msg: "飞机大战",
           router: "/html/spaceship.html",
+        },
+        {
+          img: "https://shuaigang.top/gsg/static-resource/formal/backgroundImg/games/SinuousWorld.webp",
+          msg: "Sinuous World",
+          router: "/html/SinuousWorld.html",
         },
       ],
     });
@@ -64,7 +73,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb01.jpg);
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb01.webp);
 }
 
 .games_title {

@@ -1,7 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Index from '../views/Index.vue'
-import Home from '../views/home/Home.vue'
-import NotFound from "../views/other/404.vue"
 import BeatingHeart from "../views/other/BeatingHeart.vue"
 import RotateBeatingHeart from "../views/other/RotateBeatingHeart.vue"
 
@@ -13,71 +10,91 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/index',
     name: 'Index',
-    component: Index,
-    redirect: "/index/home",
+    component: () => import('../views/index.vue'),
+    redirect: "/home",
     children: [
       {
-        path: '/index/home',
+        path: '/home',
         name: 'Home',
-        component: Home
+        component: () => import('../views/home/index.vue')
       },
       {
-        path: '/index/music',
-        name: 'Music',
-        component: () => import('../views/home/Music.vue')
+        path: '/blog',
+        name: 'Blog',
+        component: () => import('../views/blog/index.vue')
       },
       {
-        path: '/index/chat',
+        path: '/chat',
         name: 'Chat',
-        component: () => import('../views/home/Chat.vue')
+        component: () => import('../views/chat/index.vue')
       },
       {
-        path: '/index/games',
+        path: '/games',
         name: 'Games',
-        component: () => import('../views/home/Games.vue')
+        component: () => import('../views/games/index.vue')
       },
       {
-        path: '/index/archives',
+        path: '/archives',
         name: 'Archives',
-        component: () => import('../views/home/Archives.vue')
+        component: () => import('../views/archives/index.vue')
       },
       {
-        path: '/index/link',
-        name: 'Link',
-        component: () => import('../views/home/Link.vue')
-      },
-      {
-        path: '/index/message',
+        path: '/message',
         name: 'Message',
-        component: () => import('../views/home/Message.vue')
+        component: () => import('../views/message/index.vue')
       },
       {
-        path: '/index/about',
+        path: '/about',
         name: 'About',
-        component: () => import('../views/home/About.vue')
+        component: () => import('../views/about/index.vue')
       },
       {
-        path: '/index/discovery',
+        path: '/discovery',
         name: 'Discovery',
-        component: () => import('../views/music/Discovery.vue')
+        component: () => import('../views/music/discovery.vue')
       },
       {
-        path: '/index/playlists',
-        name: 'Playlists',
-        component: () => import('../views/music/Playlists.vue')
+        path: '/playlists',
+        name: 'playlists',
+        component: () => import('../views/music/playlists.vue')
       },
       {
-        path: '/index/songs',
-        name: 'Songs',
-        component: () => import('../views/music/Songs.vue')
+        path: '/newsong',
+        name: 'newsong',
+        component: () => import('../views/music/newsong.vue')
       },
       {
-        path: '/index/mv',
-        name: 'MV',
-        component: () => import('../views/music/MV.vue')
+        path: '/mvs',
+        name: 'mvs',
+        component: () => import('../views/music/mvs.vue')
+      }, 
+      {
+        path: '/result',
+        name: 'result',
+        component: () => import('../views/music/item/result.vue')
+      },  
+      {
+        path: '/playlist',
+        name: 'playlist',
+        component: () => import('../views/music/item/playlist.vue')
+      },  
+      {
+        path: '/mv',
+        name: 'mv',
+        component: () => import('../views/music/item/mv.vue')
       },
     ]
   },
+  {
+    path: '/login',
+    name: '/Login',
+    component: () => import('../views/login/login.vue')
+  },
+  // {
+  //   path: '/register',
+  //   name: '/Register',
+  //   component: () => import('../views/login/register.vue')
+  // },
   {
     path: '/beatingHeart',
     name: 'BeatingHeart',
@@ -91,7 +108,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/:catchAll(.*)',
     name: 'NotFound',
-    component: NotFound
+    component: () => import('../views/other/404.vue')
   },
 ]
 

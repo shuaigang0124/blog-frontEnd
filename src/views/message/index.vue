@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts">
-import { ElMessage } from "element-plus";
+import myMessage from "@/utils/common";
 import {
   defineComponent,
   onMounted,
@@ -65,7 +65,10 @@ import {
   toRefs,
 } from "vue";
 import vueDanmaku from "vue3-danmaku";
-import post from "@/http/axios";
+import { ElMessageBox } from "element-plus";
+import { insertMsg, getMsg } from "@/api/message";
+import router from "@/router";
+import { Base64 } from "js-base64";
 export default defineComponent({
   name: "",
   components: {
@@ -100,25 +103,33 @@ export default defineComponent({
       sendMsg() {
         if (state.content) {
           let data = {};
-          if (state.userId !== "") {
+          if (state.userId) {
             data = {
               color: state.contentColor,
               content: state.content,
               userId: state.userId,
+              userName: "【当前发送】",
             };
           } else {
-            data = {
-              color: state.contentColor,
-              content: state.content,
-              userName: "游客",
-            };
+            ElMessageBox.confirm("是否前往登录?", "Warning", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+            })
+              .then(() => {
+                sessionStorage.setItem("router", "/message");
+                // window.location.href='/login'
+                router.push("/login");
+              })
+              .catch(() => {
+                // window.location.href='/home'
+              });
+            return;
           }
-          // 发送弹幕（插入到当前播放位置，实时显示）
-          danmakuRef.value.add(data);
           request.insertMsg(data);
           state.content = "";
         } else {
-          ElMessage.warning("发送内容不能为空！");
+          myMessage("发送内容不能为空！", null, 1, null, null);
         }
       },
       enterClick() {
@@ -129,6 +140,9 @@ export default defineComponent({
       document.getElementById("inputMsg").focus();
       // methods.addToList();
       request.getMsgList();
+      if (sessionStorage.getItem("shuaigangOVO")) {
+        state.userId = Base64.decode(sessionStorage.getItem("shuaigangOVO"));
+      }
     });
     onUnmounted(() => {
       state.danmus = [];
@@ -137,16 +151,19 @@ export default defineComponent({
     const request = {
       getMsgList() {
         // post请求
-        post("/msg/getMsg", null).then((res: any) => {
-          console.log(res);
-          let { message, customData } = res;
-          state.danmus = customData;
+        getMsg(null).then((res: any) => {
+          let { message, data } = res;
+          state.danmus = data;
         });
       },
-      insertMsg(data) {
-        post("/msg/insertMsg", data).then((res: any) => {
-          console.log(res);
-          let { message, customData } = res;
+      insertMsg(param) {
+        insertMsg(param).then((res: any) => {
+          let { code } = res;
+          if (code === 200) {
+            // 发送弹幕（插入到当前播放位置，实时显示）
+            danmakuRef.value.add(param);
+          } else {
+          }
         });
       },
     };
@@ -156,8 +173,8 @@ export default defineComponent({
 </script>
 <style scoped>
 .body_img {
-  background-image: url(../../assets/backgroundImg/wb03.jpg);
-  /* background-image: url(../../assets/backgroundImg/hmbb/4.jpg); */
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/wb03.webp);
+  /* background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/hmbb/4.webp); */
 }
 .info_input {
   position: absolute;

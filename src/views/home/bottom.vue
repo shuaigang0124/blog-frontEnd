@@ -1,65 +1,101 @@
 <template>
   <div class="HomeBottom" id="HomeBottom">
-    <div>
-      <div class="HomeBottom_body">
+    <div class="HomeBottom_particles">
+      <div class="HomeBottom_body" id="HomeBottom_body">
         <div class="HomeBottom_body_info">
-          <div class="HomeBottom_body_info_left" id="HomeBottom_body_left">
+          <div class="HomeBottom_body_info_left">
             <div class="top_info">
               <div class="top_left">博客</div>
               <div class="top_right">
-                共 <span class="top_num">{{ totalNum }} </span> 篇
+                共 <span class="top_num">{{ page.total }} </span> 篇
               </div>
             </div>
             <div class="article_info">
               <div class="article_list" v-for="item in articleList" :key="item">
-                <div class="article_item" @click="readArticle">
+                <div class="article_item" @click="readArticle(item.id)">
                   <div class="article_title">{{ item.title }}</div>
-                  <div class="article_describe">{{ item.describe }}</div>
+                  <div class="article_describe">{{ item.description }}</div>
                   <div class="article_user_info">
                     <div class="article_avatar">
-                      <img class="article_avatar_img" :src="item.avatar" />
+                      <div>
+                        <el-avatar
+                          :size="35"
+                          :src="'https://shuaigang.top' + item.avatar"
+                          @error="true"
+                        >
+                          <img
+                            src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
+                          />
+                        </el-avatar>
+                      </div>
                       <div class="article_user_name">{{ item.userName }}</div>
                       <div class="article_time">
                         <img
                           class="article_icon"
-                          src="../assets/icon/calendar.png"
+                          src="../../assets/icon/calendar.png"
                         />
-                        {{ item.time }}
+                        {{ item.gmtCreate }}
                       </div>
                       <div class="article_read_num">
                         <img
                           class="article_icon"
-                          src="../assets/icon/browse.png"
+                          src="../../assets/icon/browse.png"
                         />
                         {{ item.readNum }}
                       </div>
                       <div class="article_click_num">
                         <img
                           class="article_icon"
-                          src="../assets/icon/praise.png"
+                          src="../../assets/icon/praise.png"
                         />
                         {{ item.clickNum }}
                       </div>
                     </div>
-                    <el-tag class="article_tag" type="info" size="small">
-                      {{ item.tag }}
+                    <el-tag
+                      v-if="item.isNotice !== 0"
+                      class="article_notice_tag"
+                      >公告
+                    </el-tag>
+                    <el-tag
+                      v-else
+                      :type="item.isOriginality === 0 ? 'danger' : ''"
+                      size="small"
+                    >
+                      {{ item.isOriginality === 0 ? "原创" : "转载" }}
                     </el-tag>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="page_info">
+              <el-config-provider :locale="locale">
+                <el-pagination
+                  v-model:current-page="page.pageNum"
+                  v-model:page-size="page.pageSize"
+                  :page-sizes="page.sizes"
+                  :small="false"
+                  :disabled="false"
+                  :background="false"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="page.total"
+                  @size-change="handleSizeChange"
+                  @current-change="handleCurrentChange"
+                  :hide-on-single-page="true"
+                />
+              </el-config-provider>
+            </div>
           </div>
-          <div class="HomeBottom_body_info_right" id="HomeBottom_body_right">
+          <div class="HomeBottom_body_info_right">
             <div class="module_one">
               <div class="module_title">标签云</div>
               <div class="module_title_line" />
               <el-tag
                 class="my_el_tags"
                 v-for="tag in tagList"
-                :key="tag.name"
+                :key="tag"
                 :color="tag.color"
                 effect="light"
-                @click="tagToList"
+                @click="tagToList(tag)"
               >
                 <span class="tag_text"> {{ tag.name }}</span>
               </el-tag>
@@ -97,12 +133,14 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="beian">
-        <div class="beian_info">
-          <div>
-            <div class="beian_info_content">© 2022 - 2023 By ShuaiGang</div>
-            <div class="beian_info_content">渝ICP备2021011002号</div>
+        <div class="beian">
+          <div class="beian_info">
+            <div>
+              <div class="beian_info_content">© 2021 - 2023 By ShuaiGang</div>
+              <el-link @click="openBeian" class="beian_info_content"
+                >渝ICP备2021011002号</el-link
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -111,52 +149,42 @@
   </div>
 </template>
 <script lang="js">
-import post from "@/http/axios";
-import { defineComponent, nextTick, onMounted, onUnmounted, reactive, toRefs } from "vue";
-import elementResizeDetectorMaker from "element-resize-detector";
-import "../js/particles.min.js";
-import { ElMessage } from "element-plus";
+import { getArticleList } from "@/api/article";
+import { getTagList } from "@/api/tag";
+import {
+  defineComponent,
+  watch,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  onUnmounted,
+  reactive,
+  toRefs,
+} from "vue";
+import "../../js/particles.min.js";
+import router from "@/router";
+import myMessage from "@/utils/common";
+import { ElConfigProvider } from "element-plus";
+import zhCn from "element-plus/lib/locale/lang/zh-cn";
 export default defineComponent({
   name: "",
   components: {},
   props: {},
   setup() {
+    let locale = zhCn;
     // 页面数据
     const state = reactive({
-      PH: 0,
       winState: false,
-      screenWidth: 0,
-      screenHeight: 0,
-      totalNum: 99,
-      articleList: [
-        // {
-        //   title: "入站需知！！",
-        //   describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
-        //   avatar:
-        //     "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
-        //   userName: "shuaigang",
-        //   time: "2022-09-19 16:05",
-        //   readNum: "99",
-        //   clickNum: "52",
-        //   tag: "公告",
-        // },
-      ],
-      tagList: [
-        { color: "#036564", name: "java" },
-        { color: "#EB6841", name: "vue" },
-        { color: "#3FB8AF", name: "服务器" },
-        { color: "#FE4365", name: "数据库" },
-        { color: "#FC9D9A", name: "学习笔记" },
-        { color: "#EDC951", name: "面试" },
-        { color: "#C8C8A9", name: "生活" },
-        { color: "#83AF9B", name: "数据库" },
-        { color: "#8A9B0F", name: "Spring" },
-        { color: "#EB6841", name: "Redis" },
-        { color: "#3FB8AF", name: "RabbitMQ" },
-        { color: "#FE4365", name: "MyBtis" },
-        { color: "#FC9D9A", name: "ElasticSearch" },
-        { color: "#EDC951", name: "BUG" },
-      ],
+      parWidth: 0,
+      parHeight: 0,
+      page: {
+        pageNum: 1,
+        pageSize: 5,
+        total: 0,
+        sizes: [5, 10, 15, 20],
+      },
+      articleList: [],
+      tagList: [],
       linkData: [
         {
           name: "游戏一",
@@ -169,10 +197,12 @@ export default defineComponent({
         {
           name: "游戏三",
           url: "https://shuaigang.top/html/brick.html",
-        },{
+        },
+        {
           name: "游戏四",
           url: "https://shuaigang.top/html/spaceship.html",
-        },{
+        },
+        {
           name: "隔江明月照莲华",
           url: "https://shuaigang.top",
         },
@@ -180,25 +210,39 @@ export default defineComponent({
     });
     // 方法体
     const methods = {
-      readArticle() {
-        ElMessage.warning("敬请期待");
+      readArticle(id) {
+        router.push({
+          path: "/blog",
+          query: { id },
+        });
       },
-      tagToList() {
-        ElMessage.warning("敬请期待");
+      tagToList(tag) {
+        router.push({
+          path: "/archives",
+          query: { id: tag.id },
+        });
       },
       readGuide() {
-        ElMessage.warning("敬请期待");
+        myMessage("暂未开放", null, 1, null, null);
       },
       par() {
         particlesJS("particles-js", {
           particles: {
-            number: { value: 500, density: { enable: true, value_area: 800 } },
+            //粒子的数量以及密度;enable为false默认为50
+            number: {
+              value: 250,
+              density: { enable: false, value_area: 3200 },
+            },
             color: { value: "#ffffff" },
             shape: {
               type: "circle",
               stroke: { width: 0, color: "#000000" },
               polygon: { nb_sides: 5 },
-              image: { src: "img/github.svg", width: 100, height: 100 },
+              image: {
+                src: "img/github.svg",
+                width: state.parWidth,
+                height: state.parHeight,
+              },
             },
             opacity: {
               value: 0.5,
@@ -251,241 +295,110 @@ export default defineComponent({
           },
           retina_detect: true,
         });
-        // var count_particles, stats, update = null;
-        // stats = new Stats();
-        // stats.setMode(0);
-        // stats.domElement.style.position = "absolute";
-        // stats.domElement.style.left = "0px";
-        // stats.domElement.style.top = "0px";
-        // document.body.appendChild(stats.domElement);
-        // count_particles = document.querySelector(".js-count-particles");
-        // update = function () {
-        //   stats.begin();
-        //   stats.end();
-        //   if (
-        //     window.pJSDom[0].pJS.particles &&
-        //     window.pJSDom[0].pJS.particles.array
-        //   ) {
-        //     count_particles.innerText =
-        //       window.pJSDom[0].pJS.particles.array.length;
-        //   }
-        //   requestAnimationFrame(update);
-        // };
-        // requestAnimationFrame(update);
       },
-      //监听容器高度变化
+      //监听容器宽高变化
       listenParentHeight() {
-        const erd = elementResizeDetectorMaker();
-        erd.listenTo(
-          document.getElementById("HomeBottom_body_left").offsetHeight,
-          (element) => {
-            nextTick(() => {
-              //监听到事件后执行的业务逻辑
-              var leftHeight = document.getElementById(
-                "HomeBottom_body_left"
-              ).offsetHeight;
-              var rightHeight = document.getElementById(
-                "HomeBottom_body_right"
-              ).offsetHeight;
-              var parent = document.getElementById("HomeBottom");
-              if (leftHeight > rightHeight) {
-                if (parent.offsetHeight < leftHeight) {
-                }
-                var height = state.PH + leftHeight;
-                document
-                  .getElementById("HomeBottom")
-                  .setAttribute(
-                    "style",
-                    "height: " + height.toString() + "px;"
-                  );
-              } else {
-              }
-            });
-          }
-        );
-        erd.listenTo(
-          document.getElementById("HomeBottom_body_right").offsetHeight,
-          (element) => {
-            nextTick(() => {
-              //监听到事件后执行的业务逻辑
-            });
-          }
-        );
+        window.addEventListener("resize", methods.setParentHeight());
       },
       //设置容器高度
       setParentHeight() {
-        var parent = document.getElementById("HomeBottom");
-        state.PH = parent.offsetHeight;
-        var childLeft = document.getElementById("HomeBottom_body_left");
-        var childRight = document.getElementById("HomeBottom_body_right");
-        if (
-          parent.offsetHeight < childLeft.offsetHeight ||
-          parent.offsetWidth < childRight.offsetWidth
-        ) {
-          if (childLeft.offsetHeight > childRight.offsetHeight) {
-            var height = parent.offsetHeight + childLeft.offsetHeight;
-          } else {
-            var height = parent.offsetHeight + childRight.offsetHeight;
-          }
-        }
-        parent.setAttribute("style", "height: " + height.toString() + "px;");
+        setTimeout(() => {
+          // 剪掉滚动条的样式大小
+          state.parWidth =
+            document.getElementById("HomeBottom_body").clientWidth - 5;
+          state.parHeight =
+            document.getElementById("HomeBottom_body").clientHeight - 5;
+        }, 1);
       },
-      //监听窗口变化
+      //监听视窗变化
       watchWin() {
         window.onresize = () => {
           return (() => {
             if (state.winState) {
               methods.setParentHeight();
             }
-            // methods.par();
           })();
         };
       },
-      // beforeDestroy () {
-      //   // 销毁 particlesJS
-      //   if (pJSDom && pJSDom.length > 0) {
-      //     pJSDom.forEach(pJSDomItem => {
-      //         pJSDomItem.pJS.fn.vendors.destroypJS();
-      //     })
-      //   }
-      // },
+      openBeian() {
+        window.open("https://beian.miit.gov.cn");
+      },
+      handleSizeChange(size) {
+        state.page.pageSize = size;
+        request.getArticleList();
+      },
+      handleCurrentChange(num) {
+        state.page.pageNum = num;
+        request.getArticleList();
+      },
     };
     // 页面默认请求
     onMounted(() => {
-      // var homeState = localStorage.getItem('if_home');
-      // if (!homeState) {
-      //   localStorage.setItem('if_home', 'true');
-      // }
-      // if (homeState === 'false') {
-      //   localStorage.setItem('if_home', 'true');
-      //   location.reload();
-      // }
       state.winState = true;
       methods.watchWin();
-      let data = {
-        title: "入站需知！！",
-        describe: "如何获取源码地址？入站有什么注意事项？进来便知！",
-        avatar:
-          "https://shuaigang.top/gsg/static-resource/formal/2/20220730/1659166634126-3559486829291024.webp",
-        userName: "shuaigang",
-        time: "2022-09-19 16:05",
-        readNum: "99",
-        clickNum: "52",
-        tag: "公告",
-      };
-      for (var i = 0; i < 5; i++) {
-        state.articleList.push(data);
-      }
-      // request.getArticleList();
-      setTimeout(function () {
-        methods.setParentHeight();
-        // 粒子背景
-        methods.par();
-      }, 1);
+      methods.setParentHeight();
+      request.getTagList();
+      request.getArticleList();
     });
     onUnmounted(() => {
       state.winState = false;
-      // methods.beforeDestroy();
-      // localStorage.setItem('if_home', 'false');
+      // 移除监听
+      window.removeEventListener("resize", methods.setParentHeight());
+    });
+    onBeforeUnmount(() => {
+      // 销毁 particlesJS
+      if (pJSDom && pJSDom.length > 0) {
+        pJSDom.forEach((pJSDomItem) => {
+          pJSDomItem.pJS.fn.vendors.destroypJS();
+        });
+      }
+    });
+    // 监听state值的变化
+    watch(state, (newValue, oldValue) => {
+      var hb = document.getElementById("HomeBottom");
+      hb.setAttribute("style", "width: " + newValue.parWidth + "px;");
+      hb.setAttribute("style", "height: " + newValue.parHeight + "px;");
+      // 粒子背景
+      if (pJSDom && pJSDom.length > 0) {
+        pJSDom.forEach((pJSDomItem) => {
+          pJSDomItem.pJS.fn.vendors.destroypJS();
+        });
+      }
+      methods.par();
     });
     // 请求
     const request = {
-      getArticleList() {
-        let page = {
-          index: 1,
-          size: 10,
-        }
-        // post请求
-        post("/atc/getArticle", null).then((res, any) => {
-          console.log(res);
-          let { message, customData } = res;
-          // for (let i = 0; i < customData.resultList.length; i) {
-          //   var date = new Date(customData.resultList[i].gmtCreate);
-
-          //   customData.resultList[i].gmtCreate = customData.resultList[i].gmtCreate;
-          // }
-          // state.articleList = customData;
+      getTagList() {
+        getTagList({}).then((res, any) => {
+          let { code, data } = res;
+          if (code == 200) {
+            state.tagList = data;
+          }
         });
-      }
+      },
+      getArticleList() {
+        // post请求
+        getArticleList(state.page).then((res, any) => {
+          let { code, message, data } = res;
+          if (code === 200) {
+            state.page.total = data.total;
+            state.articleList = data.list;
+            methods.setParentHeight();
+          }
+          // for (let i = 0; i < data.resultList.length; i) {
+          //   var date = new Date(data.resultList[i].gmtCreate);
 
+          //   data.resultList[i].gmtCreate = data.resultList[i].gmtCreate;
+          // }
+          // state.articleList = data;
+        });
+      },
     };
-    return { ...methods, ...toRefs(state) };
+    return { ...methods, ...toRefs(state), locale };
   },
 });
 </script>
 <style scoped>
-.module_title {
-  text-decoration: none;
-  font-size: 1.2rem;
-  position: relative;
-  transition: 0.3s;
-}
-.module_title_line {
-  margin-top: 1vh;
-  width: 6.5vw;
-  border-bottom: 3px solid #80c8f8;
-}
-.guide_info {
-  margin-top: 2vh;
-  width: 100%;
-  height: 20vh;
-  background-image: url(../assets/backgroundImg/20.jpg);
-  background-repeat: no-repeat;
-  background-position: 50%;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #ffffff;
-  justify-content: center;
-}
-.guide_info_title {
-  font: 1rem Microsoft YaHei, Arial, Helvetica, sans-serif;
-}
-.guide_info_button {
-  margin-top: 1.5vh;
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-.guide_info_button:hover {
-  color: black;
-  cursor: pointer;
-  background-color: #fff;
-}
-
-.module_one {
-  padding: 2vh 1vw 2vh 1vw;
-  border-radius: 5px;
-  background-color: #ffffff;
-}
-.module_two {
-  padding: 2vh 1vw 2vh 1vw;
-  margin-top: 2vh;
-  border-radius: 5px;
-  background-color: #ffffff;
-}
-.module_one:hover {
-  cursor: pointer;
-}
-.module_two:hover {
-  cursor: pointer;
-}
-.my_el_tags {
-  margin-right: 0.5vw;
-  margin-top: 1vh;
-  border-radius: 0.6rem;
-  /* font-weight: bold; */
-  font-size: 0.9rem;
-  color: #ffffff;
-}
-.my_el_tags:hover {
-  border-radius: 0;
-}
-.my_el_tags:hover .tag_text {
-  /* color: #ffffff; */
-  text-shadow: 1px 1px 1px black;
-}
-
 /* :deep(.particles-js-canvas-el) {
   width: 100vw !important;
   min-height: 100% !important;
@@ -494,10 +407,12 @@ export default defineComponent({
   position: absolute;
   top: 0;
   bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .HomeBottom {
-  /* background-image: url("../assets/backgroundImg/beijing.webp"); */
+  /* background-image: url("https://shuaigang.top/gsg/static-resource/formal/backgroundImg/beijing.webp"); */
   background-color: #e74c3c;
   animation: bg-color 10s infinite;
   -webkit-animation: bg-color 10s infinite;
@@ -545,37 +460,56 @@ export default defineComponent({
   }
 }
 
-.HomeBottom_img {
-  width: 100%;
+.HomeBottom_particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
+
 /**
 * 内容
 */
 .HomeBottom_body {
-  padding: 5vh 11vw 18vh 13vw;
+  background-color: transparent;
 }
 .HomeBottom_body_info {
+  padding: 5vh 12vw 12vh 12vw;
   display: flex;
 }
 .HomeBottom_body_info_left {
-  /* width: 51vw; */
+  z-index: 999;
   border-radius: 5px;
   background-color: #ffffff;
-  position: absolute;
-  z-index: 99;
+  /* height: 100%; */
+  width: 100%;
 }
 .HomeBottom_body_info_right {
-  margin-left: 55vw;
-  /* height: 20vh; */
-  width: 21vw;
-  position: absolute;
-  z-index: 99;
+  z-index: 999;
+  margin-left: 2vw;
+  width: 100%;
+  height: 100%;
 }
+.module_one,
+.module_two {
+  padding: 2vh 1vw 2vh 1vw;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+.module_two {
+  margin-top: 2vh;
+}
+.module_one,
+.module_two:hover {
+  cursor: pointer;
+}
+
 /**
 * flex左--头部
 */
 .top_info {
-  width: 51vw;
+  width: 50vw;
   display: flex;
   justify-content: space-between;
   padding: 2vh 1vw 2vh 1vw;
@@ -602,10 +536,10 @@ export default defineComponent({
 .article_item {
   padding: 1vh 1vw 1vh 1vw;
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-  cursor: pointer;
   /* background-color: #00000066; */
 }
 .article_item:hover {
+  cursor: pointer;
   box-shadow: 0 0 0 100vw rgba(48, 55, 66, 0.15) inset;
   border-radius: 5px;
 }
@@ -628,17 +562,13 @@ export default defineComponent({
   margin-top: 2vh;
   display: flex;
   justify-content: space-between;
+  /* flex-wrap: wrap; */
   align-items: center;
 }
 .article_avatar {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.article_avatar_img {
-  width: 1.8rem;
-  height: 1.8rem;
-  border-radius: 50%;
 }
 .article_user_name {
   color: #4183c4;
@@ -663,34 +593,95 @@ export default defineComponent({
   margin-left: 0.8vw;
   font-size: 0.9rem;
 }
-.article_tag {
+.article_notice_tag {
   background-color: #fff;
   color: #1685a9;
 }
 
+.page_info {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1vw 3vh 0;
+}
+:deep(.el-pagination) {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
 /**
 * flex右  简介
 */
+.module_title {
+  text-decoration: none;
+  font-size: 1.2rem;
+  position: relative;
+  transition: 0.3s;
+}
+.module_title_line {
+  margin-top: 1vh;
+  width: 6.5vw;
+  border-bottom: 3px solid #80c8f8;
+}
+.guide_info {
+  margin-top: 2vh;
+  width: 100%;
+  height: 20vh;
+  background-image: url(https://shuaigang.top/gsg/static-resource/formal/backgroundImg/20.webp);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  justify-content: center;
+}
+.guide_info_title {
+  font: 1rem Microsoft YaHei, Arial, Helvetica, sans-serif;
+}
+.guide_info_button {
+  margin-top: 1.5vh;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.guide_info_button:hover {
+  color: black;
+  /* cursor: pointer; */
+  background-color: #fff;
+}
+
+.my_el_tags {
+  margin-right: 0.5vw;
+  margin-top: 1vh;
+  border-radius: 0.6rem;
+  /* font-weight: bold; */
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+.my_el_tags:hover {
+  border-radius: 0;
+}
+.my_el_tags:hover .tag_text {
+  color: #ffffff;
+  text-shadow: 1px 1px 1px black;
+}
 
 /**
 * 底部
 */
 .beian {
-  /* margin-top: 5vh; */
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  z-index: 99;
-  bottom: -1vh;
   width: 100%;
 }
 .beian_info {
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 15vh;
+  height: 10vh;
   width: 100%;
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
   background-size: 600% 600%;

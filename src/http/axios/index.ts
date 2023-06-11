@@ -1,3 +1,4 @@
+import myMessage from "@/utils/common";
 import axios from "axios";
 import { Base64 } from "js-base64";
 
@@ -7,25 +8,51 @@ const instance = axios.create({
 })
 
 let codes = {
-    CODE_SUCCESS: 200,
+    SUCCESS: 200,
     CODE_NOT_FOUND: 404,
+    ERROR_PARAMS: 4004,
     CODE_ERROR: 500,
-    CODE_ERROR_PARAMETER: 500,
-    CODE_NET_ERROR: 500,
-    CODE_NGINX_ERROR: 500
+    TOKEN_IS_EXPIRED: 4006,
+    UNAUTHORIZED: 4001
 }
 // 添加响应拦截器
 instance.interceptors.response.use(
 
     response => {
         const responseData = response.data
-        // const ERRCOR_CODE = responseData.code
-
-        // switch (ERRCOR_CODE) {
-        //     case codes.CODE_SUCCESS:
-        //         // 返回的数据
-        //         return responseData
-        // }
+        if (response.config.method === 'get') {
+            // get请求不做响应拦截处理
+            return responseData;
+        }
+        if (responseData.data) {
+            let { code, message } = JSON.parse(Base64.decode(response.data.data));
+            if (!code) {
+                return responseData;
+            }
+            switch (code) {
+                // token失效
+                case codes.TOKEN_IS_EXPIRED:
+                    // let userId = sessionStorage.getItem("shuaigangOVO");
+                    // if (userId) {
+                    //     post("/authentication/generateToken", { userId }).then((res: any) => {
+                    //         if (res.code === codes.SUCCESS && res.data.Authorization) {
+                    //             sessionStorage.setItem("shuaigangOVO", res.data.Authorization)
+                    //         }
+                    //     })
+                    // } else {
+                        sessionStorage.clear();
+                        location.reload();
+                    // }
+                    break
+                // 未认证
+                case codes.UNAUTHORIZED:
+                    sessionStorage.clear();
+                    break
+            }
+            // if (code !== codes.SUCCESS) {
+            //     myMessage(null, message, 2, null, null);
+            // }
+        }
         return responseData
     },
 )
@@ -43,34 +70,53 @@ if (process.env.NODE_ENV === 'production') {
 const post = async (url: string, param?: any) => {
     let token = await getToken()
     let userInfo = await getUserInfo()
-    let myData = {
-        customData: param || {},
-    }
     let paramData = {
-        encryption_type: "base64",
-        data: Base64.encode(JSON.stringify(myData)),
+        // encryption_type: "base64",
+        data: Base64.encode(JSON.stringify(param !== null ? param : {})),
     }
     return new Promise((resolve, reject) => {
         instance
             .post(`${baseUrl}${url}`, paramData, {
                 headers: {
                     "Authorization": token || '',
-                    "userInfo": userInfo || '',
+                    // "userInfo": userInfo || '',
                 }
             })
             .then(res => {
-                resolve(JSON.parse(Base64.decode(res.data)));
+                if (res.data) {
+                    // console.log(Base64.decode(res.data))
+                    // console.log(JSON.parse(Base64.decode(res.data)))
+                    resolve(JSON.parse(Base64.decode(res.data)));
+                }
             })
             .catch(err =>
                 reject(err));
     })
 
 }
-const getToken = () => {
-    return localStorage.getItem('token')
-}
-const getUserInfo = () => {
-    return localStorage.getItem('userInfo')
+
+const get = async (url: string, params?: any) => {
+    return new Promise((resolve, reject) => {
+        instance
+            .get(`${url}`, { params })
+            .then(res => {
+                // console.log(res)
+                if (res) {
+                    resolve(res);
+                }
+            })
+            .catch(err =>
+                reject(err));
+    })
 }
 
-export default post
+
+const getToken = () => {
+    return sessionStorage.getItem('token')
+}
+const getUserInfo = () => {
+    return sessionStorage.getItem('userInfo')
+}
+
+// export default post
+export { post, get }

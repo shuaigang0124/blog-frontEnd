@@ -1,13 +1,17 @@
 <template>
   <div class="top">
     <div class="item" v-for="item in titleList" :key="item">
-      <!-- <router-link class="router" :to="item.to">
-        <img class="icon_img" :src="item.icon" />
-        <span class="router_title">{{ item.title }}</span>
-        <div v-if="item.title === '音乐盒'" @click ="goMusic" />
-        <div v-if="item.title === '首页'" @click="goHome" />
-      </router-link> -->
+      <el-input
+        ref="inputRef"
+        @keyup.enter="searchMusic"
+        v-model="inputCat"
+        placeholder="搜索音乐"
+        v-if="item.title === '搜索' && searchInput"
+        prefix-icon="el-icon-search"
+        clearable
+      />
       <el-button
+        v-else
         class="router"
         @click="checkPage(item)"
         type="text"
@@ -20,203 +24,268 @@
       </el-button>
     </div>
   </div>
+  <el-dialog
+    v-model="dialogVisible"
+    title="搜索"
+    width="55%"
+    center
+    :before-close="
+      () => {
+        dialogVisible = false;
+      }
+    "
+  >
+    <el-input
+      ref="inputRef"
+      v-model="params.content"
+      @keyup.enter="searchBlog"
+      placeholder="请输入关键字查询相关文章"
+      prefix-icon="el-icon-search"
+      clearable
+    />
+    <div v-if="blogList.length">
+      <h3 class="search_blog_total">找到{{ params.total }}篇文章</h3>
+      <div v-for="item in blogList" :key="item">
+        <div class="search_blog_item" @click="goToBlog(item.id)">
+          <div class="search_blog_description">{{ item.description }}</div>
+          <div class="search_blog_gmtCreate">
+            {{
+              new Date(item.gmtCreate).getFullYear() +
+              "年" +
+              (new Date(item.gmtCreate).getMonth() + 1) +
+              "月" +
+              new Date(item.gmtCreate).getDate() +
+              "日"
+            }}
+          </div>
+        </div>
+      </div>
+      <el-pagination
+        align="right"
+        background
+        small
+        :hide-on-single-page="true"
+        layout="prev, pager, next"
+        v-model:current-page="params.pageNum"
+        v-model:page-size="params.pageSize"
+        :total="params.total"
+        @current-change="changePageNum"
+      />
+    </div>
+  </el-dialog>
+  <a-player />
   <router-view />
 </template>
 
 <script lang="ts">
-import { ElNotification } from "element-plus";
 import { defineComponent, h, onMounted, reactive, toRefs } from "vue";
-import router from "../router";
+import router from "@/router";
+import myMessage from "@/utils/common";
+import { getArticleList } from "@/api/article";
+import { search } from "@/api/music";
+import { nextTick, ref } from "vue";
+import aPlayer from "@/components/music/aPlayer.vue";
 export default defineComponent({
   name: "",
-  components: {},
+  components: { aPlayer },
   props: {},
   setup() {
     // 页面数据
+    const inputRef = ref<HTMLElement | null>(null);
     const state = reactive({
       titleList: [
         {
-          to: "/index/home",
+          to: "/homeSearch",
+          icon: require("./../assets/icon/search.png"),
+          title: "搜索",
+        },
+        {
+          to: "/home",
           icon: require("./../assets/icon/home.png"),
           title: "首页",
         },
         {
-          to: "/index/archives",
+          to: "/archives",
           icon: require("./../assets/icon/archive.png"),
           title: "归档",
         },
         {
-          to: "/index/chat",
+          to: "/chat",
           icon: require("./../assets/icon/chat.png"),
           title: "聊天室",
         },
         {
-          to: "/index/message",
+          to: "/message",
           icon: require("./../assets/icon/message.png"),
           title: "留言",
         },
         {
-          to: "/index/games",
+          to: "/games",
           icon: require("./../assets/icon/game.png"),
           title: "游戏",
         },
         {
-          to: "/index/music",
+          to: "/discovery",
           icon: require("./../assets/icon/listen.png"),
           title: "音乐盒",
         },
         {
-          to: "/index/about",
+          to: "/about",
           icon: require("./../assets/icon/candy.png"),
           title: "关于",
         },
       ],
+      homeList: [
+        {
+          to: "/homeSearch",
+          icon: require("./../assets/icon/search.png"),
+          title: "搜索",
+        },
+        {
+          to: "/home",
+          icon: require("./../assets/icon/home.png"),
+          title: "首页",
+        },
+        {
+          to: "/archives",
+          icon: require("./../assets/icon/archive.png"),
+          title: "归档",
+        },
+        {
+          to: "/chat",
+          icon: require("./../assets/icon/chat.png"),
+          title: "聊天室",
+        },
+        {
+          to: "/message",
+          icon: require("./../assets/icon/message.png"),
+          title: "留言",
+        },
+        {
+          to: "/games",
+          icon: require("./../assets/icon/game.png"),
+          title: "游戏",
+        },
+        {
+          to: "/discovery",
+          icon: require("./../assets/icon/listen.png"),
+          title: "音乐盒",
+        },
+        {
+          to: "/about",
+          icon: require("./../assets/icon/candy.png"),
+          title: "关于",
+        },
+      ],
+      musicList: [
+        {
+          to: "/search",
+          icon: require("./../assets/icon/search.png"),
+          title: "搜索",
+        },
+        {
+          to: "/discovery",
+          icon: require("./../assets/icon/discovery.png"),
+          title: "发现音乐",
+        },
+        {
+          to: "/playlists",
+          icon: require("./../assets/icon/playlist.png"),
+          title: "推荐歌单",
+        },
+        {
+          to: "/newsong",
+          icon: require("./../assets/icon/new.png"),
+          title: "最新音乐",
+        },
+        {
+          to: "/mvs",
+          icon: require("./../assets/icon/MV.png"),
+          title: "最新MV",
+        },
+        {
+          to: "/home",
+          icon: require("./../assets/icon/home.png"),
+          title: "首页",
+        },
+      ],
+      musicPath: [
+        "/result",
+        "/discovery",
+        "/playlists",
+        "/playlist",
+        "/newsong",
+        "/mvs",
+        "/mv",
+      ],
       isDisabled: false,
+      searchInput: false,
+      inputCat: "",
+      dialogVisible: false,
+      params: {
+        pageNum: 1,
+        pageSize: 10,
+        total: 0,
+        content: null,
+        startTime: null,
+        endTime: null,
+      },
+      blogList: [],
+      notificationMessage1:
+        "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
       notificationMessage2:
-        '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">10s后自动关闭</div>',
+        '<div style="color: #008080"><i>shuaigang更新了音乐盒相关页面数据展示</i></div><div style="color: blue;font-size: 0.1rem;">2s后自动关闭</div>',
     });
     // 方法体
     const methods = {
       checkPage(e) {
-        if (e.to !== "") {
+        if (e.to !== "" && e.to != "/search" && e.to != "/homeSearch") {
+          // window.location.href=e.to
+          state.searchInput = false;
+          state.dialogVisible = false;
           router.push(e.to);
+        } else if (e.to == "/search") {
+          state.searchInput = true;
+          nextTick(() => {
+            inputRef.value[0] && inputRef.value[0].focus();
+          });
+        } else if (e.to == "/homeSearch") {
+          state.dialogVisible = true;
+          nextTick(() => {
+            inputRef.value && inputRef.value.focus();
+          });
         }
-        if (e.title === "音乐盒" && state.titleList.length === 7) {
-          state.isDisabled = true;
-          var data = [
-            {
-              to: "/index/music",
-              icon: require("./../assets/icon/search.png"),
-              title: "搜索",
-            },
-            {
-              to: "/index/discovery",
-              icon: require("./../assets/icon/discovery.png"),
-              title: "发现音乐",
-            },
-            {
-              to: "/index/playlists",
-              icon: require("./../assets/icon/playlist.png"),
-              title: "推荐歌单",
-            },
-            {
-              to: "/index/songs",
-              icon: require("./../assets/icon/new.png"),
-              title: "最新音乐",
-            },
-            {
-              to: "/index/mv",
-              icon: require("./../assets/icon/MV.png"),
-              title: "最新MV",
-            },
-            {
-              to: "/index/home",
-              icon: require("./../assets/icon/home.png"),
-              title: "首页",
-            },
-          ];
-          const oldList = setInterval(() => {
-            state.titleList.shift();
-            if (state.titleList.length === 0) {
-              clearInterval(oldList);
-              var i = -1;
-              const newList = setInterval(() => {
-                i += 1;
-                state.titleList.push(data[i]);
-                if (state.titleList.length === data.length) {
-                  clearInterval(newList);
-                  state.isDisabled = false;
-                }
-              }, 15);
-            }
-          }, 15);
+        if (e.title === "音乐盒" && state.titleList.length === 8) {
+          methods.pushTitle(state.musicList);
         }
-        if (e.title === "首页" && state.titleList.length !== 7) {
-          state.isDisabled = true;
-          var data = [
-            {
-              to: "/index/home",
-              icon: require("./../assets/icon/home.png"),
-              title: "首页",
-            },
-            {
-              to: "/index/archives",
-              icon: require("./../assets/icon/archive.png"),
-              title: "归档",
-            },
-            {
-              to: "/index/chat",
-              icon: require("./../assets/icon/chat.png"),
-              title: "聊天室",
-            },
-            {
-              to: "/index/message",
-              icon: require("./../assets/icon/message.png"),
-              title: "留言",
-            },
-            {
-              to: "/index/games",
-              icon: require("./../assets/icon/game.png"),
-              title: "游戏",
-            },
-            {
-              to: "/index/music",
-              icon: require("./../assets/icon/listen.png"),
-              title: "音乐盒",
-            },
-            {
-              to: "/index/about",
-              icon: require("./../assets/icon/candy.png"),
-              title: "关于",
-            },
-          ];
-          const oldList = setInterval(() => {
-            state.titleList.shift();
-            if (state.titleList.length === 0) {
-              clearInterval(oldList);
-              var j = -1;
-              const newList = setInterval(() => {
-                j += 1;
-                state.titleList.push(data[j]);
-                if (state.titleList.length === data.length) {
-                  clearInterval(newList);
-                  state.isDisabled = false;
-                }
-              }, 15);
-            }
-          }, 15);
+        if (e.title === "首页" && state.titleList.length !== 8) {
+          methods.pushTitle(state.homeList);
         }
+      },
+      pushTitle(data) {
+        state.isDisabled = true;
+        const oldList = setInterval(() => {
+          state.titleList.shift();
+          if (state.titleList.length === 0) {
+            clearInterval(oldList);
+            var i = -1;
+            const newList = setInterval(() => {
+              i += 1;
+              state.titleList.push(data[i]);
+              if (state.titleList.length === data.length) {
+                clearInterval(newList);
+                state.isDisabled = false;
+              }
+            }, 15);
+          }
+        }, 15);
       },
       // 通知提醒
       openNotification1() {
-        ElNotification({
-          title: "消息",
-          dangerouslyUseHTMLString: true,
-          message:
-            "<div style='font-size: 12px;'>在本站中各位可以创建用户发布博客、评论、留言等进行测试，但是没有实际意义的博客会被站主删除，望各位知悉</div>",
-          duration: 0,
-        });
+        myMessage(state.notificationMessage1, "通知", 3, 0, "TL");
       },
       openNotification2() {
-        // var timeNum = 10;
-        // const countdown = setInterval(() => {
-        //   timeNum -= 1;
-        //   var data =
-        //     '<div style="color: #008080"><i>shuaigang更新了前端页面</i></div><div style="color: blue;font-size: 0.1rem;">' +
-        //     timeNum +
-        //     "s后自动关闭</div>";
-        //   state.notificationMessage2 = data;
-        //   if (timeNum === 0) {
-        //     clearInterval(countdown);
-        //   }
-        // }, 1000);
-        ElNotification({
-          title: "通知",
-          dangerouslyUseHTMLString: true,
-          message: state.notificationMessage2,
-          position: "top-left",
-          duration: 10000,
-        });
+        myMessage(state.notificationMessage2, "通知", 3, null, "TL");
       },
       isMobile() {
         let flag = navigator.userAgent.match(
@@ -224,46 +293,129 @@ export default defineComponent({
         );
         return flag;
       },
+      searchMusic() {
+        if (!state.inputCat) {
+          myMessage("请输入您想要搜索的歌曲", null, 1, null, null);
+        }
+        localStorage.setItem("keywords", state.inputCat);
+        if (router.currentRoute.value.path !== "/result") {
+          router.push("/result");
+        }
+        // search({
+        //   keywords: state.inputCat,
+        //   type: 1,
+        //   limit: 10,
+        // }).then((res) => {
+        //   console.log(res);
+        // });
+      },
+      searchBlog() {
+        if (!state.params.content) {
+          myMessage("请输入您想要查询的关键字", null, 1, null, null);
+          return;
+        }
+        request.getArticleList();
+      },
+      changePageNum(num) {
+        state.params.pageNum = num;
+        request.getArticleList();
+      },
+      goToBlog(id) {
+        state.dialogVisible = false;
+        router.push({
+          path: "/blog",
+          query: { id },
+        });
+      },
     };
     // 页面默认请求
     onMounted(() => {
-      if (methods.isMobile()) {
-        router.push({
-          path: "/500",
-        });
-      } else {
-        let ntf = localStorage.getItem("notification");
-        let nowTime = new Date().getTime();
-        if (ntf) {
-          let time = Number(ntf);
-          if (time < nowTime - 24 * 60 * 60 * 1000) {
-            methods.openNotification1();
-            localStorage.setItem("notification", nowTime.toString());
-          }
-        } else {
-          localStorage.setItem("notification", nowTime.toString());
-          methods.openNotification1();
+      let nowPath = router.currentRoute.value.path;
+      for (let i = 0; i < state.musicPath.length; i++) {
+        if (nowPath == state.musicPath[i]) {
+          methods.pushTitle(state.musicList);
+          break;
         }
-        // methods.openNotification1();
-        methods.openNotification2();
       }
+
+      // if (methods.isMobile()) {
+      // window.location.href = "/500";
+      // router.push("/500");
+      // } else {
+      methods.openNotification2();
+      let ntf = localStorage.getItem("notification");
+      let nowTime = new Date().getTime();
+      if (ntf) {
+        let time = Number(ntf);
+        if (time < nowTime - 24 * 60 * 60 * 1000) {
+          methods.openNotification1();
+          localStorage.setItem("notification", nowTime.toString());
+        }
+      } else {
+        localStorage.setItem("notification", nowTime.toString());
+        methods.openNotification1();
+      }
+      // }
     });
     // 请求
-    const request = {};
-    return { ...methods, ...toRefs(state) };
+    const request = {
+      getArticleList() {
+        getArticleList(state.params).then((res: any) => {
+          // console.log(res);
+          let { code, data } = res;
+          if (code === 200) {
+            state.blogList = data.list;
+            state.params.total = data.total;
+          }
+        });
+      },
+    };
+    return { ...methods, ...toRefs(state), inputRef };
   },
 });
 </script>
 
 <style>
+.search_blog_item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+.search_blog_item:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.search_blog_description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.search_blog_gmtCreate {
+  white-space: nowrap;
+}
+
+.el-notification .el-icon-success {
+  color: #67c23a !important;
+}
+.el-notification .el-icon-info {
+  color: #909399 !important;
+}
+.el-notification .el-icon-warning {
+  color: #e6a32c !important;
+}
+.el-notification .el-icon-error {
+  color: #f56c6c !important;
+}
 body {
   margin: 0;
   height: 100vh;
   overflow: auto;
+  cursor: url(https://shuaigang.top/gsg/static-resource/formal/resource/my.cur),
+    default;
 }
-.el-button.is-disabled {
+/* .el-button.is-disabled {
   cursor: pointer !important;
-}
+} */
 .icon_img {
   height: 0.9rem;
   width: 0.9rem;
@@ -324,12 +476,12 @@ body {
   height: 3px;
   background: #80c8f8;
 }
-.router:hover {
-  /* color: #80c8f8; */
-  /* transform: translateY(-1rem); */
-  /* filter: drop-shadow(#80c8f8 0 1rem); */
-  cursor: pointer;
-}
+/* .router:hover { */
+/* color: #80c8f8; */
+/* transform: translateY(-1rem); */
+/* filter: drop-shadow(#80c8f8 0 1rem); */
+/* cursor: pointer; */
+/* } */
 .router:hover:after {
   width: 100%;
   left: 0;
@@ -379,6 +531,7 @@ body {
 }
 
 .body_img {
+  background-color: gray;
   animation: grow1 1s 1 forwards;
   height: 100vh;
   width: 100vw;
