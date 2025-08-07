@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/index',
     name: 'Index',
-    component: () => import('../views/index.vue'),
+    component: () => import('../views/Index.vue'),
     redirect: "/home",
     children: [
       {
@@ -51,12 +51,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/discovery',
         name: 'Discovery',
-        component: () => import('../views/music/discovery.vue')
+        component: () => import('../views/music/Discovery.vue')
       },
       {
         path: '/playlists',
         name: 'playlists',
-        component: () => import('../views/music/playlists.vue')
+        component: () => import('../views/music/Playlists.vue')
       },
       {
         path: '/newsong',
@@ -88,7 +88,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: '/Login',
-    component: () => import('../views/login/login.vue')
+    component: () => import('../views/login/Login.vue')
   },
   // {
   //   path: '/register',
